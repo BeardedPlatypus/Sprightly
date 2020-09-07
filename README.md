@@ -1,4 +1,4 @@
-<p align='center'><img align='center' src='https://raw.githubusercontent.com/BeardedPlatypus/Sprightly/master/readme/sprightly_icon.svg' width='25%'></p>
+<p align='center'><img align='center' src='https://raw.githubusercontent.com/BeardedPlatypus/Sprightly/master/readme/sprightly_icon.svg?raw=true' width='25%'></p>
 
 # Sprightly - Organising Sprites
 
