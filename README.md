@@ -1,4 +1,7 @@
-<p align='center'><img align='center' src='https://raw.githubusercontent.com/BeardedPlatypus/Sprightly/master/readme/sprightly_icon.svg?token=ABKWHLZFHGRQFLO3NYLOPES7KZ7ZI' width='30%'></p>
+<p align='center'><img align='center' src='https://raw.githubusercontent.com/BeardedPlatypus/Sprightly/master/readme/sprightly_icon.svg?token=ABKWHLZFHGRQFLO3NYLOPES7KZ7ZI' width='25%'></p>
 
-# Sprightly
-A small Fabulous / SDL2 application to organise sprite sheets and sprite animations.
+# Sprightly: Organising spritesheets, sprites, and sprite animations
+
+Sprightly is a small Fabulous for Xamarin.Forms application to define sprite
+sheets, sprites, and sprite animations and export the metadata as a json file,
+so it can be consumed in another application. 
