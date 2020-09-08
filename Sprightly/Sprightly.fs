@@ -45,6 +45,7 @@ module App =
 
     let view (model: Model) dispatch =
         View.ContentPage(
+          hasNavigationBar = false,
           content = View.StackLayout(padding = Thickness 20.0, verticalOptions = LayoutOptions.Center,
             children = [ 
                 View.Label(text = sprintf "%d" model.Count, horizontalOptions = LayoutOptions.Center, width=200.0, horizontalTextAlignment=TextAlignment.Center)
