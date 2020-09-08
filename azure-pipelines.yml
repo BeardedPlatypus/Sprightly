@@ -1,0 +1,40 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'windows-2019'
+
+variables:
+  solution: '**/Sprightly.sln'
+  buildPlatform: 'x64'
+  buildConfiguration: 'Release'
+
+steps:
+  - task: NuGetToolInstaller@0
+    displayName: 'Nuget - Install'
+
+  - task: NuGetCommand@2
+    displayName: 'Nuget - Restore Packages'
+    inputs:
+      restoreSolution: '$(solution)'
+
+  - task: VSBuild@1
+    displayName: 'Build - Executables'
+    inputs:
+      solution: '$(solution)'
+      platform: '$(buildPlatform)'
+      configuration: '$(buildConfiguration)'
+
+  - task: CopyFiles@2
+    displayName: 'Build - Copy Executable'
+    inputs:
+      SourceFolder: '$(Build.SourcesDirectory)/Sprightly.WPF/bin/$(buildConfiguration)/netcoreapp3.1/'
+      Contents: '**/*'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)'
+      CleanTargetFolder: true
+  
+  - task: PublishPipelineArtifact@0
+    displayName: 'Build - Publish executables'
+    inputs:
+      artifactName: 'Executable'
+      targetPath: '$(Build.ArtifactStagingDirectory)'
