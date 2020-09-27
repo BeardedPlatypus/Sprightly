@@ -6,8 +6,16 @@
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="BeardedPlatypus.kobold-layer" Version="0.1.0-alpha" />
+    <PackageReference Include="BeardedPlatypus.kobold-layer" Version="0.1.0-dev.1163" />
   </ItemGroup>
 
 </Project>

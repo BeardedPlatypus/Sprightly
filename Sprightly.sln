@@ -5,6 +5,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Sprightly", "Sprightly\Sprightly.fsproj", "{EF1F8C70-A460-41E4-96A6-4C1695EBE99E}"
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Sprightly.WPF", "Sprightly.WPF\Sprightly.WPF.fsproj", "{09DB065E-1FB9-4634-9342-41C03CF670F1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EB41A3B9-2859-4BB9-AC69-22BE5C191A44} = {EB41A3B9-2859-4BB9-AC69-22BE5C191A44}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sprightly.WPF.Components", "Sprightly.WPF.Components\Sprightly.WPF.Components.csproj", "{EB41A3B9-2859-4BB9-AC69-22BE5C191A44}"
 EndProject
