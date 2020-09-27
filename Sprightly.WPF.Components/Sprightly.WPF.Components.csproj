@@ -5,4 +5,8 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="BeardedPlatypus.kobold-layer" Version="0.1.0-alpha" />
+  </ItemGroup>
+
 </Project>
