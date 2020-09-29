@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="SpriteView.fs" />
     <Compile Include="Sprightly.fs" />
   </ItemGroup>
   <ItemGroup>
