@@ -8,6 +8,7 @@
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="SpriteViewRenderer.fs" />
     <Compile Include="Properties\AssemblyInfo.fs" />
     <Compile Include="App.fs" />
     <None Include="app.config" />
@@ -27,5 +28,6 @@
     <PackageReference Update="FSharp.Core" Version="4.7.2" /> <!-- workaround for VSMac bug https://github.com/mono/monodevelop/pull/5137 --> 
     <PackageReference Include="Xamarin.Forms.Platform.WPF" Version="4.8.0.1364" />
     <ProjectReference Include="../Sprightly/Sprightly.fsproj" />
+    <ProjectReference Include="..\Sprightly.WPF.Components\Sprightly.WPF.Components.csproj" />
   </ItemGroup>
 </Project>

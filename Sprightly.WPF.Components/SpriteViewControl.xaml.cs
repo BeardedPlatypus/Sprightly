@@ -8,17 +8,17 @@ namespace Sprightly.WPF.Components
     /// <summary>
     /// Interaction logic for SpriteView.xaml
     /// </summary>
-    public partial class SpriteView : UserControl
+    public partial class SpriteViewControl : UserControl
     {
         private bool _hasLoaded = false;
         private bool _hasInitialized = false;
 
-        private ViewHost _viewHost;
+        private SpriteViewHost _spriteViewHost;
 
         /// <summary>
-        /// Creates a new <see cref="SpriteView"/>.
+        /// Creates a new <see cref="SpriteViewControl"/>.
         /// </summary>
-        public SpriteView()
+        public SpriteViewControl()
         {
             InitializeComponent();
         }
@@ -51,10 +51,10 @@ namespace Sprightly.WPF.Components
 
         private void InitializeViewport()
         {
-            _viewHost = new ViewHost(SpriteCanvas.ActualWidth, SpriteCanvas.ActualHeight);
-            SpriteCanvas.Child = _viewHost;
+            _spriteViewHost = new SpriteViewHost(SpriteCanvas.ActualWidth, SpriteCanvas.ActualHeight);
+            SpriteCanvas.Child = _spriteViewHost;
 
-            _viewHost.MessageHook += new HwndSourceHook(ControlMsgFilter);
+            _spriteViewHost.MessageHook += new HwndSourceHook(ControlMsgFilter);
 
             _hasInitialized = true;
             SizeChanged -= OnSizeChanged;

@@ -5,12 +5,12 @@ using System.Windows.Interop;
 namespace Sprightly.WPF.Components
 {
     /// <summary>
-    /// <see cref="ViewHost"/> provides the <see cref="HwndHost"/>
+    /// <see cref="SpriteViewHost"/> provides the <see cref="HwndHost"/>
     /// implementation in order to host the
     /// <see cref="kobold_layer.clr.view"/> object.
     /// </summary>
     /// <seealso cref="HwndHost" />
-    public class ViewHost : HwndHost
+    public class SpriteViewHost : HwndHost
     {
         #region Constant Interop Values
         // Interop values, see: https://docs.microsoft.com/en-us/windows/win32/winmsg/extended-window-styles
@@ -28,11 +28,11 @@ namespace Sprightly.WPF.Components
         private readonly int _hostWidth;
 
         /// <summary>
-        /// Creates a new <see cref="ViewportHost"/>.
+        /// Creates a new <see cref="SpriteViewHost"/>.
         /// </summary>
         /// <param name="width">The width.</param>
         /// <param name="height">The height.</param>
-        public ViewHost(double width, double height)
+        public SpriteViewHost(double width, double height)
         {
             _hostWidth = (int)width;
             _hostHeight = (int)height;
