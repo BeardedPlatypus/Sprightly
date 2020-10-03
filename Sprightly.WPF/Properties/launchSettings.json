@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Sprightly.WPF": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

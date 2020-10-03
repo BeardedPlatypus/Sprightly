@@ -1,4 +1,4 @@
-﻿namespace Sprightly.WPF
+﻿namespace FabulousSDL.WPF
 open System.Reflection
 open System.Runtime.CompilerServices
 

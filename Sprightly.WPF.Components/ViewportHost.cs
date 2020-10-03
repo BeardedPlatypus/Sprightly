@@ -5,12 +5,12 @@ using System.Windows.Interop;
 namespace Sprightly.WPF.Components
 {
     /// <summary>
-    /// <see cref="SpriteViewHost"/> provides the <see cref="HwndHost"/>
+    /// <see cref="ViewportHost"/> provides the <see cref="HwndHost"/>
     /// implementation in order to host the
     /// <see cref="kobold_layer.clr.view"/> object.
     /// </summary>
     /// <seealso cref="HwndHost" />
-    public class SpriteViewHost : HwndHost
+    public class ViewportHost : HwndHost
     {
         #region Constant Interop Values
         // Interop values, see: https://docs.microsoft.com/en-us/windows/win32/winmsg/extended-window-styles
@@ -21,21 +21,20 @@ namespace Sprightly.WPF.Components
         #endregion
 
         private IntPtr _hwndHost;
-
         private kobold_layer.clr.view _view;
 
         private readonly int _hostHeight;
         private readonly int _hostWidth;
 
         /// <summary>
-        /// Creates a new <see cref="SpriteViewHost"/>.
+        /// Creates a new <see cref="ViewportHost"/>.
         /// </summary>
         /// <param name="width">The width.</param>
         /// <param name="height">The height.</param>
-        public SpriteViewHost(double width, double height)
+        public ViewportHost(double width, double height)
         {
-            _hostWidth = (int)width;
-            _hostHeight = (int)height;
+            _hostWidth = (int) width;
+            _hostHeight = (int) height;
         }
 
         protected override HandleRef BuildWindowCore(HandleRef hwndParent)
@@ -46,7 +45,7 @@ namespace Sprightly.WPF.Components
                 _hostWidth,
                 _hostHeight,
                 hwndParent.Handle,
-                (IntPtr)HostId,
+                (IntPtr) HostId,
                 IntPtr.Zero,
                 0);
 

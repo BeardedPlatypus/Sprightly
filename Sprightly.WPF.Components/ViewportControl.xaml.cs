@@ -6,19 +6,19 @@ using System.Windows.Interop;
 namespace Sprightly.WPF.Components
 {
     /// <summary>
-    /// Interaction logic for SpriteView.xaml
+    /// Interaction logic for ViewportControl.xaml
     /// </summary>
-    public partial class SpriteViewControl : UserControl
+    public partial class ViewportControl: UserControl
     {
         private bool _hasLoaded = false;
         private bool _hasInitialized = false;
 
-        private SpriteViewHost _spriteViewHost;
+        private ViewportHost _viewportHost;
 
         /// <summary>
-        /// Creates a new <see cref="SpriteViewControl"/>.
+        /// Creates a new <see cref="ViewportControl"/>.
         /// </summary>
-        public SpriteViewControl()
+        public ViewportControl()
         {
             InitializeComponent();
         }
@@ -33,8 +33,8 @@ namespace Sprightly.WPF.Components
             // have a valid size and it has not been initialised yet.
             // Otherwise we will do so on the first non-zero size
             // change.
-            if (!_hasInitialized && IsValidSize(SpriteCanvas.ActualWidth, 
-                                                SpriteCanvas.ActualHeight))
+            if (!_hasInitialized && IsValidSize(ViewportCanvas.ActualWidth, 
+                                               ViewportCanvas.ActualHeight))
                 InitializeViewport();
         }
 
@@ -51,10 +51,10 @@ namespace Sprightly.WPF.Components
 
         private void InitializeViewport()
         {
-            _spriteViewHost = new SpriteViewHost(SpriteCanvas.ActualWidth, SpriteCanvas.ActualHeight);
-            SpriteCanvas.Child = _spriteViewHost;
+            _viewportHost = new ViewportHost(ViewportCanvas.ActualWidth, ViewportCanvas.ActualHeight);
+            ViewportCanvas.Child = _viewportHost;
 
-            _spriteViewHost.MessageHook += new HwndSourceHook(ControlMsgFilter);
+            _viewportHost.MessageHook += new HwndSourceHook(ControlMsgFilter);
 
             _hasInitialized = true;
             SizeChanged -= OnSizeChanged;

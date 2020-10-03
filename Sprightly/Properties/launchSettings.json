@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Sprightly": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

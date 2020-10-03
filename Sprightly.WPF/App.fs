@@ -15,9 +15,8 @@ module Main =
 
         let app = new System.Windows.Application()
         Forms.Init()
-
         let window = MainWindow() 
-        window.Title <- "Sprightly"
+        window.Title <- "Fabulous SDL Demo"
 
         window.LoadApplication(new Sprightly.App())
 
