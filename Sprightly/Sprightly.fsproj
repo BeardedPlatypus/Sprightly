@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Domain\Texture.fs" />
     <Content Include="DataAccess\sprightly_project.json" />
     <Compile Include="Viewport.fs" />
     <Compile Include="Sprightly.fs" />
