@@ -11,6 +11,7 @@ module public Texture =
     type public T = {
         id: int32
         name: string
+        path: Path.T
     }
 
     /// <summary>
@@ -21,8 +22,9 @@ module public Texture =
     /// <returns>
     /// A new texture.
     /// </returns>
-    let construct (id: int32) (name: string) : T =
+    let construct (id: int32) (name: string) (path: Path.T) : T =
         { id = id
           name = name
+          path = path
         }
 
