@@ -14,13 +14,15 @@ namespace Sprightly.WPF.Components
         private bool _hasInitialized = false;
 
         private ViewportHost _viewportHost;
+        private readonly IViewport _viewport;
 
         /// <summary>
         /// Creates a new <see cref="ViewportControl"/>.
         /// </summary>
-        public ViewportControl()
+        public ViewportControl(IViewport viewport)
         {
             InitializeComponent();
+            _viewport = viewport;
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -51,7 +53,7 @@ namespace Sprightly.WPF.Components
 
         private void InitializeViewport()
         {
-            _viewportHost = new ViewportHost(ViewportCanvas.ActualWidth, ViewportCanvas.ActualHeight);
+            _viewportHost = new ViewportHost(ViewportCanvas.ActualWidth, ViewportCanvas.ActualHeight, _viewport);
             ViewportCanvas.Child = _viewportHost;
 
             _viewportHost.MessageHook += new HwndSourceHook(ControlMsgFilter);

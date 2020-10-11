@@ -21,7 +21,7 @@ namespace Sprightly.WPF.Components
         #endregion
 
         private IntPtr _hwndHost;
-        private kobold_layer.clr.view _view;
+        private readonly IViewport _viewport;
 
         private readonly int _hostHeight;
         private readonly int _hostWidth;
@@ -31,8 +31,12 @@ namespace Sprightly.WPF.Components
         /// </summary>
         /// <param name="width">The width.</param>
         /// <param name="height">The height.</param>
-        public ViewportHost(double width, double height)
+        /// <param name="viewport">The viewport used to render with.</param>
+        public ViewportHost(double width, 
+                            double height, 
+                            IViewport viewport)
         {
+            this._viewport = viewport;
             _hostWidth = (int) width;
             _hostHeight = (int) height;
         }
@@ -49,14 +53,9 @@ namespace Sprightly.WPF.Components
                 IntPtr.Zero,
                 0);
 
-            _view = new kobold_layer.clr.view();
+            _viewport.Initialise(_hwndHost);
+            _viewport.Update();
 
-            unsafe
-            {
-                _view.initialise(_hwndHost.ToPointer());
-            }
-
-            _view.update();
             return new HandleRef(this, _hwndHost);
         }
 
@@ -70,7 +69,7 @@ namespace Sprightly.WPF.Components
             switch (msg)
             {
                 case WmErasebkgnd:
-                    _view.update();
+                    _viewport.Update();
                     handled = true;
                     break;
                 default:

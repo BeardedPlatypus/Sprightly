@@ -10,14 +10,14 @@ open Sprightly.WPF.Components
 /// to render the <see cref="Viewport"/> as a <see cref="ViewportControl"/>.
 /// </summary>
 type ViewportRenderer() =
-    inherit ViewRenderer<Viewport, ViewportControl>()
+    inherit ViewRenderer<Sprightly.Viewport, ViewportControl>()
 
-    override this.OnElementChanged(e: ElementChangedEventArgs<Viewport>) = 
+    override this.OnElementChanged(e: ElementChangedEventArgs<Sprightly.Viewport>) = 
         base.OnElementChanged(e)
 
         match this.Control with
         | null -> 
-            this.SetNativeControl(ViewportControl())
+            this.SetNativeControl(ViewportControl(Sprightly.WPF.Components.Viewport()))
         | _ ->
             do ()
 
