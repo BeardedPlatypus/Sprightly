@@ -13,7 +13,7 @@
     <Compile Include="Domain\Path.fs" />
     <Compile Include="Domain\Texture.fs" />
     <Content Include="DataAccess\sprightly_project.json" />
-    <Compile Include="IKoboldFacade.fs" />
+    <Compile Include="ITextureFactory.fs" />
     <Compile Include="Viewport.fs" />
     <Compile Include="Sprightly.fs" />
   </ItemGroup>

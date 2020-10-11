@@ -1,10 +1,10 @@
 ﻿namespace Sprightly 
 
 /// <summary>
-/// <see cref="IKoboldFacade"/> exposes the relevant update logic of the kobold
-/// facade to the Sprightly application.
+/// <see cref="ITextureFactory"/> exposes the relevant methods to generate new 
+/// underlying texture objects to be used in the <see cref="Viewport"/>.
 /// </summary>
-type IKoboldUpdateFacade = 
+type ITextureFactory = 
     /// <summary>
     /// Check if the texture with the specified <paramref name="label"/> exists.
     /// </summary>
