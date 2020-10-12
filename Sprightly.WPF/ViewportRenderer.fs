@@ -2,7 +2,6 @@
 
 open Xamarin.Forms.Platform.WPF
 
-open Sprightly
 open Sprightly.WPF.Components
 
 /// <summary>
@@ -17,7 +16,8 @@ type ViewportRenderer() =
 
         match this.Control with
         | null -> 
-            this.SetNativeControl(ViewportControl(Sprightly.WPF.Components.Viewport()))
+            let viewport = ViewportFactory.Create ()
+            this.SetNativeControl(ViewportControl(viewport))
         | _ ->
             do ()
 
