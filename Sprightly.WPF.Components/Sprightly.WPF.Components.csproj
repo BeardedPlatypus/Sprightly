@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BeardedPlatypus.kobold-layer" Version="0.1.0-dev.1176" />
+    <PackageReference Include="BeardedPlatypus.kobold-layer" Version="0.1.0-dev.1178" />
   </ItemGroup>
 
 </Project>
