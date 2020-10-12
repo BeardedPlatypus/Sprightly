@@ -1,5 +1,6 @@
 ﻿namespace Sprightly.Pages
 
+open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
 
@@ -9,35 +10,102 @@ open Xamarin.Forms
 /// </summary>
 module public StartPage =
     /// <summary>
-    /// <see cref="RecentProject"/> defines a single recent project with a 
-    /// path and a date when it was last opened.
-    /// </summary>
-    type public RecentProject = 
-        { Path : Sprightly.Domain.Path.T 
-          LastOpened : System.DateTime
-        }
-
-    /// <summary>
     /// <see cref="Model"/> defines the model for the <see cref="StartPage"/>.
     /// This consists of a list of recent projects.
     /// </summary>
     type public Model = 
-        { RecentProjects : RecentProject list
+        { RecentProjects : Sprightly.DataAccess.RecentProject list
         }
+
 
     /// <summary>
     /// <see cref="Msg"/> defines the messages for the <see cref="StartPage"/>.
     /// </summary>
     type public Msg  =
-        | SetRecentProjects of RecentProject list
+        | SetRecentProjects of Sprightly.DataAccess.RecentProject list
         | RequestNewProject 
+
+
+    /// <summary>
+    /// <see cref="InternalCmdMsg"/> defines the internal command messages for 
+    /// the <see cref="StartPage"/>, which can be mapped through the 
+    /// <see cref="mapInternalCmdMsg"/> method.
+    /// </summary>
+    type public InternalCmdMsg =
+        | LoadRecentProjects
+        | SaveRecentProjects of Sprightly.DataAccess.RecentProject list
+
+
+    /// <summary>
+    /// <see cref="ExternalCmdMsg"/> defines the external command messages for 
+    /// the <see cref="StartPage"/>, which need to be mapped in the application
+    /// level.
+    /// </summary>
+    type public ExternalCmdMsg =
+        | StartNewProject
+
 
     /// <summary>
     /// <see cref="Msg"/> defines the command messages for the <see cref="StartPage"/>.
     /// </summary>
     type public CmdMsg =
-        | LoadRecentProjects
-        | StartNewProject
+        | Internal of InternalCmdMsg
+        | External of ExternalCmdMsg
+
+    let private recentProjectsKey = "recent_projects"
+
+    let private loadRecentProjectsCmd () =
+        async {
+            do! Async.SwitchToThreadPool ()
+            let app = Xamarin.Forms.Application.Current
+
+            try 
+                match app.Properties.TryGetValue recentProjectsKey with
+                | true, (:? string as json) -> 
+                    let recentProjects = Newtonsoft.Json.JsonConvert.DeserializeObject<Sprightly.DataAccess.RecentProject list>(json)
+                    return Some <| SetRecentProjects recentProjects
+                | _ -> 
+                    return None
+             with ex -> 
+                 return None
+        } |> Cmd.ofAsyncMsgOption
+
+
+    let private saveRecentProjectsCmd (recentProjects: Sprightly.DataAccess.RecentProject list) = 
+        async {
+            do! Async.SwitchToThreadPool ()
+            let app = Xamarin.Forms.Application.Current
+
+            let json = Newtonsoft.Json.JsonConvert.SerializeObject(recentProjects)
+            app.Properties.[recentProjectsKey] <- json
+            app.SavePropertiesAsync () |> ignore
+
+            return None
+        } |> Cmd.ofAsyncMsgOption
+
+
+    /// <summary>
+    /// <see cref="mapInternalCmdMsg> maps the provided <paramref name="cmd"/>
+    /// to a corresponding cmd.
+    /// </summary>
+    /// <param name="cmd">The command message to convert to a command.</param>
+    /// <returns>
+    /// The command corresponding with the provided <paramref name="cmd"/>.
+    /// </returns>
+    let public mapInternalCmdMsg (cmd: InternalCmdMsg) =
+        match cmd with 
+        | LoadRecentProjects -> 
+            loadRecentProjectsCmd ()
+        | SaveRecentProjects recentProjects -> 
+            saveRecentProjectsCmd recentProjects
+
+
+    /// <summary>
+    /// Initialise a model and CmdMsg for the <see cref="StartPage"/>.
+    /// </summary>
+    let public init : Model * CmdMsg list = 
+        { RecentProjects = [] }, [ Internal LoadRecentProjects ]
+
 
     /// <summary>
     /// Update the provided <paramref name="model"/> to its new state given the
@@ -54,12 +122,14 @@ module public StartPage =
         | SetRecentProjects recentProjects -> 
             { model with RecentProjects = recentProjects }, []
         | RequestNewProject ->
-            model, [ StartNewProject ]
-        
+            model, [ External StartNewProject ]
+       
+       
     let private projectButtonsView dispatch = 
         View.StackLayout(children = [ Common.Components.textButton "New Project"  (fun () -> dispatch RequestNewProject)
                                       Common.Components.textButton "Open Project" (fun () -> ())
                                     ])
+
 
     let private projectButtonsColumnView dispatch = 
         View.Grid(coldefs = [ Star ],
@@ -74,8 +144,9 @@ module public StartPage =
                              ])
             .Margin(Thickness 20.0)
             .RowSpacing(35.0)
+
     
-    let private recentProjectsView (recentProjects: RecentProject list ) dispatch = 
+    let private recentProjectsView (recentProjects: Sprightly.DataAccess.RecentProject list ) dispatch = 
         View.Grid(coldefs = [ Star],
                   rowdefs = [ Star; Stars 5.0 ],
                   children = [ 
@@ -86,6 +157,7 @@ module public StartPage =
                           .BoxViewCornerRadius(CornerRadius 7.5)
                           .Row(1)])
             .Margin(Thickness 20.0)
+
 
     /// <summary>
     /// <see cref="view"/> transforms the <paramref name="model"/> onto
