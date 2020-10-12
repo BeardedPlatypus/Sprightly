@@ -42,8 +42,9 @@ module App =
                                   ]
                                ).RowSpacing(2.0).ColumnSpacing(2.0)
 
-        View.ContentPage(content = content,
-                         backgroundColor = Color.Black,
+        let startPage = Pages.StartPage.view { RecentProjects = []} (fun _ -> ())
+
+        View.ContentPage(content = startPage,
                          hasNavigationBar = false)
 
     // Note, this declaration is needed if you enable LiveUpdate

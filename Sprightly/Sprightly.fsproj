@@ -10,15 +10,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="Assets\icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Compile Include="Domain\Path.fs" />
     <Compile Include="Domain\Texture.fs" />
     <Content Include="DataAccess\sprightly_project.json" />
+    <Compile Include="Pages\Common\Components.fs" />
+    <Compile Include="Pages\StartPage.fs" />
     <Compile Include="ITextureFactory.fs" />
     <Compile Include="Viewport.fs" />
     <Compile Include="Sprightly.fs" />
   </ItemGroup>
-
-  <ItemGroup />
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="4.8.0.1364" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
