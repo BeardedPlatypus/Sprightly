@@ -14,41 +14,81 @@ open Xamarin.Forms
 /// See: https://fsprojects.github.io/Fabulous/Fabulous.XamarinForms/index.html#getting-started
 /// </remarks>
 module App = 
-    type Model = unit
-    type Msg = unit
+    type public Model = 
+        | StartPageModel of Pages.StartPage.Model
 
-    let initModel = ()
+    type public Msg = 
+        | StartPageMsg of Pages.StartPage.Msg
 
-    let init () = initModel, Cmd.none
+    type public CmdMsg = 
+        | StartPageCmdMsg of Pages.StartPage.CmdMsg
 
-    let update (msg: Msg) (model: Model) =
-        model, Cmd.none
+
+    let private toCmdMsg (mapFunc: 'a -> CmdMsg) (cmdMsgList: 'a list) : CmdMsg list =
+        List.map mapFunc cmdMsgList
+
+    let init () =
+        let model, cmdMsgs = Pages.StartPage.init
+        model |> StartPageModel, cmdMsgs |> ( toCmdMsg StartPageCmdMsg )
+
+    let update (msg: Msg) (model: Model) : Model * CmdMsg list =
+        match model, msg with 
+        | (StartPageModel startPageModel, StartPageMsg startPageMsg) ->
+            let updatedModel, cmdMsgs = Pages.StartPage.update startPageMsg startPageModel
+            updatedModel |> StartPageModel, cmdMsgs |> ( toCmdMsg StartPageCmdMsg )
+        | _ -> 
+            model, []
 
     let view (model: Model) dispatch =
-        let content = View.Grid( rowdefs = [ Stars 2.0; Star ],
-                                 coldefs = [ Star; Stars 2.0; Star],
-                                 children = 
-                                  [ View.BoxView().BackgroundColor(Color.LightCoral)
-                                                  .Row(0).Column(0)
-                                    View.Viewport().Row(0).Column(1)
-                                    View.BoxView().BackgroundColor(Color.LightGreen)
-                                                  .Row(0).Column(2)
-                                    View.BoxView().BackgroundColor(Color.Coral)
-                                                  .Row(1).Column(0)
-                                    View.BoxView().BackgroundColor(Color.DarkOrange)
-                                                  .Row(1).Column(1)
-                                    View.BoxView().BackgroundColor(Color.LimeGreen)
-                                                  .Row(1).Column(2)
-                                  ]
-                               ).RowSpacing(2.0).ColumnSpacing(2.0)
+        // let content = View.Grid( rowdefs = [ Stars 2.0; Star ],
+        //                          coldefs = [ Star; Stars 2.0; Star],
+        //                          children = 
+        //                           [ View.BoxView().BackgroundColor(Color.LightCoral)
+        //                                           .Row(0).Column(0)
+        //                             View.Viewport().Row(0).Column(1)
+        //                             View.BoxView().BackgroundColor(Color.LightGreen)
+        //                                           .Row(0).Column(2)
+        //                             View.BoxView().BackgroundColor(Color.Coral)
+        //                                           .Row(1).Column(0)
+        //                             View.BoxView().BackgroundColor(Color.DarkOrange)
+        //                                           .Row(1).Column(1)
+        //                             View.BoxView().BackgroundColor(Color.LimeGreen)
+        //                                           .Row(1).Column(2)
+        //                           ]
+        //                        ).RowSpacing(2.0).ColumnSpacing(2.0)
 
-        let startPage = Pages.StartPage.view { RecentProjects = []} (fun _ -> ())
 
-        View.ContentPage(content = startPage,
+        let content = 
+            match model with 
+            | StartPageModel startPageModel ->
+                Pages.StartPage.view startPageModel ( dispatch << StartPageMsg )
+
+        View.ContentPage(content = content,
                          hasNavigationBar = false)
 
+
+    let mapExternalStartPageCmdMsg (cmdMsg: Pages.StartPage.ExternalCmdMsg) =
+        Cmd.none
+
+
+    let mapStartPageCmdMsg (cmdMsg: Pages.StartPage.CmdMsg) = 
+        let cmd = 
+            match cmdMsg with 
+            | Pages.StartPage.Internal internalCmdMsg -> 
+                Pages.StartPage.mapInternalCmdMsg internalCmdMsg
+            | Pages.StartPage.External externalCmdMsg ->
+                mapExternalStartPageCmdMsg externalCmdMsg
+
+        Cmd.map StartPageMsg cmd
+
+
+    let mapCmdMsg (cmdMsg: CmdMsg) =
+        match cmdMsg with 
+        | StartPageCmdMsg startPageCmdMsg -> mapStartPageCmdMsg startPageCmdMsg
+
+
     // Note, this declaration is needed if you enable LiveUpdate
-    let program = Program.mkProgram init update view
+    let program = Program.mkProgramWithCmdMsg init update view mapCmdMsg
 
 type App () as app = 
     inherit Application ()
@@ -69,6 +109,7 @@ type App () as app =
 
     // Uncomment this code to save the application state to app.Properties using Newtonsoft.Json
     // See https://fsprojects.github.io/Fabulous/Fabulous.XamarinForms/models.html#saving-application-state for further  instructions.
+
 #if APPSAVE
     let modelId = "model"
     override __.OnSleep() = 
