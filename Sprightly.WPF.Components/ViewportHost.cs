@@ -54,6 +54,7 @@ namespace Sprightly.WPF.Components
                 0);
 
             _viewport.Initialise(_hwndHost);
+            _viewport.LoadTexture("sample", "sample.png");
             _viewport.Update();
 
             return new HandleRef(this, _hwndHost);

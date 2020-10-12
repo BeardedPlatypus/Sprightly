@@ -8,7 +8,7 @@ module public Texture =
     /// <summary>
     /// <see cref="Id"/> defines a texture id.
     /// </summary>
-    type Id = | Id of int32
+    type Id = | Id of string
 
     /// <summary>
     /// <see cref="Name"/> defines a texture name.
@@ -32,7 +32,7 @@ module public Texture =
     /// <returns>
     /// A new texture.
     /// </returns>
-    let construct (id: int32) (name: string) (path: Path.T) : T =
+    let construct (id: string) (name: string) (path: Path.T) : T =
         { id = Id id
           name = Name name
           path = path
