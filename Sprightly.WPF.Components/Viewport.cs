@@ -34,5 +34,15 @@ namespace Sprightly.WPF.Components
         {
             throw new NotImplementedException();
         }
+
+        public bool HasTexture(string id)
+        {
+            return _view.has_texture(id);
+        }
+
+        public void LoadTexture(string id, string path)
+        {
+            _view.load_texture(id, path);
+        }
     }
 }

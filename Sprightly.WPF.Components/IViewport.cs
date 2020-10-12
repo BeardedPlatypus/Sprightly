@@ -26,5 +26,9 @@ namespace Sprightly.WPF.Components
         /// Finalises the render.
         /// </summary>
         void FinaliseRender();
+
+        bool HasTexture(string id);
+
+        void LoadTexture(string id, string path);
     }
 }
