@@ -15,6 +15,7 @@
     </None>
     <Compile Include="Domain\Path.fs" />
     <Compile Include="Domain\Texture.fs" />
+    <Compile Include="DataAccess\RecentProject.fs" />
     <Content Include="DataAccess\sprightly_project.json" />
     <Compile Include="Pages\Common\Components.fs" />
     <Compile Include="Pages\StartPage.fs" />
