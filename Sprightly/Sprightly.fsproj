@@ -18,6 +18,7 @@
     <Compile Include="DataAccess\RecentProject.fs" />
     <Content Include="DataAccess\sprightly_project.json" />
     <Compile Include="Pages\Common\Components.fs" />
+    <Compile Include="Pages\StartPageComponents\RecentProjectButton.fs" />
     <Compile Include="Pages\StartPage.fs" />
     <Compile Include="ITextureFactory.fs" />
     <Compile Include="Viewport.fs" />
