@@ -145,17 +145,17 @@ module public StartPage =
             .Margin(Thickness 20.0)
             .RowSpacing(35.0)
 
-    
+
+
     let private recentProjectsView (recentProjects: Sprightly.DataAccess.RecentProject list ) dispatch = 
-        View.Grid(coldefs = [ Star],
-                  rowdefs = [ Star; Stars 5.0 ],
-                  children = [ 
-                      View.BoxView()
-                          .BoxViewCornerRadius(CornerRadius 7.5)
-                          .Row(0)
-                      View.BoxView()
-                          .BoxViewCornerRadius(CornerRadius 7.5)
-                          .Row(1)])
+        View.Grid(coldefs = [ Star ],
+                  rowdefs = [ Star; Stars 7.0 ],
+                         children = [ View.Label(text = "Recent Projects:", 
+                                                 fontSize = FontSize.fromValue 28.0)
+                                          .Row(0)
+                                      View.BoxView()
+                                          .BoxViewCornerRadius(CornerRadius 7.5)
+                                          .Row(1)])
             .Margin(Thickness 20.0)
 
 

@@ -17,8 +17,10 @@ module App =
     type public Model = 
         | StartPageModel of Pages.StartPage.Model
 
+
     type public Msg = 
         | StartPageMsg of Pages.StartPage.Msg
+
 
     type public CmdMsg = 
         | StartPageCmdMsg of Pages.StartPage.CmdMsg
@@ -27,9 +29,11 @@ module App =
     let private toCmdMsg (mapFunc: 'a -> CmdMsg) (cmdMsgList: 'a list) : CmdMsg list =
         List.map mapFunc cmdMsgList
 
+
     let init () =
         let model, cmdMsgs = Pages.StartPage.init
         model |> StartPageModel, cmdMsgs |> ( toCmdMsg StartPageCmdMsg )
+
 
     let update (msg: Msg) (model: Model) : Model * CmdMsg list =
         match model, msg with 
@@ -38,6 +42,7 @@ module App =
             updatedModel |> StartPageModel, cmdMsgs |> ( toCmdMsg StartPageCmdMsg )
         | _ -> 
             model, []
+
 
     let view (model: Model) dispatch =
         // let content = View.Grid( rowdefs = [ Stars 2.0; Star ],
@@ -89,6 +94,7 @@ module App =
 
     // Note, this declaration is needed if you enable LiveUpdate
     let program = Program.mkProgramWithCmdMsg init update view mapCmdMsg
+
 
 type App () as app = 
     inherit Application ()
