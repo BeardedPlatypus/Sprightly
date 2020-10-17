@@ -15,15 +15,19 @@ open Xamarin.Forms
 /// </remarks>
 module App = 
     type public Model = 
-        | StartPageModel of Pages.StartPage.Model
+        | StartPageModel   of Pages.StartPage.Model
+        | ProjectPageModel of Pages.ProjectPage.Model
 
 
     type public Msg = 
-        | StartPageMsg of Pages.StartPage.Msg
+        | StartPageMsg    of Pages.StartPage.Msg
+        | ProjectPageMsg  of Pages.ProjectPage.Msg
+        | StartNewProject
 
 
     type public CmdMsg = 
-        | StartPageCmdMsg of Pages.StartPage.CmdMsg
+        | StartPageCmdMsg   of Pages.StartPage.CmdMsg
+        | ProjectPageCmdMsg of Pages.ProjectPage.CmdMsg
 
 
     let private toCmdMsg (mapFunc: 'a -> CmdMsg) (cmdMsgList: 'a list) : CmdMsg list =
@@ -40,56 +44,51 @@ module App =
         | (StartPageModel startPageModel, StartPageMsg startPageMsg) ->
             let updatedModel, cmdMsgs = Pages.StartPage.update startPageMsg startPageModel
             updatedModel |> StartPageModel, cmdMsgs |> ( toCmdMsg StartPageCmdMsg )
+        | (ProjectPageModel projectPageModel, ProjectPageMsg projectPageMsg) ->
+            let updatedModel, cmdMsgs = Pages.ProjectPage.update projectPageMsg projectPageModel
+            updatedModel |> ProjectPageModel, cmdMsgs |> ( toCmdMsg ProjectPageCmdMsg )
+        | _, StartNewProject ->
+            () |> ProjectPageModel, []
         | _ -> 
             model, []
 
 
     let view (model: Model) dispatch =
-        // let content = View.Grid( rowdefs = [ Stars 2.0; Star ],
-        //                          coldefs = [ Star; Stars 2.0; Star],
-        //                          children = 
-        //                           [ View.BoxView().BackgroundColor(Color.LightCoral)
-        //                                           .Row(0).Column(0)
-        //                             View.Viewport().Row(0).Column(1)
-        //                             View.BoxView().BackgroundColor(Color.LightGreen)
-        //                                           .Row(0).Column(2)
-        //                             View.BoxView().BackgroundColor(Color.Coral)
-        //                                           .Row(1).Column(0)
-        //                             View.BoxView().BackgroundColor(Color.DarkOrange)
-        //                                           .Row(1).Column(1)
-        //                             View.BoxView().BackgroundColor(Color.LimeGreen)
-        //                                           .Row(1).Column(2)
-        //                           ]
-        //                        ).RowSpacing(2.0).ColumnSpacing(2.0)
-
-
         let content = 
             match model with 
             | StartPageModel startPageModel ->
                 Pages.StartPage.view startPageModel ( dispatch << StartPageMsg )
+            | ProjectPageModel projectPageModel ->
+                Pages.ProjectPage.view projectPageModel ( dispatch << ProjectPageMsg )
 
         View.ContentPage(content = content,
                          hasNavigationBar = false)
 
+    
+    let private startNewProjectCmd = 
+         Cmd.ofMsg StartNewProject
+
 
     let mapExternalStartPageCmdMsg (cmdMsg: Pages.StartPage.ExternalCmdMsg) =
-        Cmd.none
+        match cmdMsg with 
+        | Pages.StartPage.StartNewProject -> 
+            startNewProjectCmd
+        | _ ->
+            Cmd.none
 
 
     let mapStartPageCmdMsg (cmdMsg: Pages.StartPage.CmdMsg) = 
-        let cmd = 
-            match cmdMsg with 
-            | Pages.StartPage.Internal internalCmdMsg -> 
-                Pages.StartPage.mapInternalCmdMsg internalCmdMsg
-            | Pages.StartPage.External externalCmdMsg ->
-                mapExternalStartPageCmdMsg externalCmdMsg
-
-        Cmd.map StartPageMsg cmd
+        match cmdMsg with 
+        | Pages.StartPage.Internal internalCmdMsg -> 
+            Pages.StartPage.mapInternalCmdMsg internalCmdMsg |> ( Cmd.map StartPageMsg )
+        | Pages.StartPage.External externalCmdMsg ->
+            mapExternalStartPageCmdMsg externalCmdMsg
 
 
     let mapCmdMsg (cmdMsg: CmdMsg) =
         match cmdMsg with 
         | StartPageCmdMsg startPageCmdMsg -> mapStartPageCmdMsg startPageCmdMsg
+        | ProjectPageCmdMsg _ -> Cmd.none
 
 
     // Note, this declaration is needed if you enable LiveUpdate
