@@ -145,18 +145,30 @@ module public StartPage =
                                    .Row(1)
                              ])
             .Margin(Thickness 20.0)
-            .RowSpacing(35.0)
+            .RowSpacing(25.0)
 
 
 
     let private recentProjectsView (recentProjects: Sprightly.DataAccess.RecentProject list ) dispatch = 
-        let recentProject: Sprightly.DataAccess.RecentProject = { Path=Sprightly.Domain.Path.fromString "C:/Some/Path/file.json"; LastOpened=System.DateTime.Now}
+        let recentProjectsListView = 
+            match recentProjects with 
+            | [] ->
+                View.Label(text = "No recent projects",
+                           padding = Thickness (25.0, 0.0, 25.0, 0.0),
+                           textColor = Color.Gray)
+            | _ ->
+                let recentProjectViewElements = 
+                    List.map (fun rp -> View.RecentProjectButton(recentProjectValue=rp)) recentProjects
+                View.ScrollView(View.StackLayout(children = recentProjectViewElements,
+                                                 padding  = Thickness (0.0, 0.0, 25.0, 0.0)))
+
         View.Grid(coldefs = [ Star ],
                   rowdefs = [ Star; Stars 7.0 ],
                   children = [ View.Label(text = "Recent Projects:", 
                                           fontSize = FontSize.fromValue 28.0)
                                    .Row(0)
-                               View.RecentProjectButton(recentProjectValue=recentProject ).Row(1)])
+                               recentProjectsListView.Row(1)
+                             ])
             .Margin(Thickness 20.0)
 
 
