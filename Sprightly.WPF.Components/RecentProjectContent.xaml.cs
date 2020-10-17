@@ -21,6 +21,6 @@ namespace Sprightly.WPF.Components
 
         public string FileName => Path.GetFileName(path);
         public string DirectoryPath => Path.GetDirectoryName(path);
-        public string LastOpenedDate => lastOpened.ToShortDateString();
+        public string LastOpenedDate => $"{lastOpened.ToShortDateString()} {lastOpened.ToShortTimeString()}";
     }
 }
