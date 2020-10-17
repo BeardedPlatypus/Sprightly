@@ -4,7 +4,7 @@ open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
 
-open Sprightly.FabulousRecentProjectButton
+open Sprightly.Components.StartPage.FabulousRecentProjectButton
 
 /// <summary>
 /// <see cref="ProjectPage"/> defines the introduct project page shown when
