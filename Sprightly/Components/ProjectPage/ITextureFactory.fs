@@ -1,4 +1,6 @@
-﻿namespace Sprightly 
+﻿namespace Sprightly.Components.ProjectPage
+
+open Sprightly
 
 /// <summary>
 /// <see cref="ITextureFactory"/> exposes the relevant methods to generate new 

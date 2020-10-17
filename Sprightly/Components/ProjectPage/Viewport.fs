@@ -1,4 +1,4 @@
-﻿namespace Sprightly
+﻿namespace Sprightly.Components.ProjectPage
 
 open Fabulous
 open Fabulous.XamarinForms
