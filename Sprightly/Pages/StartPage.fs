@@ -4,6 +4,8 @@ open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
 
+open Sprightly.FabulousRecentProjectButton
+
 /// <summary>
 /// <see cref="ProjectPage"/> defines the introduct project page shown when
 /// sprightly is started.
@@ -148,14 +150,13 @@ module public StartPage =
 
 
     let private recentProjectsView (recentProjects: Sprightly.DataAccess.RecentProject list ) dispatch = 
+        let recentProject: Sprightly.DataAccess.RecentProject = { Path=Sprightly.Domain.Path.fromString "C:/Some/Path/file.json"; LastOpened=System.DateTime.Now}
         View.Grid(coldefs = [ Star ],
                   rowdefs = [ Star; Stars 7.0 ],
-                         children = [ View.Label(text = "Recent Projects:", 
-                                                 fontSize = FontSize.fromValue 28.0)
-                                          .Row(0)
-                                      View.BoxView()
-                                          .BoxViewCornerRadius(CornerRadius 7.5)
-                                          .Row(1)])
+                  children = [ View.Label(text = "Recent Projects:", 
+                                          fontSize = FontSize.fromValue 28.0)
+                                   .Row(0)
+                               View.RecentProjectButton(recentProjectValue=recentProject ).Row(1)])
             .Margin(Thickness 20.0)
 
 

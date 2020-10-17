@@ -13,6 +13,7 @@
     <Compile Include="ViewportFactory.fs" />
     <Compile Include="TextureFactory.fs" />
     <Compile Include="Properties\AssemblyInfo.fs" />
+    <Compile Include="RecentProjectButtonRenderer.fs" />
     <Compile Include="ViewportRenderer.fs" />
     <Compile Include="App.fs" />
     <None Include="app.config" />
