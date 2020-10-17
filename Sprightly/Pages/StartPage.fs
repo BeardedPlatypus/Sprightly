@@ -3,6 +3,7 @@
 open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
+open Sprightly.Components
 
 open Sprightly.Components.StartPage.FabulousRecentProjectButton
 

@@ -1,6 +1,5 @@
-﻿namespace Sprightly.Pages.Common
+﻿namespace Sprightly.Components.Common
 
-open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
 
