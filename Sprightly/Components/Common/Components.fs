@@ -13,3 +13,9 @@ module public Components =
             .FontSize(FontSize.fromValue 12.0)
             .Padding(Thickness 10.0)
 
+    let public sprightlyIcon =
+        View.Image(source = Image.fromPath "Assets/icon.png")
+            .VerticalOptions(LayoutOptions.Center)
+            .HorizontalOptions(LayoutOptions.Center)
+            .Padding(Thickness 5.0)
+

@@ -74,6 +74,85 @@ module NewProjectPage =
             model, [ External ReturnToStartPage ]
 
 
+    let private navigationButtonsView dispatch = 
+        let createProjectButton =
+            (Common.Components.textButton "Create Project"  (fun () -> dispatch RequestNewProject))
+                .HorizontalOptions(LayoutOptions.Fill)
+
+        let returnButton = 
+            (Common.Components.textButton "Back" (fun () -> dispatch RequestStartPage))
+                .HorizontalOptions(LayoutOptions.Fill)
+
+        let topButtons = 
+            View.StackLayout(children = [ createProjectButton ])
+                .StackLayoutOrientation(StackOrientation.Vertical)
+                .VerticalOptions(LayoutOptions.Start)
+        let middleButtons = 
+            View.StackLayout(children = [])
+                .StackLayoutOrientation(StackOrientation.Vertical)
+                .VerticalOptions(LayoutOptions.CenterAndExpand)
+        let bottomButtons = 
+            View.StackLayout(children = [ returnButton ])
+                .StackLayoutOrientation(StackOrientation.Vertical)
+                .VerticalOptions(LayoutOptions.End)
+
+        View.StackLayout(children = [ topButtons; middleButtons; bottomButtons ])
+            .VerticalOptions(LayoutOptions.FillAndExpand)
+            .HorizontalOptions(LayoutOptions.FillAndExpand)
+
+
+    let private navigationButtonsColumnView dispatch = 
+        View.Grid(coldefs = [ Star ],
+                  rowdefs = [ Star; Stars 2.0 ],
+                  children = [ Common.Components.sprightlyIcon.Row(0)
+                               (navigationButtonsView dispatch).Row(1)
+                             ])
+            .Margin(Thickness 20.0)
+            .RowSpacing(25.0)
+
+
+    let private nameEntryView (i: int) (name: string) dispatch =
+        [ View.Label(text="Project name:")
+              .Row(0).Column(0)
+          View.Entry(text = name)
+              .Row(0).Column(1)
+        ]
+
+
+    let private directoryEntryView (i: int) (name: string) dispatch =
+        [ View.Label(text="Project directory:")
+              .Row(i).Column(0)
+          View.Entry(text = name)
+              .Row(i).Column(1)
+          View.Button(text = "...")
+              .Row(i).Column(2)
+              .Padding(Thickness (10.0, 0.0))
+        ]
+
+
+    let private newProjectDataFieldsView (model : Model) dispatch =
+        let projectName = match model.ProjectName with | None -> "" | Some v -> v
+        let projectDirectory = match model.DirectoryPath with | None -> "" | Some ( Sprightly.Domain.Path.T v) -> v
+
+        View.Grid(coldefs = [ Star; Stars 6.0; Auto ],
+                  rowdefs = [ Star; Star ],
+                  children = nameEntryView 0 projectName dispatch @
+                             directoryEntryView 1 projectDirectory dispatch)
+            .VerticalOptions(LayoutOptions.Start)
+
+
+    let private newProjectDataEntryView (model: Model) dispatch = 
+        View.Grid(coldefs = [ Star ],
+                  rowdefs = [ Star; Stars 7.0 ],
+                  children = [ View.Label(text = "Create new project:", 
+                                          fontSize = FontSize.fromValue 28.0)
+                                   .Row(0)
+                               (newProjectDataFieldsView model dispatch)
+                                   .Row(1)
+                             ])
+            .Margin(Thickness 20.0)
+
+
     /// <summary>
     /// <see cref="view"/> transforms the <paramref name="model"/> onto
     /// its corresponding view.
@@ -84,11 +163,29 @@ module NewProjectPage =
     /// <see cref='update"/> is executed on the ui thread.
     /// </remarks>
     let public view (model: Model) dispatch = 
-        View.Label(text = "Create new project:", 
-                   fontSize = FontSize.fromValue 28.0)
-            .Margin(Thickness 40.0)
-
-
-
-
+        let dataEntryView = newProjectDataEntryView model dispatch
+        let navigationButtons = navigationButtonsColumnView dispatch
+     
+        let divider = 
+          View.BoxView(color = Color.Gray,
+                       width = 2.5)
+              .Padding(Thickness 20.0)
+              .BoxViewCornerRadius(CornerRadius 1.25)
+     
+        View.Grid(rowdefs = [ Star ],
+                  coldefs = [ Stars 4.0; Auto; Star ],
+                  children = 
+                    [ dataEntryView
+                          .VerticalOptions(LayoutOptions.FillAndExpand)
+                          .HorizontalOptions(LayoutOptions.FillAndExpand)
+                          .Column(0)
+                    ; divider
+                          .VerticalOptions(LayoutOptions.FillAndExpand)
+                          .Column(1)
+                    ; navigationButtons
+                          .VerticalOptions(LayoutOptions.FillAndExpand)
+                          .Column(2);
+                    ])
+              .Spacing(10.0)
+              .Margin(Thickness 20.0)    
 

@@ -137,13 +137,8 @@ module public StartPage =
     let private projectButtonsColumnView dispatch = 
         View.Grid(coldefs = [ Star ],
                   rowdefs = [ Star; Stars 2.0 ],
-                  children = [ View.Image(source = Image.fromPath "Assets/icon.png")
-                                   .VerticalOptions(LayoutOptions.Center)
-                                   .HorizontalOptions(LayoutOptions.Center)
-                                   .Padding(Thickness 5.0)
-                                   .Row(0)
-                               (projectButtonsView dispatch)
-                                   .Row(1)
+                  children = [ Common.Components.sprightlyIcon.Row(0)
+                               (projectButtonsView dispatch).Row(1)
                              ])
             .Margin(Thickness 20.0)
             .RowSpacing(25.0)
