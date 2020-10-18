@@ -20,12 +20,19 @@ module NewProjectPage =
 
 
     /// <summary>
+    /// Initialise a new default <see cref="Model"/>.
+    /// </summary>
+    let public init () : Model = { ProjectName = None; DirectoryPath = None }
+
+
+    /// <summary>
     /// <see cref="Msg"/> defines the messages for the <see cref="NewProjectPage"/>.
     /// </summary>
     type public Msg = 
         | SetProjectName of string
         | SetDirectoryPath of string
         | RequestNewProject
+        | RequestStartPage
 
 
     /// <summary>
@@ -35,6 +42,7 @@ module NewProjectPage =
     /// </summary>
     type public ExternalCmdMsg =
         | CreateNewProject
+        | ReturnToStartPage
 
 
     /// <summary>
@@ -62,6 +70,8 @@ module NewProjectPage =
             { model with DirectoryPath = Some (Sprightly.Domain.Path.fromString newPath) }, []
         | RequestNewProject ->
             model, [ External CreateNewProject ]
+        | RequestStartPage -> 
+            model, [ External ReturnToStartPage ]
 
 
     /// <summary>

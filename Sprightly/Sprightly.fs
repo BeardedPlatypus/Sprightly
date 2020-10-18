@@ -15,19 +15,23 @@ open Xamarin.Forms
 /// </remarks>
 module App = 
     type public Model = 
-        | StartPageModel   of Pages.StartPage.Model
-        | ProjectPageModel of Pages.ProjectPage.Model
+        | StartPageModel      of Pages.StartPage.Model
+        | ProjectPageModel    of Pages.ProjectPage.Model
+        | NewProjectPageModel of Pages.NewProjectPage.Model
 
 
     type public Msg = 
-        | StartPageMsg    of Pages.StartPage.Msg
-        | ProjectPageMsg  of Pages.ProjectPage.Msg
+        | StartPageMsg      of Pages.StartPage.Msg
+        | ProjectPageMsg    of Pages.ProjectPage.Msg
+        | NewProjectPageMsg of Pages.NewProjectPage.Msg
         | StartNewProject
+        | ReturnToStartPage
 
 
     type public CmdMsg = 
-        | StartPageCmdMsg   of Pages.StartPage.CmdMsg
-        | ProjectPageCmdMsg of Pages.ProjectPage.CmdMsg
+        | StartPageCmdMsg      of Pages.StartPage.CmdMsg
+        | ProjectPageCmdMsg    of Pages.ProjectPage.CmdMsg
+        | NewProjectPageCmdMsg of Pages.NewProjectPage.CmdMsg
 
 
     let private toCmdMsg (mapFunc: 'a -> CmdMsg) (cmdMsgList: 'a list) : CmdMsg list =
@@ -47,8 +51,13 @@ module App =
         | (ProjectPageModel projectPageModel, ProjectPageMsg projectPageMsg) ->
             let updatedModel, cmdMsgs = Pages.ProjectPage.update projectPageMsg projectPageModel
             updatedModel |> ProjectPageModel, cmdMsgs |> ( toCmdMsg ProjectPageCmdMsg )
+        | (NewProjectPageModel newProjectPageModel, NewProjectPageMsg newProjectPageMsg) ->
+            let updatedModel, cmdMsgs = Pages.NewProjectPage.update newProjectPageMsg newProjectPageModel
+            updatedModel |> NewProjectPageModel, cmdMsgs |> ( toCmdMsg NewProjectPageCmdMsg )
         | _, StartNewProject ->
-            () |> ProjectPageModel, []
+            Pages.NewProjectPage.init () |> NewProjectPageModel, []
+        | _, ReturnToStartPage ->
+            init ()
         | _ -> 
             model, []
 
@@ -60,24 +69,23 @@ module App =
                 Pages.StartPage.view startPageModel ( dispatch << StartPageMsg )
             | ProjectPageModel projectPageModel ->
                 Pages.ProjectPage.view projectPageModel ( dispatch << ProjectPageMsg )
+            | NewProjectPageModel newProjectPageModel ->
+                Pages.NewProjectPage.view newProjectPageModel ( dispatch << NewProjectPageMsg )
+             
 
         View.ContentPage(content = content,
                          hasNavigationBar = false)
 
     
-    let private startNewProjectCmd = 
-         Cmd.ofMsg StartNewProject
-
-
-    let mapExternalStartPageCmdMsg (cmdMsg: Pages.StartPage.ExternalCmdMsg) =
+    let private mapExternalStartPageCmdMsg (cmdMsg: Pages.StartPage.ExternalCmdMsg) =
         match cmdMsg with 
         | Pages.StartPage.StartNewProject -> 
-            startNewProjectCmd
+            Cmd.ofMsg StartNewProject
         | _ ->
             Cmd.none
 
 
-    let mapStartPageCmdMsg (cmdMsg: Pages.StartPage.CmdMsg) = 
+    let private mapStartPageCmdMsg (cmdMsg: Pages.StartPage.CmdMsg) = 
         match cmdMsg with 
         | Pages.StartPage.Internal internalCmdMsg -> 
             Pages.StartPage.mapInternalCmdMsg internalCmdMsg |> ( Cmd.map StartPageMsg )
@@ -85,10 +93,28 @@ module App =
             mapExternalStartPageCmdMsg externalCmdMsg
 
 
-    let mapCmdMsg (cmdMsg: CmdMsg) =
+    let private mapExternalNewProjectPageCmdMsg (cmdMsg: Pages.NewProjectPage.ExternalCmdMsg) =
         match cmdMsg with 
-        | StartPageCmdMsg startPageCmdMsg -> mapStartPageCmdMsg startPageCmdMsg
-        | ProjectPageCmdMsg _ -> Cmd.none
+        | Pages.NewProjectPage.ReturnToStartPage ->
+            Cmd.ofMsg ReturnToStartPage
+        | _ -> 
+            Cmd.none
+
+
+    let private mapNewProjectPageCmdMsg (cmdMsg: Pages.NewProjectPage.CmdMsg) =
+        match cmdMsg with 
+        | Pages.NewProjectPage.External externalCmdMsg -> 
+            mapExternalNewProjectPageCmdMsg externalCmdMsg
+
+
+    let private mapCmdMsg (cmdMsg: CmdMsg) =
+        match cmdMsg with 
+        | StartPageCmdMsg startPageCmdMsg -> 
+            mapStartPageCmdMsg startPageCmdMsg
+        | ProjectPageCmdMsg _ -> 
+            Cmd.none
+        | NewProjectPageCmdMsg newProjectCmdMsg -> 
+            mapNewProjectPageCmdMsg newProjectCmdMsg
 
 
     // Note, this declaration is needed if you enable LiveUpdate
