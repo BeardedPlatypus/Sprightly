@@ -26,6 +26,7 @@ module App =
         | NewProjectPageMsg of Pages.NewProjectPage.Msg
         | StartNewProject
         | ReturnToStartPage
+        | CreateNewProject
 
 
     type public CmdMsg = 
@@ -56,6 +57,8 @@ module App =
             updatedModel |> NewProjectPageModel, cmdMsgs |> ( toCmdMsg NewProjectPageCmdMsg )
         | _, StartNewProject ->
             Pages.NewProjectPage.init () |> NewProjectPageModel, []
+        | _, CreateNewProject ->
+            ProjectPageModel (), []
         | _, ReturnToStartPage ->
             init ()
         | _ -> 
@@ -97,6 +100,8 @@ module App =
         match cmdMsg with 
         | Pages.NewProjectPage.ReturnToStartPage ->
             Cmd.ofMsg ReturnToStartPage
+        | Pages.NewProjectPage.CreateNewProject ->
+            Cmd.ofMsg CreateNewProject
         | _ -> 
             Cmd.none
 

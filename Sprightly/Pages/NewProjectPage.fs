@@ -112,17 +112,23 @@ module NewProjectPage =
 
 
     let private nameEntryView (i: int) (name: string) dispatch =
+        let fTextChanged (args: TextChangedEventArgs) = 
+            dispatch (SetProjectName args.NewTextValue)
+
         [ View.Label(text="Project name:")
               .Row(0).Column(0)
-          View.Entry(text = name)
+          View.Entry(text = name, textChanged=fTextChanged)
               .Row(0).Column(1)
         ]
 
 
     let private directoryEntryView (i: int) (name: string) dispatch =
+        let fTextChanged (args: TextChangedEventArgs) = 
+            dispatch (SetDirectoryPath args.NewTextValue)
+
         [ View.Label(text="Project directory:")
               .Row(i).Column(0)
-          View.Entry(text = name)
+          View.Entry(text = name, textChanged=fTextChanged)
               .Row(i).Column(1)
           View.Button(text = "...")
               .Row(i).Column(2)
