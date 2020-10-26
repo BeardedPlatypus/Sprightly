@@ -52,3 +52,14 @@ module public Path =
     /// </returns>
     let name (path: T) : string = 
         match path with | T pathStr -> System.IO.Path.GetFileName pathStr
+
+    /// <summary>
+    /// Get the parent directory of the provided <paramref name="path"/>.
+    /// </summary>
+    /// <param name="path">The path from which to obtain the name. </param>
+    /// <returns>
+    /// The parent directory of the directory or file to which <paramref name="path"/> points.
+    /// </returns>
+    let parentDirectory (path: T) : T = 
+        match path with | T pathStr -> System.IO.Path.GetDirectoryName pathStr |> fromString
+       
