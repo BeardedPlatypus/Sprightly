@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
   </PropertyGroup>
 
@@ -17,7 +17,7 @@
     <Compile Include="Domain\Texture.fs" />
     <Compile Include="DataAccess\RecentProject.fs" />
     <Content Include="DataAccess\sprightly_project.json" />
-    <Compile Include="Components\Common\FilePicker.fs" />
+    <Compile Include="Components\Common\IFilePicker.fs" />
     <Compile Include="Components\Common\Components.fs" />
     <Compile Include="Components\StartPage\RecentProjectButton.fs" />
     <Compile Include="Components\ProjectPage\ITextureFactory.fs" />
@@ -33,7 +33,6 @@
     <PackageReference Include="Fabulous.XamarinForms" Version="0.57.0" />
     <PackageReference Include="Fabulous.XamarinForms.LiveUpdate" Version="0.57.0" />
     <PackageReference Include="FSharp.Core" Version="4.6.2" />
-    <PackageReference Include="Xamarin.Plugin.FilePicker" Version="2.1.41" />
     <PackageReference Update="FSharp.Core" Version="5.0.0" /> <!-- workaround for VSMac bug https://github.com/mono/monodevelop/pull/5137 --> 
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
