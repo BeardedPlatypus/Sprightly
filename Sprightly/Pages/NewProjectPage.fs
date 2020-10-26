@@ -30,9 +30,19 @@ module NewProjectPage =
     /// </summary>
     type public Msg = 
         | SetProjectName of string
-        | SetDirectoryPath of string
+        | SetDirectoryPath of Sprightly.Domain.Path.T
         | RequestNewProject
         | RequestStartPage
+        | RequestOpenFilePicker
+
+
+    /// <summary>
+    /// <see cref="InternalCmdMsg"/> defines the internal command messages for 
+    /// the <see cref="NewProject"/>, which can be mapped through the 
+    /// <see cref="mapInternalCmdMsg"/> method.
+    /// </summary>
+    type public InternalCmdMsg =
+        | OpenFilePicker
 
 
     /// <summary>
@@ -49,8 +59,31 @@ module NewProjectPage =
     /// <see cref="Msg"/> defines the command messages for the <see cref="NewProjectPage"/>.
     /// </summary>
     type public CmdMsg =
+        | Internal of InternalCmdMsg
         | External of ExternalCmdMsg
 
+
+    let private openFilePickerCmd () =
+        async {
+            do! Async.SwitchToThreadPool ()
+
+            let picker = DependencyService.Get<IFilePicker.IFilePicker>()
+            return Option.map SetDirectoryPath (picker.Pick "Project file (*.json)|*.json") 
+        } |> Cmd.ofAsyncMsgOption
+
+
+    /// <summary>
+    /// <see cref="mapInternalCmdMsg> maps the provided <paramref name="cmd"/>
+    /// to a corresponding cmd.
+    /// </summary>
+    /// <param name="cmd">The command message to convert to a command.</param>
+    /// <returns>
+    /// The command corresponding with the provided <paramref name="cmd"/>.
+    /// </returns>
+    let public mapInternalCmdMsg (cmd: InternalCmdMsg) =
+        match cmd with 
+        | OpenFilePicker -> 
+            openFilePickerCmd ()
 
     /// <summary>
     /// Update the provided <paramref name="model"/> to its new state given the
@@ -67,11 +100,15 @@ module NewProjectPage =
         | SetProjectName newName   -> 
             { model with ProjectName = Some newName }, []
         | SetDirectoryPath newPath -> 
-            { model with DirectoryPath = Some (Sprightly.Domain.Path.fromString newPath) }, []
+            { ProjectName   = Some ( Sprightly.Domain.Path.name newPath )
+              DirectoryPath = Some ( Sprightly.Domain.Path.parentDirectory newPath ) 
+            }, []
         | RequestNewProject ->
             model, [ External CreateNewProject ]
         | RequestStartPage -> 
             model, [ External ReturnToStartPage ]
+        | RequestOpenFilePicker -> 
+            model, [ Internal OpenFilePicker ]
 
 
     let private navigationButtonsView dispatch = 
@@ -124,13 +161,13 @@ module NewProjectPage =
 
     let private directoryEntryView (i: int) (name: string) dispatch =
         let fTextChanged (args: TextChangedEventArgs) = 
-            dispatch (SetDirectoryPath args.NewTextValue)
+            dispatch (SetDirectoryPath (Sprightly.Domain.Path.fromString args.NewTextValue))
 
         [ View.Label(text="Project directory:")
               .Row(i).Column(0)
           View.Entry(text = name, textChanged=fTextChanged)
               .Row(i).Column(1)
-          View.Button(text = "...")
+          View.Button(text = "...", command = (fun () -> dispatch RequestOpenFilePicker))
               .Row(i).Column(2)
               .Padding(Thickness (10.0, 0.0))
         ]

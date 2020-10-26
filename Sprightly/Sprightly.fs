@@ -108,6 +108,8 @@ module App =
 
     let private mapNewProjectPageCmdMsg (cmdMsg: Pages.NewProjectPage.CmdMsg) =
         match cmdMsg with 
+        | Pages.NewProjectPage.Internal internalCmdMsg -> 
+            Pages.NewProjectPage.mapInternalCmdMsg internalCmdMsg |> ( Cmd.map NewProjectPageMsg)
         | Pages.NewProjectPage.External externalCmdMsg -> 
             mapExternalNewProjectPageCmdMsg externalCmdMsg
 
