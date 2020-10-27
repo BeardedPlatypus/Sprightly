@@ -1,6 +1,5 @@
 ﻿namespace Sprightly.Pages
 
-open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
 open Sprightly.Components
@@ -63,13 +62,17 @@ module NewProjectPage =
         | External of ExternalCmdMsg
 
 
-    let private openFilePickerCmd () =
-        async {
-            do! Async.SwitchToThreadPool ()
+    let private openProjectFolderSelectionCmd () =
+        let config = IFileBrowserDialog.FileBrowserDialogConfiguration(checkIfFileExists = true,
+                                                                       dereferenceLinks = true,
+                                                                       filter = "Sprightly solution files (*.sprightly.json)|*.sprightly.json|All files (*.*)|*.*",
+                                                                       filterIndex = 2, 
+                                                                       multiSelect = false,
+                                                                       restoreDirectory = false, 
+                                                                       title = "Select new sprightly solution location",
+                                                                       supportMultiDottedExtensions = true)
+        IFileBrowserDialog.Cmds.openFileBrowserDialogCmd config SetDirectoryPath
 
-            let picker = DependencyService.Get<IFilePicker.IFilePicker>()
-            return Option.map SetDirectoryPath (picker.Pick "Project file (*.json)|*.json") 
-        } |> Cmd.ofAsyncMsgOption
 
 
     /// <summary>
@@ -83,7 +86,8 @@ module NewProjectPage =
     let public mapInternalCmdMsg (cmd: InternalCmdMsg) =
         match cmd with 
         | OpenFilePicker -> 
-            openFilePickerCmd ()
+            openProjectFolderSelectionCmd
+           
 
     /// <summary>
     /// Update the provided <paramref name="model"/> to its new state given the

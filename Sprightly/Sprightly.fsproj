@@ -17,7 +17,7 @@
     <Compile Include="Domain\Texture.fs" />
     <Compile Include="DataAccess\RecentProject.fs" />
     <Content Include="DataAccess\sprightly_project.json" />
-    <Compile Include="Components\Common\IFilePicker.fs" />
+    <Compile Include="Components\Common\IFileBrowserDialog.fs" />
     <Compile Include="Components\Common\Components.fs" />
     <Compile Include="Components\StartPage\RecentProjectButton.fs" />
     <Compile Include="Components\ProjectPage\ITextureFactory.fs" />
