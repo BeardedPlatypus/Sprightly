@@ -63,16 +63,15 @@ module NewProjectPage =
 
 
     let private openProjectFolderSelectionCmd () =
-        let config = IFileBrowserDialog.FileBrowserDialogConfiguration(checkIfFileExists = true,
-                                                                       dereferenceLinks = true,
-                                                                       filter = "Sprightly solution files (*.sprightly.json)|*.sprightly.json|All files (*.*)|*.*",
-                                                                       filterIndex = 2, 
-                                                                       multiSelect = false,
-                                                                       restoreDirectory = false, 
-                                                                       title = "Select new sprightly solution location",
-                                                                       supportMultiDottedExtensions = true)
-        IFileBrowserDialog.Cmds.openFileBrowserDialogCmd config SetDirectoryPath
-
+        let config = Common.Dialogs.FileDialogConfiguration(checkIfFileExists = true,
+                                                            dereferenceLinks = true,
+                                                            filter = "Sprightly solution files (*.sprightly.json)|*.sprightly.json|All files (*.*)|*.*",
+                                                            filterIndex = 2, 
+                                                            multiSelect = false,
+                                                            restoreDirectory = false, 
+                                                            title = "Select new sprightly solution location",
+                                                            supportMultiDottedExtensions = true)
+        Common.Dialogs.Cmds.openFileDialogCmd config SetDirectoryPath
 
 
     /// <summary>

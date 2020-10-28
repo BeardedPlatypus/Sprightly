@@ -1,28 +1,24 @@
-﻿namespace IFileBrowserDialog
-
-open Fabulous
-open Xamarin.Forms
+﻿namespace Sprightly.Components.Common.Dialogs
 
 open Sprightly
 
-
 /// <summary>
-/// <see cref="FileBrowserDialogConfiguration"/> defines the optional configuration
-/// options of a <see cref="IFileBrowserDialog"/>.
+/// <see cref="FileDialogConfiguration"/> defines the optional configuration
+/// options of a file dialog.
 /// </summary>
-type public FileBrowserDialogConfiguration (?addExtension: bool,
-                                            ?checkIfFileExists: bool,
-                                            ?dereferenceLinks: bool,
-                                            ?filter: string,
-                                            ?filterIndex: int,
-                                            ?initialDirectory: Domain.Path.T,
-                                            ?multiSelect: bool,
-                                            ?readOnlyChecked: bool,
-                                            ?restoreDirectory: bool,
-                                            ?showReadOnly: bool,
-                                            ?supportMultiDottedExtensions: bool,
-                                            ?title: string,
-                                            ?validateNames: bool) =
+type public FileDialogConfiguration (?addExtension: bool,
+                                     ?checkIfFileExists: bool,
+                                     ?dereferenceLinks: bool,
+                                     ?filter: string,
+                                     ?filterIndex: int,
+                                     ?initialDirectory: Domain.Path.T,
+                                     ?multiSelect: bool,
+                                     ?readOnlyChecked: bool,
+                                     ?restoreDirectory: bool,
+                                     ?showReadOnly: bool,
+                                     ?supportMultiDottedExtensions: bool,
+                                     ?title: string,
+                                     ?validateNames: bool) =
     /// <summary>
     /// Value indicating whether the dialog box automatically adds an 
     /// extension to a file name if the user omits the extension.
@@ -95,46 +91,3 @@ type public FileBrowserDialogConfiguration (?addExtension: bool,
     /// </summary>
     member val ValidateNames: bool option = validateNames
 
-
-/// <summary>
-/// <see cref="IFilePicker"/> defines the interface with which a file
-/// picker interface can be created.
-/// </summary>
-type public IFileBrowserDialog = 
-    /// <summary>
-    /// Pick a file through a file dialog and return the result as a path.
-    /// </summary>
-    /// <returns>
-    /// Upon success the path will be returned; otherwise None.
-    /// </returns>
-    abstract Pick : unit -> Domain.Path.T Option
-
-    /// <summary>
-    /// Configure this <see cref="IFilePicker"/> with the provided 
-    /// <see cref="FileBrowserDialogConfiguration"/>.
-    /// </summary>
-    abstract ConfigureWith : FileBrowserDialogConfiguration -> unit
-    
-
-/// <summary>
-/// <see cref="Cmds"/> exposes the commonly used commands related to the 
-/// <see cref="IFileBrowserDialog"/>.
-/// </summary>
-module public Cmds =
-    /// <summary>
-    /// Construct a new async command to open a file browser dialog.
-    /// </summary>
-    /// <param name="config">The configuration for the file browser dialog.</param>
-    /// <param name="toMsg"/>Function to generate the relevant message object returned if a path is obtained successfully.</param>
-    /// <returns>
-    /// An async command to open a file browser dialog.
-    /// </returns>
-    let public openFileBrowserDialogCmd (config: FileBrowserDialogConfiguration) (toMsg: Domain.Path.T -> 'Msg) =
-        async {
-            do! Async.SwitchToThreadPool ()
-
-            let picker = DependencyService.Get<IFileBrowserDialog>()
-            picker.ConfigureWith config
-
-            return Option.map toMsg <| picker.Pick ()
-        } |> Cmd.ofAsyncMsgOption
