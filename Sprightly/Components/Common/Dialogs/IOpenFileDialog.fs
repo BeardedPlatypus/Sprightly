@@ -16,7 +16,7 @@ type public IOpenFileDialog =
     abstract Pick : unit -> Domain.Path.T Option
 
     /// <summary>
-    /// Configure this <see cref="IOpenFileDialog"/> with the provided 
+    /// Configure this <see cref="ISaveFileDialog"/> with the provided 
     /// <see cref="FileBrowserDialogConfiguration"/>.
     /// </summary>
-    abstract ConfigureWith : FileDialogConfiguration -> unit
+    abstract Configuration : FileDialogConfiguration option with get, set

@@ -63,14 +63,14 @@ module NewProjectPage =
 
 
     let private openProjectFolderSelectionCmd () =
-        let config = Common.Dialogs.FileDialogConfiguration(checkIfFileExists = true,
+        let config = Common.Dialogs.FileDialogConfiguration(addExtension = true,
+                                                            checkIfFileExists = false,
                                                             dereferenceLinks = true,
                                                             filter = "Sprightly solution files (*.sprightly.json)|*.sprightly.json|All files (*.*)|*.*",
                                                             filterIndex = 2, 
                                                             multiSelect = false,
                                                             restoreDirectory = false, 
-                                                            title = "Select new sprightly solution location",
-                                                            supportMultiDottedExtensions = true)
+                                                            title = "Select new sprightly solution location")
         Common.Dialogs.Cmds.openFileDialogCmd config SetDirectoryPath
 
 
@@ -85,7 +85,7 @@ module NewProjectPage =
     let public mapInternalCmdMsg (cmd: InternalCmdMsg) =
         match cmd with 
         | OpenFilePicker -> 
-            openProjectFolderSelectionCmd
+            openProjectFolderSelectionCmd ()
            
 
     /// <summary>
