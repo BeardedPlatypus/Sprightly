@@ -16,7 +16,6 @@ type public FileDialogConfiguration (?addExtension: bool,
                                      ?readOnlyChecked: bool,
                                      ?restoreDirectory: bool,
                                      ?showReadOnly: bool,
-                                     ?supportMultiDottedExtensions: bool,
                                      ?title: string,
                                      ?validateNames: bool) =
     /// <summary>
@@ -68,18 +67,12 @@ type public FileDialogConfiguration (?addExtension: bool,
     /// value indicating whether the dialog box restores the directory to the 
     /// previously selected directory before closing.
     /// </summary>
-    member val restoreDirectory: bool option = restoreDirectory
+    member val RestoreDirectory: bool option = restoreDirectory
 
     /// <summary>
     /// Gets or sets a value indicating whether the dialog box contains a read-only check box.
     /// </summary>
     member val ShowReadOnly: bool option = showReadOnly
-
-    /// <summary>
-    /// Value indicating whether the dialog box supports displaying and saving 
-    /// files that have multiple file name extensions.
-    /// </summary>
-    member val SupportMultiDottedExtensions = supportMultiDottedExtensions
 
     /// <summary>
     /// The file dialog box title.
