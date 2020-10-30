@@ -66,8 +66,8 @@ module NewProjectPage =
         let config = Common.Dialogs.FileDialogConfiguration(addExtension = true,
                                                             checkIfFileExists = false,
                                                             dereferenceLinks = true,
-                                                            filter = "Sprightly solution files (*.sprightly.json)|*.sprightly.json|All files (*.*)|*.*",
-                                                            filterIndex = 2, 
+                                                            filter = "Sprightly solution files (*.sprightly)|*.sprightly|All files (*.*)|*.*",
+                                                            filterIndex = 1, 
                                                             multiSelect = false,
                                                             restoreDirectory = false, 
                                                             title = "Select new sprightly solution location")
