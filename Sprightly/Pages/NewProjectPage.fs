@@ -151,40 +151,56 @@ module NewProjectPage =
             .RowSpacing(25.0)
 
 
-    let private nameEntryView (i: int) (name: string) dispatch =
+    let private entryBoxColumnDef = [ Stars 21.0; Star ]
+
+    let private nameEntryView (name: string) dispatch =
         let fTextChanged (args: TextChangedEventArgs) = 
             dispatch (SetProjectName args.NewTextValue)
 
-        [ View.Label(text="Project name:")
-              .Row(0).Column(0)
-          View.Entry(text = name, textChanged=fTextChanged)
-              .Row(0).Column(1)
-        ]
+        let label = View.Label(text="Project name:")
+        let entry = View.Grid(rowdefs = [ Star ],
+                              coldefs = entryBoxColumnDef,
+                              children = [ View.Entry(text = name, textChanged=fTextChanged)
+                                               .Column(0)])
+
+        View.StackLayout(orientation = StackOrientation.Vertical,
+                         children = [ label; entry ])
+            .Spacing(12.0)
 
 
-    let private directoryEntryView (i: int) (name: string) dispatch =
+    let private directoryEntryView (directoryPath: string) (isChecked: bool) dispatch =
         let fTextChanged (args: TextChangedEventArgs) = 
             dispatch (SetDirectoryPath (Sprightly.Domain.Path.fromString args.NewTextValue))
 
-        [ View.Label(text="Project directory:")
-              .Row(i).Column(0)
-          View.Entry(text = name, textChanged=fTextChanged)
-              .Row(i).Column(1)
-          View.Button(text = "...", command = (fun () -> dispatch RequestOpenFilePicker))
-              .Row(i).Column(2)
-              .Padding(Thickness (10.0, 0.0))
-        ]
+        let label = View.Label(text="Project directory:")
+        let entry = View.Grid(rowdefs = [ Star ],
+                              coldefs = entryBoxColumnDef,
+                              children = [ View.Entry(text = directoryPath, textChanged=fTextChanged)
+                                               .Column(0)
+                                           View.Button(text = "...", command = (fun () -> dispatch RequestOpenFilePicker))
+                                               .Padding(Thickness (10.0, 0.0))
+                                               .Column(1)])
+
+        let checkbox = View.StackLayout(orientation = StackOrientation.Horizontal,
+                                        children = [ View.CheckBox(isChecked = isChecked) 
+                                                     View.Label(text="Create the sprightly project in a separate directory.")])
+        
+        View.StackLayout(orientation = StackOrientation.Vertical,
+                         children = [ label; entry; checkbox])
+            .Spacing(12.0)
+
 
 
     let private newProjectDataFieldsView (model : Model) dispatch =
         let projectName = match model.ProjectName with | None -> "" | Some v -> v
-        let projectDirectory = match model.DirectoryPath with | None -> "" | Some ( Sprightly.Domain.Path.T v) -> v
+        let directoryPath = match model.DirectoryPath with | None -> "" | Some ( Sprightly.Domain.Path.T v) -> v
 
-        View.Grid(coldefs = [ Star; Stars 6.0; Auto ],
-                  rowdefs = [ Star; Star ],
-                  children = nameEntryView 0 projectName dispatch @
-                             directoryEntryView 1 projectDirectory dispatch)
+        View.StackLayout(orientation = StackOrientation.Vertical,
+                         children = [ nameEntryView projectName dispatch
+                                      directoryEntryView directoryPath false dispatch 
+                                    ])
             .VerticalOptions(LayoutOptions.Start)
+            .Spacing(24.0)
 
 
     let private newProjectDataEntryView (model: Model) dispatch = 
