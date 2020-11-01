@@ -89,3 +89,23 @@ module public Path =
     /// </returns>
     let isRooted (path: T) : bool = 
         System.IO.Path.IsPathRooted (path |> toString)
+
+    /// <summary>
+    /// <see cref="OpenMode"/> defines whether a file should be opened to read
+    /// or to write.
+    /// </summary>
+    type OpenMode = 
+        | Read
+        | Write
+
+    /// <summary>
+    /// Open the file at the specified <paramref name="path"/> with the given 
+    /// <paramref name="mode"/>.
+    /// </summary>
+    let openFile (path: T) (mode: OpenMode) : System.IO.FileStream = 
+        match mode with 
+        | Read  -> System.IO.File.OpenRead (path |> toString)
+        | Write -> System.IO.File.OpenWrite (path |> toString)
+
+
+
