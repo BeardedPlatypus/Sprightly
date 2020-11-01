@@ -100,7 +100,7 @@ module App =
         match cmdMsg with 
         | Pages.NewProjectPage.ReturnToStartPage ->
             Cmd.ofMsg ReturnToStartPage
-        | Pages.NewProjectPage.CreateNewProject ->
+        | Pages.NewProjectPage.CreateNewProject model ->
             Cmd.ofMsg CreateNewProject
         | _ -> 
             Cmd.none

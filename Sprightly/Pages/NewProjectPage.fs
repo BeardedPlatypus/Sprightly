@@ -15,13 +15,18 @@ module NewProjectPage =
     type public Model =
         { ProjectName : string option
           DirectoryPath : Sprightly.Domain.Path.T option
+          CreateNewDirectory: bool
         }
 
 
     /// <summary>
     /// Initialise a new default <see cref="Model"/>.
     /// </summary>
-    let public init () : Model = { ProjectName = None; DirectoryPath = None }
+    let public init () : Model = 
+        { ProjectName = None
+          DirectoryPath = None
+          CreateNewDirectory = true
+        }
 
 
     /// <summary>
@@ -30,6 +35,7 @@ module NewProjectPage =
     type public Msg = 
         | SetProjectName of string
         | SetDirectoryPath of Sprightly.Domain.Path.T
+        | SetCreateNewDirectory of bool
         | RequestNewProject
         | RequestStartPage
         | RequestOpenFilePicker
@@ -50,7 +56,7 @@ module NewProjectPage =
     /// level.
     /// </summary>
     type public ExternalCmdMsg =
-        | CreateNewProject
+        | CreateNewProject of Model
         | ReturnToStartPage
 
 
@@ -103,11 +109,13 @@ module NewProjectPage =
         | SetProjectName newName   -> 
             { model with ProjectName = Some newName }, []
         | SetDirectoryPath newPath -> 
-            { ProjectName   = Some ( Sprightly.Domain.Path.name newPath )
-              DirectoryPath = Some ( Sprightly.Domain.Path.parentDirectory newPath ) 
+            { model with ProjectName   = Some ( Sprightly.Domain.Path.name newPath )
+                         DirectoryPath = Some ( Sprightly.Domain.Path.parentDirectory newPath ) 
             }, []
+        | SetCreateNewDirectory newCreateDirectoryFlag ->
+            { model with CreateNewDirectory = newCreateDirectoryFlag }, []
         | RequestNewProject ->
-            model, [ External CreateNewProject ]
+            model, [ External <| CreateNewProject model ]
         | RequestStartPage -> 
             model, [ External ReturnToStartPage ]
         | RequestOpenFilePicker -> 
@@ -153,6 +161,7 @@ module NewProjectPage =
 
     let private entryBoxColumnDef = [ Stars 21.0; Star ]
 
+
     let private nameEntryView (name: string) dispatch =
         let fTextChanged (args: TextChangedEventArgs) = 
             dispatch (SetProjectName args.NewTextValue)
@@ -181,14 +190,16 @@ module NewProjectPage =
                                                .Padding(Thickness (10.0, 0.0))
                                                .Column(1)])
 
+        let fCheckBoxChanged (args: CheckedChangedEventArgs) = 
+             dispatch (SetCreateNewDirectory args.Value)
         let checkbox = View.StackLayout(orientation = StackOrientation.Horizontal,
-                                        children = [ View.CheckBox(isChecked = isChecked) 
-                                                     View.Label(text="Create the sprightly project in a separate directory.")])
+                                        children = [ View.CheckBox(isChecked = isChecked, 
+                                                                   checkedChanged = fCheckBoxChanged) 
+                                                     View.Label(text="Create the new project in a new directory.")])
         
         View.StackLayout(orientation = StackOrientation.Vertical,
                          children = [ label; entry; checkbox])
             .Spacing(12.0)
-
 
 
     let private newProjectDataFieldsView (model : Model) dispatch =
@@ -197,7 +208,7 @@ module NewProjectPage =
 
         View.StackLayout(orientation = StackOrientation.Vertical,
                          children = [ nameEntryView projectName dispatch
-                                      directoryEntryView directoryPath false dispatch 
+                                      directoryEntryView directoryPath model.CreateNewDirectory dispatch 
                                     ])
             .VerticalOptions(LayoutOptions.Start)
             .Spacing(24.0)
@@ -248,6 +259,6 @@ module NewProjectPage =
                           .VerticalOptions(LayoutOptions.FillAndExpand)
                           .Column(2);
                     ])
-              .Spacing(10.0)
-              .Margin(Thickness 20.0)    
+            .Spacing(10.0)
+            .Margin(Thickness 20.0)    
 
