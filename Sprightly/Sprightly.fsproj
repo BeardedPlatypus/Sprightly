@@ -27,8 +27,8 @@
     <Compile Include="Components\StartPage\RecentProjectButton.fs" />
     <Compile Include="Components\ProjectPage\ITextureFactory.fs" />
     <Compile Include="Components\ProjectPage\Viewport.fs" />
-    <Compile Include="Pages\NewProjectPage.fs" />
     <Compile Include="Pages\StartPage.fs" />
+    <Compile Include="Pages\NewProjectPage.fs" />
     <Compile Include="Pages\ProjectPage.fs" />
     <Compile Include="Sprightly.fs" />
   </ItemGroup>

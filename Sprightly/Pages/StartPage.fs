@@ -167,7 +167,6 @@ module public StartPage =
             .RowSpacing(25.0)
 
 
-
     let private recentProjectsView (recentProjects: Sprightly.DataAccess.RecentProject list ) dispatch = 
         let recentProjectsListView = 
             match recentProjects with 
