@@ -17,7 +17,6 @@
     <Compile Include="Domain\Texture.fs" />
     <Compile Include="DataAccess\Json.fs" />
     <Compile Include="DataAccess\SolutionFile.fs" />
-    <Compile Include="DataAccess\SolutionFileDescription.fs" />
     <Compile Include="DataAccess\RecentProject.fs" />
     <EmbeddedResource Include="DataAccess\sprightly_project.json" />
     <Compile Include="Components\Common\Dialogs\FileDialogConfiguration.fs" />
