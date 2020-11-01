@@ -19,6 +19,8 @@ module public Path =
     /// </returns>
     let fromString (s: string) : T = T s
 
+    let toString (path: T) : string = match path with | T s -> s
+
     /// <summary>
     /// Combine <paramref name="parent"/> and <paramref name="child"/> into a 
     /// single <see cref="Path.T"/>.
@@ -29,8 +31,7 @@ module public Path =
     /// The combined <see cref="Path.T"/>.
     /// </returns>
     let combine (parent: T) (child: T) : T = 
-        match parent, child with 
-        | T parentStr, T childStr -> System.IO.Path.Combine [| parentStr; childStr|] |> T
+        System.IO.Path.Combine [| (parent |> toString) ; (child |> toString) |] |> T
 
     /// <summary>
     /// Combine <paramref name="parent"/> and <paramref name="child"/> into a 
@@ -51,7 +52,7 @@ module public Path =
     /// The name of the directory or file to which <paramref name="path"/> points.
     /// </returns>
     let name (path: T) : string = 
-        match path with | T pathStr -> System.IO.Path.GetFileName pathStr
+        System.IO.Path.GetFileName (toString path)
 
     /// <summary>
     /// Get the parent directory of the provided <paramref name="path"/>.
@@ -61,5 +62,30 @@ module public Path =
     /// The parent directory of the directory or file to which <paramref name="path"/> points.
     /// </returns>
     let parentDirectory (path: T) : T = 
-        match path with | T pathStr -> System.IO.Path.GetDirectoryName pathStr |> fromString
-       
+        ( System.IO.Path.GetDirectoryName ( path |> toString )) |> fromString
+
+    /// <summary>
+    /// Get whether <paramref name="path"/> is valid or not.
+    /// </summary>
+    /// <param name="path">The path to verify.</param>
+    /// <returns>
+    /// True if <paramref name="path"/> is valid; false otherwise.
+    /// </returns>
+    let isValid (path: T) : bool =
+        let pathStr = toString path
+
+        try 
+            System.IO.Path.GetFullPath pathStr |> ignore
+            true
+        with 
+        | _ -> false
+
+    /// <summary>
+    /// Get whether <paramref name="path"/> is root or not.
+    /// </summary>
+    /// <param name="path">The path to verify.</param>
+    /// <returns>
+    /// True if <paramref name="path"/> is rooted; false otherwise.
+    /// </returns>
+    let isRooted (path: T) : bool = 
+        System.IO.Path.IsPathRooted (path |> toString)
