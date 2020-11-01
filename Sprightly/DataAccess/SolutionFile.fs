@@ -1,7 +1,12 @@
 ﻿namespace Sprightly.DataAccess
 
 open Sprightly.Domain
+open Sprightly.Domain.Path
 
+///<summary>
+/// <see cref="SolutionFile"/> defines the types and functions related
+/// to accessing a solution file on disk.
+/// </summary>
 module SolutionFile =
     open FSharp.Data
     
@@ -11,6 +16,15 @@ module SolutionFile =
     type public T = 
         JsonProvider<"./DataAccess/sprightly_project.json", 
                      EmbeddedResource="Sprightly, sprightly_project.json">
+
+    /// <summary>
+    /// Write the specified <paramref name="solutionFile"/> to the specified path.
+    /// </summary>
+    /// <param name="solutionFile">The solution file to write to disk.</param>
+    /// <param name="path">The path to write to. </param>
+    let write (solutionFile: T) (path: Path.T) : Async<unit> = 
+        Json.serialize solutionFile 
+        |> ( Json.writeJsonString path )
 
     /// <summary>
     /// <see cref="T"/> defines a single solution file.
@@ -34,12 +48,13 @@ module SolutionFile =
         }
 
     /// <summary>
-    /// Write the specified <paramref name="solutionFile"/> to the specified path.
+    /// Transform the provided <paramref name="description"/> to a 
+    /// <see cref="Path.T"/>.
     /// </summary>
-    /// <param name="solutionFile">The solution file to write to disk.</param>
-    /// <param name="path">The path to write to. </param>
-    let write (solutionFile: T) (path: Path.T) : Async<unit> = 
-        Json.serialize solutionFile 
-        |> ( Json.writeJsonString path )
-        
+    /// <param name="description">The description to transform.</param>
+    /// <returns>
+    /// The path corresponding with the provided <paramref name="description"/>.
+    /// </returns>
+    let public descriptionToPath (description: Description): Path.T =
+        description.DirectoryPath / (description.FileName |> Path.fromString)
 
