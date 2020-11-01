@@ -42,7 +42,7 @@ module SolutionFile =
     /// <returns>
     /// A new <see cref="Description"/>
     /// </returns>
-    let public init (fileName: string) (directoryPath: Path.T) : Description =
+    let public description (fileName: string) (directoryPath: Path.T) : Description =
         { FileName = fileName
           DirectoryPath = directoryPath
         }

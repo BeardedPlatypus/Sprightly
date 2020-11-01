@@ -3,6 +3,8 @@
 open Fabulous.XamarinForms
 open Xamarin.Forms
 open Sprightly.Components
+open Sprightly.Domain.Path
+
 
 /// <summary>
 /// <see cref="NewProjectPage"/> defines the page shown to create a new project
@@ -56,7 +58,7 @@ module NewProjectPage =
     /// level.
     /// </summary>
     type public ExternalCmdMsg =
-        | CreateNewProject of Model
+        | CreateNewProject of Sprightly.DataAccess.SolutionFile.Description
         | ReturnToStartPage
 
 
@@ -92,7 +94,24 @@ module NewProjectPage =
         match cmd with 
         | OpenFilePicker -> 
             openProjectFolderSelectionCmd ()
-           
+       
+    let private getCreateNewProjectCmdMsg (model: Model) : CmdMsg list =
+        match model.DirectoryPath, model.ProjectName with 
+        | Some directoryPath, Some projectName -> 
+            let nameWithoutExtension = 
+                System.IO.Path.GetFileNameWithoutExtension projectName
+
+            let directoryPath = 
+                if model.CreateNewDirectory then
+                    directoryPath / ( fromString nameWithoutExtension)
+                else 
+                    directoryPath
+
+            let fileDescription = Sprightly.DataAccess.SolutionFile.description projectName  directoryPath
+            [ External <| CreateNewProject fileDescription ]
+        | _ ->
+            []
+
 
     /// <summary>
     /// Update the provided <paramref name="model"/> to its new state given the
@@ -115,17 +134,28 @@ module NewProjectPage =
         | SetCreateNewDirectory newCreateDirectoryFlag ->
             { model with CreateNewDirectory = newCreateDirectoryFlag }, []
         | RequestNewProject ->
-            model, [ External <| CreateNewProject model ]
+            model, getCreateNewProjectCmdMsg model
         | RequestStartPage -> 
             model, [ External ReturnToStartPage ]
         | RequestOpenFilePicker -> 
             model, [ Internal OpenFilePicker ]
 
 
-    let private navigationButtonsView dispatch = 
+    let private IsValidNewSolution (model: Model): bool =
+        match model.DirectoryPath, model.ProjectName with
+        | Some directoryPath, Some projectName ->
+            Sprightly.Domain.Path.isValid directoryPath &&
+            Sprightly.Domain.Path.isRooted directoryPath && 
+            projectName.Length > 0
+        | _ -> 
+            false
+
+
+    let private navigationButtonsView (model: Model) dispatch = 
         let createProjectButton =
             (Common.Components.textButton "Create Project"  (fun () -> dispatch RequestNewProject))
                 .HorizontalOptions(LayoutOptions.Fill)
+                .CommandCanExecute(IsValidNewSolution model)
 
         let returnButton = 
             (Common.Components.textButton "Back" (fun () -> dispatch RequestStartPage))
@@ -149,11 +179,11 @@ module NewProjectPage =
             .HorizontalOptions(LayoutOptions.FillAndExpand)
 
 
-    let private navigationButtonsColumnView dispatch = 
+    let private navigationButtonsColumnView (model: Model) dispatch = 
         View.Grid(coldefs = [ Star ],
                   rowdefs = [ Star; Stars 2.0 ],
                   children = [ Common.Components.sprightlyIcon.Row(0)
-                               (navigationButtonsView dispatch).Row(1)
+                               (navigationButtonsView model dispatch).Row(1)
                              ])
             .Margin(Thickness 20.0)
             .RowSpacing(25.0)
@@ -237,7 +267,7 @@ module NewProjectPage =
     /// </remarks>
     let public view (model: Model) dispatch = 
         let dataEntryView = newProjectDataEntryView model dispatch
-        let navigationButtons = navigationButtonsColumnView dispatch
+        let navigationButtons = navigationButtonsColumnView model dispatch
      
         let divider = 
           View.BoxView(color = Color.Gray,
