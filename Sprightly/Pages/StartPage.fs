@@ -3,8 +3,9 @@
 open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
-open Sprightly.Components
 
+open Sprightly
+open Sprightly.Components
 open Sprightly.Components.StartPage.FabulousRecentProjectButton
 
 /// <summary>
@@ -17,7 +18,7 @@ module public StartPage =
     /// This consists of a list of recent projects.
     /// </summary>
     type public Model = 
-        { RecentProjects : Sprightly.DataAccess.RecentProject list
+        { RecentProjects : DataAccess.RecentProject list
         }
 
 
@@ -25,8 +26,10 @@ module public StartPage =
     /// <see cref="Msg"/> defines the messages for the <see cref="StartPage"/>.
     /// </summary>
     type public Msg  =
-        | SetRecentProjects of Sprightly.DataAccess.RecentProject list
+        | SetRecentProjects of DataAccess.RecentProject list
         | RequestNewProject 
+        | RequestOpenProjectPicker
+        | RequestOpenProject of Domain.Path.T
 
 
     /// <summary>
@@ -36,7 +39,8 @@ module public StartPage =
     /// </summary>
     type public InternalCmdMsg =
         | LoadRecentProjects
-        | SaveRecentProjects of Sprightly.DataAccess.RecentProject list
+        | SaveRecentProjects of DataAccess.RecentProject list
+        | OpenLoadProjectPicker
 
 
     /// <summary>
@@ -46,6 +50,7 @@ module public StartPage =
     /// </summary>
     type public ExternalCmdMsg =
         | StartNewProject
+        | OpenProject of Domain.Path.T
 
 
     /// <summary>
@@ -87,6 +92,18 @@ module public StartPage =
         } |> Cmd.ofAsyncMsgOption
 
 
+    let private openLoadProjectPickerCmd () =
+        let config = Common.Dialogs.FileDialogConfiguration(addExtension = true,
+                                                            checkIfFileExists = true,
+                                                            dereferenceLinks = true,
+                                                            filter = "Sprightly solution files (*.sprightly)|*.sprightly|All files (*.*)|*.*",
+                                                            filterIndex = 1, 
+                                                            multiSelect = false,
+                                                            restoreDirectory = false, 
+                                                            title = "Load a sprightly solution")
+        Common.Dialogs.Cmds.openFileDialogCmd config RequestOpenProject
+
+
     /// <summary>
     /// <see cref="mapInternalCmdMsg> maps the provided <paramref name="cmd"/>
     /// to a corresponding cmd.
@@ -101,6 +118,8 @@ module public StartPage =
             loadRecentProjectsCmd ()
         | SaveRecentProjects recentProjects -> 
             saveRecentProjectsCmd recentProjects
+        | OpenLoadProjectPicker ->
+            openLoadProjectPickerCmd ()
 
 
     /// <summary>
@@ -126,11 +145,15 @@ module public StartPage =
             { model with RecentProjects = recentProjects }, []
         | RequestNewProject ->
             model, [ External StartNewProject ]
+        | RequestOpenProjectPicker ->
+            model, [ Internal OpenLoadProjectPicker ]
+        | RequestOpenProject path -> 
+            model, [ External <| OpenProject path ]
        
        
     let private projectButtonsView dispatch = 
         View.StackLayout(children = [ Common.Components.textButton "New Project"  (fun () -> dispatch RequestNewProject)
-                                      Common.Components.textButton "Open Project" (fun () -> ())
+                                      Common.Components.textButton "Open Project" (fun () -> dispatch RequestOpenProjectPicker)
                                     ])
 
 
