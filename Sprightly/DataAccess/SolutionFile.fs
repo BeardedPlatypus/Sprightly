@@ -8,6 +8,15 @@ open Sprightly.Domain.Path
 /// to accessing a solution file on disk.
 /// </summary>
 module SolutionFile =
+    /// <summary>
+    /// <see cref="currentFileVersion"> defines the current file version.
+    /// </summary>
+    let private currentFileVersion : Version.T =
+        { Major = 0
+          Minor = 1
+          Patch = 0
+        }
+
     open FSharp.Data
     
     /// <summary>
@@ -22,9 +31,23 @@ module SolutionFile =
     /// </summary>
     /// <param name="solutionFile">The solution file to write to disk.</param>
     /// <param name="path">The path to write to. </param>
-    let write (solutionFile: T) (path: Path.T) : Async<unit> = 
+    let write (solutionFile: T.Root) (path: Path.T) : unit = 
         Json.serialize solutionFile 
         |> ( Json.writeJsonString path )
+
+    /// <summary>
+    /// Create an empty document.
+    /// </summary>
+    // TODO: refactor this.
+    let private empty : T.Root = 
+        T.Root (fileVersion = ( currentFileVersion |> Version.toString ),
+                view = T.View (),
+                domain = T.Domain (textures = [| |], 
+                                   animations = [| |])
+               )
+
+    let writeEmpty (path: Path.T) : unit = 
+        write empty path
 
     /// <summary>
     /// <see cref="T"/> defines a single solution file.
