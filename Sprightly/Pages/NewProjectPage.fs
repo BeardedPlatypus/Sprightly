@@ -1,5 +1,6 @@
 ﻿namespace Sprightly.Pages
 
+open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
 open Sprightly.Components
@@ -50,6 +51,7 @@ module NewProjectPage =
     /// </summary>
     type public InternalCmdMsg =
         | OpenFilePicker
+        | CreateSolutionFile of Sprightly.DataAccess.SolutionFile.Description
 
 
     /// <summary>
@@ -81,6 +83,14 @@ module NewProjectPage =
                                                             title = "Select new sprightly solution location")
         Common.Dialogs.Cmds.openFileDialogCmd config SetDirectoryPath
 
+   
+    let private createSolutionFileCmd (solutionFileDescription: Sprightly.DataAccess.SolutionFile.Description) : Cmd<Msg> =
+        async {
+            do! Async.SwitchToThreadPool ()
+            Sprightly.DataAccess.SolutionFile.writeEmpty (solutionFileDescription |> Sprightly.DataAccess.SolutionFile.descriptionToPath)
+            return None
+        } |> Cmd.ofAsyncMsgOption
+
 
     /// <summary>
     /// <see cref="mapInternalCmdMsg> maps the provided <paramref name="cmd"/>
@@ -94,6 +104,8 @@ module NewProjectPage =
         match cmd with 
         | OpenFilePicker -> 
             openProjectFolderSelectionCmd ()
+        | CreateSolutionFile description -> 
+            createSolutionFileCmd description
        
     let private getCreateNewProjectCmdMsg (model: Model) : CmdMsg list =
         match model.DirectoryPath, model.ProjectName with 
@@ -108,7 +120,9 @@ module NewProjectPage =
                     directoryPath
 
             let fileDescription = Sprightly.DataAccess.SolutionFile.description projectName  directoryPath
-            [ External <| CreateNewProject fileDescription ]
+            [ External <| CreateNewProject fileDescription
+              Internal <| CreateSolutionFile fileDescription
+            ]
         | _ ->
             []
 
