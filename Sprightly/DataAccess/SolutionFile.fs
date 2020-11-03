@@ -17,21 +17,20 @@ module SolutionFile =
           Patch = 0
         }
 
-    open FSharp.Data
-    
     /// <summary>
-    /// <see cref="T"/> defines the sprightly solution file.
+    /// <see cref="DataAccessRecord"/> describes the Data Access version of 
+    /// the solution file.
     /// </summary>
-    type public T = 
-        JsonProvider<"./DataAccess/sprightly_project.json", 
-                     EmbeddedResource="Sprightly, sprightly_project.json">
+    type public DataAccessRecord = 
+        { FileVersion: string 
+        }
 
     /// <summary>
     /// Write the specified <paramref name="solutionFile"/> to the specified path.
     /// </summary>
     /// <param name="solutionFile">The solution file to write to disk.</param>
     /// <param name="path">The path to write to. </param>
-    let write (solutionFile: T.Root) (path: Path.T) : unit = 
+    let write (solutionFile: DataAccessRecord ) (path: Path.T) : unit = 
         Json.serialize solutionFile 
         |> ( Json.writeJsonString path )
 
@@ -39,15 +38,12 @@ module SolutionFile =
     /// Create an empty document.
     /// </summary>
     // TODO: refactor this.
-    let private empty : T.Root = 
-        T.Root (fileVersion = ( currentFileVersion |> Version.toString ),
-                view = T.View (),
-                domain = T.Domain (textures = [| |], 
-                                   animations = [| |])
-               )
+    let private emptyRecord : DataAccessRecord = 
+        { FileVersion = ( currentFileVersion |> Version.toString )
+        }
 
-    let writeEmpty (path: Path.T) : unit = 
-        write empty path
+    let public writeEmpty (path: Path.T) : unit = 
+        write emptyRecord path
 
     /// <summary>
     /// <see cref="T"/> defines a single solution file.
@@ -80,4 +76,6 @@ module SolutionFile =
     /// </returns>
     let public descriptionToPath (description: Description): Path.T =
         description.DirectoryPath / (description.FileName |> Path.fromString)
+
+
 
