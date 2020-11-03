@@ -60,33 +60,20 @@ module public StartPage =
         | Internal of InternalCmdMsg
         | External of ExternalCmdMsg
 
-    let private recentProjectsKey = "recent_projects"
 
     let private loadRecentProjectsCmd () =
         async {
             do! Async.SwitchToThreadPool ()
-            let app = Xamarin.Forms.Application.Current
 
-            try 
-                match app.Properties.TryGetValue recentProjectsKey with
-                | true, (:? string as json) -> 
-                    let recentProjects = Newtonsoft.Json.JsonConvert.DeserializeObject<Sprightly.DataAccess.RecentProject list>(json)
-                    return Some <| SetRecentProjects recentProjects
-                | _ -> 
-                    return None
-             with ex -> 
-                 return None
+            return DataAccess.RecentProject.loadRecentProjects ()
+                   |> Option.map SetRecentProjects
         } |> Cmd.ofAsyncMsgOption
 
 
     let private saveRecentProjectsCmd (recentProjects: Sprightly.DataAccess.RecentProject list) = 
         async {
             do! Async.SwitchToThreadPool ()
-            let app = Xamarin.Forms.Application.Current
-
-            let json = Newtonsoft.Json.JsonConvert.SerializeObject(recentProjects)
-            app.Properties.[recentProjectsKey] <- json
-            app.SavePropertiesAsync () |> ignore
+            DataAccess.RecentProject.saveRecentProjects recentProjects
 
             return None
         } |> Cmd.ofAsyncMsgOption
