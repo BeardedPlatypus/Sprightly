@@ -26,6 +26,20 @@ module public Json =
         JsonConvert.SerializeObject obj
 
     /// <summary>
+    /// Deserialize the provided <paramref name="str"/> into a <typeref="T">.
+    /// </summary>
+    /// <param name="str">The string to deserialize.</param>
+    /// <returns>
+    /// The deserialized object of type <typeref="T"/>.
+    /// </returns>
+    let public deserialize<'T> (str: JsonString) =
+        try 
+            JsonConvert.DeserializeObject<'T> str 
+            |> Result.Ok
+        with 
+            | ex -> Result.Error ex
+
+    /// <summary>
     /// Write the specified <paramref name="content"/> to the specified
     /// <paramref name="path"/>.
     /// </summary>
@@ -36,5 +50,16 @@ module public Json =
         System.IO.Directory.CreateDirectory ( parentDirectory |> Path.toString ) |> ignore
 
         use stream = new System.IO.StreamWriter (path |> Path.toString)
-        stream.WriteAsync(content) |> Async.AwaitTask |> ignore
+        stream.Write(content) |> ignore
+
+    /// <summary>
+    /// Read the content from the file at the specified <paramref name="path"/>.
+    /// </summary>
+    /// <param name="path">The path to read from.</param>
+    /// <returns>
+    /// The content of the file at the specified <paramref name="path"/>.
+    /// </returns>
+    let public readJsonString (path: Path.T) : JsonString =
+        use stream = new System.IO.StreamReader (path |> Path.toString)
+        stream.ReadToEnd()
 
