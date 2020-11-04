@@ -27,7 +27,7 @@
                     | Result.Error _   -> None
                 | _ -> 
                     None
-             with ex -> 
+             with _ -> 
                  None
 
         let public saveRecentProjects (recentProjects: RecentProject list) : unit =
@@ -40,13 +40,6 @@
              with _ -> 
                  do ()
             
-
-        let addProjectToRecentProjects (recentProject: RecentProject) : unit =
-            loadRecentProjects () 
-            |> Option.defaultValue [] 
-            |> (fun l -> recentProject :: l)
-            |> saveRecentProjects
-
 
         let moveProjectToTopOfRecentProjects (recentProject: RecentProject) : unit =
             loadRecentProjects () 

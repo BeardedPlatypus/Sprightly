@@ -24,15 +24,18 @@ module App =
         | StartPageMsg      of Pages.StartPage.Msg
         | ProjectPageMsg    of Pages.ProjectPage.Msg
         | NewProjectPageMsg of Pages.NewProjectPage.Msg
+
         | StartNewProject
         | ReturnToStartPage
-        | CreateNewProject
+        | CreateNewProject of DataAccess.SolutionFile.Description
 
 
     type public CmdMsg = 
         | StartPageCmdMsg      of Pages.StartPage.CmdMsg
         | ProjectPageCmdMsg    of Pages.ProjectPage.CmdMsg
         | NewProjectPageCmdMsg of Pages.NewProjectPage.CmdMsg
+        
+        | MoveProjectToTopOfRecentProjects of Sprightly.DataAccess.RecentProject
 
 
     let private toCmdMsg (mapFunc: 'a -> CmdMsg) (cmdMsgList: 'a list) : CmdMsg list =
@@ -57,8 +60,8 @@ module App =
             updatedModel |> NewProjectPageModel, cmdMsgs |> ( toCmdMsg NewProjectPageCmdMsg )
         | _, StartNewProject ->
             Pages.NewProjectPage.init () |> NewProjectPageModel, []
-        | _, CreateNewProject ->
-            ProjectPageModel (), []
+        | _, CreateNewProject description ->
+            ProjectPageModel (), [ MoveProjectToTopOfRecentProjects { Path = description |> DataAccess.SolutionFile.descriptionToPath; LastOpened = System.DateTime.Now } ]
         | _, ReturnToStartPage ->
             init ()
         | _ -> 
@@ -100,8 +103,8 @@ module App =
         match cmdMsg with 
         | Pages.NewProjectPage.ReturnToStartPage ->
             Cmd.ofMsg ReturnToStartPage
-        | Pages.NewProjectPage.CreateNewProject model ->
-            Cmd.ofMsg CreateNewProject
+        | Pages.NewProjectPage.CreateNewProject description ->
+            Cmd.ofMsg ( CreateNewProject description )
         | _ -> 
             Cmd.none
 
@@ -114,6 +117,15 @@ module App =
             mapExternalNewProjectPageCmdMsg externalCmdMsg
 
 
+    let private moveProjectToTopOfRecentProjectsCmd (recentProject: DataAccess.RecentProject) =
+        async {
+            do! Async.SwitchToThreadPool ()
+
+            DataAccess.RecentProject.moveProjectToTopOfRecentProjects recentProject
+            return None
+        } |> Cmd.ofAsyncMsgOption
+
+
     let private mapCmdMsg (cmdMsg: CmdMsg) =
         match cmdMsg with 
         | StartPageCmdMsg startPageCmdMsg -> 
@@ -122,6 +134,8 @@ module App =
             Cmd.none
         | NewProjectPageCmdMsg newProjectCmdMsg -> 
             mapNewProjectPageCmdMsg newProjectCmdMsg
+        | MoveProjectToTopOfRecentProjects recentProject ->
+            moveProjectToTopOfRecentProjectsCmd recentProject
 
 
     // Note, this declaration is needed if you enable LiveUpdate
