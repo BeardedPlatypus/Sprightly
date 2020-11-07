@@ -42,6 +42,7 @@ module NewProjectPage =
         | RequestNewProject
         | RequestStartPage
         | RequestOpenFilePicker
+        | RequestOpenNewProject of Sprightly.DataAccess.SolutionFile.Description
 
 
     /// <summary>
@@ -60,7 +61,8 @@ module NewProjectPage =
     /// level.
     /// </summary>
     type public ExternalCmdMsg =
-        | CreateNewProject of Sprightly.DataAccess.SolutionFile.Description
+        | OpenNewProject of Sprightly.DataAccess.SolutionFile.Description
+        | OpenLoadingPage
         | ReturnToStartPage
 
 
@@ -88,8 +90,8 @@ module NewProjectPage =
         async {
             do! Async.SwitchToThreadPool ()
             Sprightly.DataAccess.SolutionFile.writeEmpty (solutionFileDescription |> Sprightly.DataAccess.SolutionFile.descriptionToPath)
-            return None
-        } |> Cmd.ofAsyncMsgOption
+            return RequestOpenNewProject solutionFileDescription
+        } |> Cmd.ofAsyncMsg
 
 
     /// <summary>
@@ -120,8 +122,8 @@ module NewProjectPage =
                     directoryPath
 
             let fileDescription = Sprightly.DataAccess.SolutionFile.description projectName  directoryPath
-            [ External <| CreateNewProject fileDescription
-              Internal <| CreateSolutionFile fileDescription
+            [ Internal <| CreateSolutionFile fileDescription
+              External <| OpenLoadingPage
             ]
         | _ ->
             []
@@ -153,6 +155,8 @@ module NewProjectPage =
             model, [ External ReturnToStartPage ]
         | RequestOpenFilePicker -> 
             model, [ Internal OpenFilePicker ]
+        | RequestOpenNewProject description ->
+            model, [ External <| OpenNewProject description ]
 
 
     let private IsValidNewSolution (model: Model): bool =

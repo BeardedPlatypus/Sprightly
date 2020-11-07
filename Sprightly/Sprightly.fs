@@ -14,10 +14,15 @@ open Xamarin.Forms
 /// See: https://fsprojects.github.io/Fabulous/Fabulous.XamarinForms/index.html#getting-started
 /// </remarks>
 module App = 
-    type public Model = 
+    type public PageModel = 
         | StartPageModel      of Pages.StartPage.Model
         | ProjectPageModel    of Pages.ProjectPage.Model
         | NewProjectPageModel of Pages.NewProjectPage.Model
+
+    type public Model = 
+        { PageModel : PageModel
+          IsLoading : bool
+        }
 
 
     type public Msg = 
@@ -27,7 +32,10 @@ module App =
 
         | StartNewProject
         | ReturnToStartPage
-        | CreateNewProject of DataAccess.SolutionFile.Description
+        | OpenProject of DataAccess.SolutionFile.Description
+
+        | OpenLoadingPage
+        | CloseLoadingPage
 
 
     type public CmdMsg = 
@@ -44,40 +52,66 @@ module App =
 
     let init () =
         let model, cmdMsgs = Pages.StartPage.init
-        model |> StartPageModel, cmdMsgs |> ( toCmdMsg StartPageCmdMsg )
+        { PageModel = model |> StartPageModel
+          IsLoading = false
+        }, cmdMsgs |> ( toCmdMsg StartPageCmdMsg )
 
 
     let update (msg: Msg) (model: Model) : Model * CmdMsg list =
-        match model, msg with 
+        match model.PageModel, msg with 
         | (StartPageModel startPageModel, StartPageMsg startPageMsg) ->
             let updatedModel, cmdMsgs = Pages.StartPage.update startPageMsg startPageModel
-            updatedModel |> StartPageModel, cmdMsgs |> ( toCmdMsg StartPageCmdMsg )
+            
+            { model with PageModel = updatedModel |> StartPageModel }, 
+            cmdMsgs |> ( toCmdMsg StartPageCmdMsg )
         | (ProjectPageModel projectPageModel, ProjectPageMsg projectPageMsg) ->
             let updatedModel, cmdMsgs = Pages.ProjectPage.update projectPageMsg projectPageModel
-            updatedModel |> ProjectPageModel, cmdMsgs |> ( toCmdMsg ProjectPageCmdMsg )
+            
+            { model with PageModel = updatedModel |> ProjectPageModel }, 
+            cmdMsgs |> ( toCmdMsg ProjectPageCmdMsg )
         | (NewProjectPageModel newProjectPageModel, NewProjectPageMsg newProjectPageMsg) ->
             let updatedModel, cmdMsgs = Pages.NewProjectPage.update newProjectPageMsg newProjectPageModel
-            updatedModel |> NewProjectPageModel, cmdMsgs |> ( toCmdMsg NewProjectPageCmdMsg )
+            
+            { model with PageModel = updatedModel |> NewProjectPageModel }, 
+            cmdMsgs |> ( toCmdMsg NewProjectPageCmdMsg )
         | _, StartNewProject ->
-            Pages.NewProjectPage.init () |> NewProjectPageModel, []
-        | _, CreateNewProject description ->
-            ProjectPageModel (), [ MoveProjectToTopOfRecentProjects { Path = description |> DataAccess.SolutionFile.descriptionToPath; LastOpened = System.DateTime.Now } ]
+            { model with PageModel = Pages.NewProjectPage.init () |> NewProjectPageModel}, 
+            []
+        | _, OpenProject description ->
+            { model with PageModel = ProjectPageModel () 
+                         IsLoading = false }, 
+            [ MoveProjectToTopOfRecentProjects { Path = description |> DataAccess.SolutionFile.descriptionToPath; LastOpened = System.DateTime.Now } ]
         | _, ReturnToStartPage ->
             init ()
+        | _, OpenLoadingPage ->
+            { model with IsLoading = true }, []
+        | _, CloseLoadingPage ->
+            { model with IsLoading = false }, []
         | _ -> 
             model, []
 
 
     let view (model: Model) dispatch =
-        let content = 
-            match model with 
+        let pageContent = 
+            match model.PageModel with 
             | StartPageModel startPageModel ->
                 Pages.StartPage.view startPageModel ( dispatch << StartPageMsg )
             | ProjectPageModel projectPageModel ->
                 Pages.ProjectPage.view projectPageModel ( dispatch << ProjectPageMsg )
             | NewProjectPageModel newProjectPageModel ->
                 Pages.NewProjectPage.view newProjectPageModel ( dispatch << NewProjectPageMsg )
-             
+
+        let content = 
+            if model.IsLoading then 
+                View.Grid(children = [ pageContent.IsEnabled(false) 
+                                                  .Row(0).Column(0)
+                                       View.BoxView(color = Color.FromRgba(0.0, 0.0, 0.0, 0.5))
+                                                  .Row(0).Column(0)
+                                     ])
+            else 
+                pageContent
+
+
 
         View.ContentPage(content = content,
                          hasNavigationBar = false)
@@ -103,10 +137,10 @@ module App =
         match cmdMsg with 
         | Pages.NewProjectPage.ReturnToStartPage ->
             Cmd.ofMsg ReturnToStartPage
-        | Pages.NewProjectPage.CreateNewProject description ->
-            Cmd.ofMsg ( CreateNewProject description )
-        | _ -> 
-            Cmd.none
+        | Pages.NewProjectPage.OpenNewProject description ->
+            Cmd.ofMsg ( OpenProject description )
+        | Pages.NewProjectPage.OpenLoadingPage -> 
+            Cmd.ofMsg OpenLoadingPage
 
 
     let private mapNewProjectPageCmdMsg (cmdMsg: Pages.NewProjectPage.CmdMsg) =

@@ -184,7 +184,7 @@ module public StartPage =
     /// <param name="model">The model to display.</param>
     /// <param name="dispatch">The function to dispatch messages with.</param>
     /// <remarks>
-    /// <see cref='update"/> is executed on the ui thread.
+    /// <see cref='view"/> is executed on the ui thread.
     /// </remarks>
     let public view (model: Model) dispatch = 
         let recentProjects = recentProjectsView model.RecentProjects dispatch
