@@ -36,24 +36,22 @@ module ProjectPage =
         model, []
 
 
+    /// <summary>
+    /// <see cref="view"/> transforms the <paramref name="model"/> onto
+    /// its corresponding view.
+    /// </summary>
+    /// <param name="model">The model to display.</param>
+    /// <param name="dispatch">The function to dispatch messages with.</param>
+    /// <remarks>
+    /// <see cref='view"/> is executed on the ui thread.
+    /// </remarks>
     let public view (model: Model) dispatch = 
-        View.Grid(rowdefs = [ Stars 2.0; Star ],
-                  coldefs = [ Star; Stars 2.0; Star],
-                  children = 
-                      [ View.BoxView().BackgroundColor(Color.LightCoral)
-                                      .Row(0).Column(0)
-                        View.Viewport().Row(0).Column(1)
-                        View.BoxView().BackgroundColor(Color.LightGreen)
-                                      .Row(0).Column(2)
-                        View.BoxView().BackgroundColor(Color.Coral)
-                                      .Row(1).Column(0)
-                        View.BoxView().BackgroundColor(Color.DarkOrange)
-                                      .Row(1).Column(1)
-                        View.BoxView().BackgroundColor(Color.LimeGreen)
-                                      .Row(1).Column(2)
-                      ])
-            .RowSpacing(2.0)
-            .ColumnSpacing(2.0)
+        let viewport = View.Viewport()
+
+        View.StackLayout(orientation = StackOrientation.Horizontal,
+                         children = [ viewport.VerticalOptions(LayoutOptions.FillAndExpand)
+                                              .HorizontalOptions(LayoutOptions.FillAndExpand)
+                                    ])
 
 
 
