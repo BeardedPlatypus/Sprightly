@@ -67,6 +67,6 @@
         let public moveProjectToTopOfRecentProjects (recentProject: RecentProject) : unit =
             loadRecentProjects () 
             |> Option.defaultValue [] 
-            |> List.filter (fun x -> x <> recentProject)
+            |> List.filter (fun x -> x.Path <> recentProject.Path)
             |> (fun l -> recentProject :: l)
             |> saveRecentProjects
