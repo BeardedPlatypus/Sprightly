@@ -77,5 +77,17 @@ module SolutionFile =
     let public descriptionToPath (description: Description): Path.T =
         description.DirectoryPath / (description.FileName |> Path.fromString)
 
+    /// <summary>
+    /// Transform the provided <paramref name="path"/> to a <see cref="Description"/>.
+    /// </summary>
+    /// <param name="path">The path to transform.</param>
+    /// <returns>
+    /// The description corresponding with the provided <paramref name="path"/>.
+    /// </returns>
+    let public pathToDescription (path: Path.T) =
+        { FileName = Path.name path
+          DirectoryPath = Path.parentDirectory path
+        }
+
 
 

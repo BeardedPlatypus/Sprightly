@@ -45,7 +45,7 @@ module FabulousRecentProjectButton =
             match recentProjectValue with | None -> () | Some (v: Sprightly.DataAccess.RecentProject) -> attribs.Add (recentProjectValueAttribKey, v)
 
             let update registry (prevOpt: ViewElement voption) (source: ViewElement) (target: RecentProjectButton) =
-                ViewBuilders.UpdateView(registry, prevOpt, source, target)
+                ViewBuilders.UpdateButton(registry, prevOpt, source, target)
                 source.UpdatePrimitive (prevOpt, target, recentProjectValueAttribKey, (fun target v -> target.RecentProjectValue <- v))
 
             ViewElement.Create(RecentProjectButton, update, attribs)

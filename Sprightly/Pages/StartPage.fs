@@ -29,7 +29,7 @@ module public StartPage =
         | SetRecentProjects of DataAccess.RecentProject list
         | RequestNewProject 
         | RequestOpenProjectPicker
-        | RequestOpenProject of Domain.Path.T
+        | RequestOpenProject of DataAccess.SolutionFile.Description
 
 
     /// <summary>
@@ -50,7 +50,8 @@ module public StartPage =
     /// </summary>
     type public ExternalCmdMsg =
         | StartNewProject
-        | OpenProject of Domain.Path.T
+        | OpenLoadingPage
+        | OpenProject of DataAccess.SolutionFile.Description
 
 
     /// <summary>
@@ -88,7 +89,7 @@ module public StartPage =
                                                             multiSelect = false,
                                                             restoreDirectory = false, 
                                                             title = "Load a sprightly solution")
-        Common.Dialogs.Cmds.openFileDialogCmd config RequestOpenProject
+        Common.Dialogs.Cmds.openFileDialogCmd config ( RequestOpenProject << DataAccess.SolutionFile.pathToDescription )
 
 
     /// <summary>
@@ -134,8 +135,10 @@ module public StartPage =
             model, [ External StartNewProject ]
         | RequestOpenProjectPicker ->
             model, [ Internal OpenLoadProjectPicker ]
-        | RequestOpenProject path -> 
-            model, [ External <| OpenProject path ]
+        | RequestOpenProject description -> 
+            model, [ External <| OpenLoadingPage
+                     External <| OpenProject description 
+                   ]
        
        
     let private projectButtonsView dispatch = 
@@ -162,8 +165,15 @@ module public StartPage =
                            padding = Thickness (25.0, 0.0, 25.0, 0.0),
                            textColor = Color.Gray)
             | _ ->
+                let recentProjectButtonCmd (rp: DataAccess.RecentProject) = 
+                    fun () -> dispatch (RequestOpenProject <| DataAccess.SolutionFile.pathToDescription rp.Path )
+
+                let recentProjectButtonView (rp: DataAccess.RecentProject) = 
+                    View.RecentProjectButton(recentProjectValue = rp,
+                                             command = recentProjectButtonCmd rp)
+
                 let recentProjectViewElements = 
-                    List.map (fun rp -> View.RecentProjectButton(recentProjectValue=rp)) recentProjects
+                    List.map recentProjectButtonView recentProjects
                 View.ScrollView(View.StackLayout(children = recentProjectViewElements,
                                                  padding  = Thickness (0.0, 0.0, 25.0, 0.0)))
 

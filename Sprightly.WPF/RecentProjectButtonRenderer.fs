@@ -15,11 +15,14 @@ type RecentProjectButtonRenderer() =
         | null, _ -> do ()
         | _ , null -> do ()
         | _ ->
-            let recentProject = (e.NewElement :?> RecentProjectButton).RecentProjectValue
+            let recentProjectButton = (e.NewElement :?> RecentProjectButton)
+            let recentProject = recentProjectButton.RecentProjectValue
 
             let path = match recentProject.Path with | Sprightly.Domain.Path.T v -> v
             this.Control.Content <- RecentProjectContent(path, recentProject.LastOpened)
             this.Control.HorizontalContentAlignment <- System.Windows.HorizontalAlignment.Stretch
+
+            
 
 
 // Dummy module to ensure this renderer is exported and picked up by Xamarin.Forms

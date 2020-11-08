@@ -121,8 +121,10 @@ module App =
         match cmdMsg with 
         | Pages.StartPage.StartNewProject -> 
             Cmd.ofMsg StartNewProject
-        | _ ->
-            Cmd.none
+        | Pages.StartPage.OpenProject description ->
+            Cmd.ofMsg ( OpenProject description )
+        | Pages.StartPage.OpenLoadingPage ->
+            Cmd.ofMsg OpenLoadingPage
 
 
     let private mapStartPageCmdMsg (cmdMsg: Pages.StartPage.CmdMsg) = 
