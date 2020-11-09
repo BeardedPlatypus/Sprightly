@@ -8,9 +8,12 @@ open Sprightly.Components.Common
 open Sprightly.Components.ProjectPage
 
 module ProjectPage =
-    type public Model = unit
+    type public Model = 
+        { IsOpen : bool 
+        }
 
-    type public Msg = unit
+    type public Msg =
+        | SetIsOpen of bool
 
     type public InternalCmdMsg = unit
     type public ExternalCmdMsg = unit
@@ -22,6 +25,8 @@ module ProjectPage =
         | Internal of InternalCmdMsg
         | External of ExternalCmdMsg
 
+    let public init: Model * CmdMsg list = 
+        { IsOpen = true }, []
 
     /// <summary>
     /// Update the provided <paramref name="model"/> to its new state given the
@@ -34,7 +39,9 @@ module ProjectPage =
     /// executed.
     /// </returns>
     let public update (msg: Msg) (model: Model) : Model * CmdMsg list =
-        model, []
+        match msg with 
+        | SetIsOpen v -> { model with IsOpen = v }, []
+        | _           -> model, []
 
     let private placeHolderIcons = 
         [ FontAwesome.Icons.home
@@ -46,6 +53,15 @@ module ProjectPage =
         View.StackLayout(children = List.map (fun x -> Components.fontAwesomeIconButton x (fun () -> ())) placeHolderIcons,
                          orientation = StackOrientation.Vertical)
             .Spacing(0.0)
+
+    let private ToolboxView (model: Model) dispatch =
+        let toolboxItem = CollapsiblePane.view "Some Pane" model.IsOpen [ View.Button(text = "option A"); 
+                                                                          View.Button(text = "option B")
+                                                                          View.Button(text = "option C") 
+                                                                        ]  (dispatch << SetIsOpen)
+        View.StackLayout(children = [ toolboxItem ],
+                         orientation = StackOrientation.Vertical)
+        
 
     /// <summary>
     /// <see cref="view"/> transforms the <paramref name="model"/> onto
@@ -59,11 +75,20 @@ module ProjectPage =
     let public view (model: Model) dispatch = 
         let viewport = View.Viewport()
 
+        let editorContent = 
+            View.Grid(rowdefs = [ Star ],
+                      coldefs = [ Stars 5.0; Star ],
+                      children = [ viewport.VerticalOptions(LayoutOptions.FillAndExpand)
+                                           .Column(0)
+                                   (ToolboxView model dispatch).VerticalOptions(LayoutOptions.FillAndExpand)
+                                                               .Column(1)
+                                 ])
+                .RowSpacing(0.0)
+                .ColumnSpacing(0.0)
+
         View.StackLayout(orientation = StackOrientation.Horizontal,
-                         children = [ viewport.VerticalOptions(LayoutOptions.FillAndExpand)
-                                              .HorizontalOptions(LayoutOptions.FillAndExpand)
-                                      View.BoxView(backgroundColor = Color.LightGray)
-                                          .VerticalOptions(LayoutOptions.FillAndExpand)
+                         children = [ editorContent.HorizontalOptions(LayoutOptions.FillAndExpand)
+                                                   .VerticalOptions(LayoutOptions.FillAndExpand)
                                       (ToolBoxSelectionButtonsView model dispatch)
                                           .VerticalOptions(LayoutOptions.FillAndExpand)
                              ])

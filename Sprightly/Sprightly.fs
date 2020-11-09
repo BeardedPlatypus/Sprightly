@@ -79,9 +79,11 @@ module App =
             { model with PageModel = Pages.NewProjectPage.init () |> NewProjectPageModel}, 
             []
         | _, OpenProject description ->
-            { model with PageModel = ProjectPageModel () 
+            let initModel, cmdMsgs = Pages.ProjectPage.init
+            { model with PageModel = ProjectPageModel initModel
                          IsLoading = false }, 
-            [ MoveProjectToTopOfRecentProjects { Path = description |> DataAccess.SolutionFile.descriptionToPath; LastOpened = System.DateTime.Now } ]
+            [ MoveProjectToTopOfRecentProjects { Path = description |> DataAccess.SolutionFile.descriptionToPath; LastOpened = System.DateTime.Now } ] @
+            List.map ProjectPageCmdMsg cmdMsgs
         | _, ReturnToStartPage ->
             init ()
         | _, OpenLoadingPage ->
