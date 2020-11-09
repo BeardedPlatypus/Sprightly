@@ -31,3 +31,19 @@ module public Components =
             .HorizontalOptions(LayoutOptions.Center)
             .Padding(Thickness 5.0)
 
+    /// <summary>
+    /// Create a new button with the specified <paramref name="icon"/> and 
+    /// <paramref name="command"/>.
+    /// </summary>
+    /// <param name="icon">The icon to be used within the button.</param>
+    /// <param name="command">The command to be executed when the button is pressed.</param>
+    /// <returns>
+    /// A new icon button
+    /// </returns>
+    let public fontAwesomeIconButton (icon: string) (command: unit -> unit) =
+        View.Button(text = icon, 
+                    fontFamily = FontAwesome.Fonts.Solid900,
+                    fontSize = FontSize.fromValue 28.0,
+                    width = 54.0,
+                    height = 54.0,
+                    command = command)
