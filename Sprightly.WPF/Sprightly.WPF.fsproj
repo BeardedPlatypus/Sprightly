@@ -17,6 +17,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Compile Include="Properties\AssemblyInfo.fs" />
+    <Compile Include="Components\Common\CollapsiblePaneHeaderRenderer.fs" />
     <Compile Include="Components\Common\Dialogs\Utils.fs" />
     <Compile Include="Components\Common\Dialogs\OpenFileDialog.fs" />
     <Compile Include="Components\Common\Dialogs\SaveFileDialog.fs" />
