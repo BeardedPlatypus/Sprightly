@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
@@ -22,6 +22,7 @@
     <EmbeddedResource Include="DataAccess\sprightly_project.json" />
     <Compile Include="Components\Common\FontAwesome.fs" />
     <Compile Include="Components\Common\CollapsiblePaneHeader.fs" />
+    <Compile Include="Components\Common\CollapsiblePane.fs" />
     <Compile Include="Components\Common\Dialogs\FileDialogConfiguration.fs" />
     <Compile Include="Components\Common\Dialogs\ISaveFileDialog.fs" />
     <Compile Include="Components\Common\Dialogs\IOpenFileDialog.fs" />
@@ -45,5 +46,8 @@
     <PackageReference Include="FSharp.Core" Version="4.6.2" />
     <PackageReference Update="FSharp.Core" Version="5.0.0" /> <!-- workaround for VSMac bug https://github.com/mono/monodevelop/pull/5137 --> 
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Components\ProjectPage\Toolboxes\" />
   </ItemGroup>
 </Project>
