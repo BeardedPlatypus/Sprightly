@@ -4,6 +4,7 @@ open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
 
+open Sprightly.Components.Common
 open Sprightly.Components.ProjectPage
 
 module ProjectPage =
@@ -35,6 +36,16 @@ module ProjectPage =
     let public update (msg: Msg) (model: Model) : Model * CmdMsg list =
         model, []
 
+    let private placeHolderIcons = 
+        [ FontAwesome.Icons.home
+          FontAwesome.Icons.image 
+          FontAwesome.Icons.photoVideo 
+        ]
+
+    let private ToolBoxSelectionButtonsView (model: Model) dispatch = 
+        View.StackLayout(children = List.map (fun x -> Components.fontAwesomeIconButton x (fun () -> ())) placeHolderIcons,
+                         orientation = StackOrientation.Vertical)
+            .Spacing(0.0)
 
     /// <summary>
     /// <see cref="view"/> transforms the <paramref name="model"/> onto
@@ -51,7 +62,12 @@ module ProjectPage =
         View.StackLayout(orientation = StackOrientation.Horizontal,
                          children = [ viewport.VerticalOptions(LayoutOptions.FillAndExpand)
                                               .HorizontalOptions(LayoutOptions.FillAndExpand)
-                                    ])
+                                      View.BoxView(backgroundColor = Color.LightGray)
+                                          .VerticalOptions(LayoutOptions.FillAndExpand)
+                                      (ToolBoxSelectionButtonsView model dispatch)
+                                          .VerticalOptions(LayoutOptions.FillAndExpand)
+                             ])
+            .Spacing(0.0)
 
 
 
