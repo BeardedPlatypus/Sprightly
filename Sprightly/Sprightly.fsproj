@@ -20,6 +20,7 @@
     <Compile Include="DataAccess\SolutionFile.fs" />
     <Compile Include="DataAccess\RecentProject.fs" />
     <EmbeddedResource Include="DataAccess\sprightly_project.json" />
+    <Compile Include="Components\Common\MaterialDesign.fs" />
     <Compile Include="Components\Common\FontAwesome.fs" />
     <Compile Include="Components\Common\CollapsiblePaneHeader.fs" />
     <Compile Include="Components\Common\CollapsiblePane.fs" />
