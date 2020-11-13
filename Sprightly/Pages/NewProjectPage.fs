@@ -38,6 +38,7 @@ module NewProjectPage =
     type public Msg = 
         | SetProjectName of string
         | SetDirectoryPath of Sprightly.Domain.Path.T
+        | UpdateDirectoryPath of string
         | SetCreateNewDirectory of bool
         | RequestNewProject
         | RequestStartPage
@@ -147,6 +148,9 @@ module NewProjectPage =
             { model with ProjectName   = Some ( Sprightly.Domain.Path.name newPath )
                          DirectoryPath = Some ( Sprightly.Domain.Path.parentDirectory newPath ) 
             }, []
+        | UpdateDirectoryPath newPath -> 
+            { model with DirectoryPath = Some ( Sprightly.Domain.Path.fromString newPath ) 
+            }, []
         | SetCreateNewDirectory newCreateDirectoryFlag ->
             { model with CreateNewDirectory = newCreateDirectoryFlag }, []
         | RequestNewProject ->
@@ -200,11 +204,16 @@ module NewProjectPage =
     let private navigationButtonsColumnView (model: Model) dispatch = 
         View.Grid(coldefs = [ Star ],
                   rowdefs = [ Star; Stars 2.0 ],
-                  children = [ Common.Components.sprightlyIcon.Row(0)
-                               (navigationButtonsView model dispatch).Row(1)
+                  children = [ Common.Components.sprightlyIcon
+                                   .Row(0)
+                                   .VerticalOptions(LayoutOptions.Center)
+                                   .HorizontalOptions(LayoutOptions.Center)
+                                   .Margin(Thickness 16.0)
+                               (navigationButtonsView model dispatch)
+                                   .Row(1)
                              ])
-            .Margin(Thickness 20.0)
-            .RowSpacing(25.0)
+            .RowSpacing(24.0)
+            |> Common.MaterialDesign.withElevation (Common.MaterialDesign.Elevation 4)
 
 
     let private entryBoxColumnDef = [ Stars 21.0; Star ]
@@ -214,10 +223,19 @@ module NewProjectPage =
         let fTextChanged (args: TextChangedEventArgs) = 
             dispatch (SetProjectName args.NewTextValue)
 
-        let label = View.Label(text="Project name:")
+        let label = View.Label(text="Project name:", 
+                               textColor = Color.White,
+                               fontSize = FontSize.fromValue 12.0,
+                               fontFamily = Common.MaterialDesign.Fonts.RobotoCondensedRegular)
         let entry = View.Grid(rowdefs = [ Star ],
                               coldefs = entryBoxColumnDef,
-                              children = [ View.Entry(text = name, textChanged=fTextChanged)
+                              children = [ View.Entry(text = name,
+                                                      textChanged=fTextChanged,
+                                                      textColor = Color.White,
+                                                      fontSize = FontSize.fromValue 16.0,
+                                                      fontFamily = Common.MaterialDesign.Fonts.EczarRegular,
+                                                      backgroundColor = Color.FromRgba(1.0, 1.0, 1.0, 0.04))
+                                               .Margin(Thickness (0.0, 8.0, 0.0, 8.0))
                                                .Column(0)])
 
         View.StackLayout(orientation = StackOrientation.Vertical,
@@ -227,15 +245,23 @@ module NewProjectPage =
 
     let private directoryEntryView (directoryPath: string) (isChecked: bool) dispatch =
         let fTextChanged (args: TextChangedEventArgs) = 
-            dispatch (SetDirectoryPath (Sprightly.Domain.Path.fromString args.NewTextValue))
+            dispatch (UpdateDirectoryPath args.NewTextValue)
 
-        let label = View.Label(text="Project directory:")
+        let label = View.Label(text="Project directory:",
+                               textColor = Color.White,
+                               fontSize = FontSize.fromValue 12.0,
+                               fontFamily = Common.MaterialDesign.Fonts.RobotoCondensedRegular)
         let entry = View.Grid(rowdefs = [ Star ],
                               coldefs = entryBoxColumnDef,
-                              children = [ View.Entry(text = directoryPath, textChanged=fTextChanged)
+                              children = [ View.Entry(text = directoryPath, 
+                                                      textChanged=fTextChanged,
+                                                      textColor = Color.White,
+                                                      fontSize = FontSize.fromValue 16.0,
+                                                      fontFamily = Common.MaterialDesign.Fonts.EczarRegular,
+                                                      backgroundColor = Color.FromRgba(1.0, 1.0, 1.0, 0.04))
+                                               .Margin(Thickness (0.0, 8.0, 0.0, 8.0))
                                                .Column(0)
-                                           View.Button(text = "...", command = (fun () -> dispatch RequestOpenFilePicker))
-                                               .Padding(Thickness (10.0, 0.0))
+                                           (Common.Components.textButton "..." (fun () -> dispatch RequestOpenFilePicker))
                                                .Column(1)])
 
         let fCheckBoxChanged (args: CheckedChangedEventArgs) = 
@@ -243,7 +269,11 @@ module NewProjectPage =
         let checkbox = View.StackLayout(orientation = StackOrientation.Horizontal,
                                         children = [ View.CheckBox(isChecked = isChecked, 
                                                                    checkedChanged = fCheckBoxChanged) 
-                                                     View.Label(text="Create the new project in a new directory.")])
+                                                     View.Label(text="Create the new project in a new directory.", 
+                                                                textColor = Color.White,
+                                                                fontSize = FontSize.fromValue 12.0,
+                                                                fontFamily = Common.MaterialDesign.Fonts.RobotoCondensedRegular)
+                                                   ])
         
         View.StackLayout(orientation = StackOrientation.Vertical,
                          children = [ label; entry; checkbox])
@@ -260,18 +290,17 @@ module NewProjectPage =
                                     ])
             .VerticalOptions(LayoutOptions.Start)
             .Spacing(24.0)
+            .Padding(Thickness (32.0, 10.0, 32.0, 10.0))
 
 
     let private newProjectDataEntryView (model: Model) dispatch = 
-        View.Grid(coldefs = [ Star ],
-                  rowdefs = [ Star; Stars 7.0 ],
-                  children = [ View.Label(text = "Create new project:", 
-                                          fontSize = FontSize.fromValue 28.0)
-                                   .Row(0)
-                               (newProjectDataFieldsView model dispatch)
-                                   .Row(1)
-                             ])
-            .Margin(Thickness 20.0)
+        View.StackLayout(orientation = StackOrientation.Vertical,
+                         children = [ (Common.Components.header "Create new project:")
+                                          .Margin(Thickness 16.0)
+                                      (newProjectDataFieldsView model dispatch)
+                                          .VerticalOptions(LayoutOptions.FillAndExpand)
+                                    ])
+            |> Common.MaterialDesign.withElevation (Common.MaterialDesign.Elevation 4)
 
 
     /// <summary>
@@ -287,26 +316,18 @@ module NewProjectPage =
         let dataEntryView = newProjectDataEntryView model dispatch
         let navigationButtons = navigationButtonsColumnView model dispatch
      
-        let divider = 
-          View.BoxView(color = Color.Gray,
-                       width = 2.5)
-              .Padding(Thickness 20.0)
-              .BoxViewCornerRadius(CornerRadius 1.25)
-     
         View.Grid(rowdefs = [ Star ],
-                  coldefs = [ Stars 4.0; Auto; Star ],
+                  coldefs = [ Stars 4.0; Star ],
                   children = 
                     [ dataEntryView
                           .VerticalOptions(LayoutOptions.FillAndExpand)
                           .HorizontalOptions(LayoutOptions.FillAndExpand)
                           .Column(0)
-                    ; divider
+                      navigationButtons
                           .VerticalOptions(LayoutOptions.FillAndExpand)
-                          .Column(1)
-                    ; navigationButtons
-                          .VerticalOptions(LayoutOptions.FillAndExpand)
-                          .Column(2);
+                          .Column(1);
                     ])
-            .Spacing(10.0)
-            .Margin(Thickness 20.0)    
+            .ColumnSpacing(16.0)
+            .Margin(Thickness 16.0)    
+            |> Common.MaterialDesign.withElevation (Common.MaterialDesign.Elevation 0)
 

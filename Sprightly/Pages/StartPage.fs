@@ -141,7 +141,6 @@ module public StartPage =
                    ]
        
     let private projectButtonsView dispatch = 
-        let elevation = Some (Common.MaterialDesign.Elevation 4)
         let newProjectButton = 
             Common.Components.textButton "New Project"  
                                          (fun () -> dispatch RequestNewProject) 
