@@ -1,6 +1,5 @@
 ﻿namespace Sprightly.Components.Common
 
-open Fabulous.XamarinForms
 open Xamarin.Forms
 
 /// <summary>
@@ -13,15 +12,8 @@ module public FontAwesome =
     /// application.
     /// </summary>
     module public Fonts = 
-        let public Regular400 = 
-            match Device.RuntimePlatform with 
-            | Device.WPF -> "fa-regular-400.ttf#Font Awesome 5 Free Regular"
-            | _          -> null
-        
-        let public Solid900 = 
-            match Device.RuntimePlatform with 
-            | Device.WPF -> "fa-solid-900.ttf#Font Awesome 5 Free Solid"
-            | _          -> null
+        let public Regular400 = "fa-regular"
+        let public Solid900 = "fa-solid"
 
     /// <summary>
     /// <see cref="Icons"/> describes the icons used within the Sprightly
@@ -32,4 +24,12 @@ module public FontAwesome =
         let public home = "\uf015"
         let public photoVideo = "\uf87c"
  
+
+module Dummy_FontAwesome= 
+    [<assembly: ExportFont("fa-regular-400.ttf", Alias = "fa-regular")>]
+    do()
+
+    [<assembly: ExportFont("fa-solid-900.ttf", Alias = "fa-solid")>]
+    do()
+
 
