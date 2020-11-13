@@ -13,7 +13,7 @@ module Main =
     [<STAThread>]
     let main(_args) =
 
-        let app = new System.Windows.Application()
+        let app = new Windows.Application()
         Forms.Init()
 
         let window = MainWindow() 

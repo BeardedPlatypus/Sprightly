@@ -22,12 +22,10 @@ module public Components =
     /// </returns>
     let public textButton (text: string) (command: unit -> unit) (elevation: MaterialDesign.Elevation Option) = 
         let button = 
-            View.Button(text = text.ToUpperInvariant(), 
-                        command = command)
+            View.SprightlyButton(text = text.ToUpperInvariant(), 
+                                 command = command)
                 .FontSize(FontSize.fromValue 14.0)
                 .FontFamily(MaterialDesign.Fonts.RobotoCondensedBold)
-                .Padding(Thickness 8.0)
-                .BorderWidth(0.0)
                 .TextColor(textColor)
 
         match elevation with 

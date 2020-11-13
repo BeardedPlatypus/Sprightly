@@ -132,13 +132,13 @@ module public StartPage =
         | SetRecentProjects recentProjects -> 
             { model with RecentProjects = recentProjects }, []
         | RequestNewProject ->
-            model, [ External StartNewProject ]
+            model, []//[ External StartNewProject ]
         | RequestOpenProjectPicker ->
             model, [ Internal OpenLoadProjectPicker ]
         | RequestOpenProject description -> 
-            model, [ External <| OpenLoadingPage
-                     External <| OpenProject description 
-                   ]
+            model, []//[ External <| OpenLoadingPage
+                   //  External <| OpenProject description 
+                   //]
        
     let private projectButtonsView dispatch = 
         let elevation = Some (Common.MaterialDesign.Elevation 4)
@@ -186,7 +186,6 @@ module public StartPage =
                         .With(textColor = Color.White, 
                               fontFamily = Common.MaterialDesign.Fonts.EczarRegular,
                               fontSize = FontSize.fromValue 14.0)
-                        |> Common.MaterialDesign.withElevation (Common.MaterialDesign.Elevation 4)
 
                 let recentProjectViewElements = 
                     List.map recentProjectButtonView recentProjects
