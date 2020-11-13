@@ -1,5 +1,6 @@
 ﻿namespace Sprightly.Components.Common
 
+open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
 
@@ -8,6 +9,8 @@ open Xamarin.Forms
 /// commonly used within Sprightly, like simple styled buttons, labels etc.
 /// </summary>
 module public Components =
+    let private textColor = Color.White
+
     /// <summary>
     /// Common text button for the Sprightly application.
     /// </summary>
@@ -25,11 +28,25 @@ module public Components =
                 .FontFamily(MaterialDesign.Fonts.RobotoCondensedBold)
                 .Padding(Thickness 8.0)
                 .BorderWidth(0.0)
-                .TextColor(Color.White)
+                .TextColor(textColor)
 
         match elevation with 
         | Some elevationValue -> button |> ( MaterialDesign.withElevation elevationValue )
         | None                -> button
+
+    /// <summary>
+    /// Common header for the Sprightly application.
+    /// </summary>
+    /// <param name="text">The text of the text button.</param>
+    /// <returns>
+    /// A styled label with the given <paramref name="text"/>.
+    /// </returns>
+    let public header (text: string) : ViewElement = 
+        View.Label(text = text, 
+                   fontSize = FontSize.fromValue 60.0,
+                   textColor = textColor,
+                   fontFamily = MaterialDesign.Fonts.RobotoCondensedLight)
+
 
     /// <summary>
     /// The Sprightly icon

@@ -28,14 +28,13 @@
                    Text="{Binding Path=LastOpenedDate}"
                    TextAlignment="Right"
                    Opacity="0.6"
-                   FontFamily="Roboto Condensed"
-                   FontWeight="Light"
                    HorizontalAlignment="Stretch"/>
         <TextBlock Grid.Row="1" 
                    Grid.Column="0"
                    Text="{Binding Path=DirectoryPath}"
                    TextAlignment="Left"
                    HorizontalAlignment="Stretch"
+                   FontFamily="Roboto Condensed"
                    Opacity="0.6"/>
     </Grid>
 </UserControl>

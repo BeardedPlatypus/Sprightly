@@ -140,21 +140,30 @@ module public StartPage =
                      External <| OpenProject description 
                    ]
        
-       
     let private projectButtonsView dispatch = 
-        View.StackLayout(children = [ Common.Components.textButton "New Project"  (fun () -> dispatch RequestNewProject) (Some (Common.MaterialDesign.Elevation 4))
-                                      Common.Components.textButton "Open Project" (fun () -> dispatch RequestOpenProjectPicker) (Some (Common.MaterialDesign.Elevation 4))
-                                    ])
+        let elevation = Some (Common.MaterialDesign.Elevation 4)
+        let newProjectButton = 
+            Common.Components.textButton "New Project"  
+                                         (fun () -> dispatch RequestNewProject) 
+                                         elevation
+        let openProjectButton = 
+            Common.Components.textButton "Open Project" 
+                                         (fun () -> dispatch RequestOpenProjectPicker) 
+                                         elevation
+
+        View.StackLayout(children = [ newProjectButton; openProjectButton ])
 
 
     let private projectButtonsColumnView dispatch = 
         View.Grid(coldefs = [ Star ],
                   rowdefs = [ Star; Stars 2.0 ],
-                  children = [ Common.Components.sprightlyIcon.Row(0)
-                                                              .VerticalOptions(LayoutOptions.Center)
-                                                              .HorizontalOptions(LayoutOptions.Center)
-                                                              .Margin(Thickness 16.0)
-                               (projectButtonsView dispatch).Row(1)
+                  children = [ Common.Components.sprightlyIcon
+                                   .Row(0)
+                                   .VerticalOptions(LayoutOptions.Center)
+                                   .HorizontalOptions(LayoutOptions.Center)
+                                   .Margin(Thickness 16.0)
+                               (projectButtonsView dispatch)
+                                   .Row(1)
                              ])
             .RowSpacing(24.0) 
             |> Common.MaterialDesign.withElevation (Common.MaterialDesign.Elevation 4)
@@ -177,20 +186,17 @@ module public StartPage =
                         .With(textColor = Color.White, 
                               fontFamily = Common.MaterialDesign.Fonts.EczarRegular,
                               fontSize = FontSize.fromValue 14.0)
-                        .BackgroundColor(Common.MaterialDesign.ElevationColors.dp04)
-                        .BorderColor(Common.MaterialDesign.ElevationColors.dp04)
+                        |> Common.MaterialDesign.withElevation (Common.MaterialDesign.Elevation 4)
 
                 let recentProjectViewElements = 
                     List.map recentProjectButtonView recentProjects
                 View.ScrollView(View.StackLayout(children = recentProjectViewElements))
 
         View.StackLayout(orientation = StackOrientation.Vertical,
-                         children = [ View.Label(text = "Recent Projects:", 
-                                                 fontSize = FontSize.fromValue 60.0,
-                                                 textColor = Color.White,
-                                                 fontFamily = Common.MaterialDesign.Fonts.RobotoCondensedLight)
+                         children = [ (Common.Components.header "Recent Projects:")
                                           .Margin(Thickness 16.0)
-                                      recentProjectsListView.VerticalOptions(LayoutOptions.FillAndExpand)
+                                      recentProjectsListView
+                                          .VerticalOptions(LayoutOptions.FillAndExpand)
                                     ])
             |> Common.MaterialDesign.withElevation (Common.MaterialDesign.Elevation 4)
 
