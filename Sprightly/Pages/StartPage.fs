@@ -142,8 +142,8 @@ module public StartPage =
        
        
     let private projectButtonsView dispatch = 
-        View.StackLayout(children = [ Common.Components.textButton "New Project"  (fun () -> dispatch RequestNewProject)
-                                      Common.Components.textButton "Open Project" (fun () -> dispatch RequestOpenProjectPicker)
+        View.StackLayout(children = [ Common.Components.textButton "New Project"  (fun () -> dispatch RequestNewProject) (Some (Common.MaterialDesign.Elevation 4))
+                                      Common.Components.textButton "Open Project" (fun () -> dispatch RequestOpenProjectPicker) (Some (Common.MaterialDesign.Elevation 4))
                                     ])
 
 
@@ -151,10 +151,13 @@ module public StartPage =
         View.Grid(coldefs = [ Star ],
                   rowdefs = [ Star; Stars 2.0 ],
                   children = [ Common.Components.sprightlyIcon.Row(0)
+                                                              .VerticalOptions(LayoutOptions.Center)
+                                                              .HorizontalOptions(LayoutOptions.Center)
+                                                              .Margin(Thickness 16.0)
                                (projectButtonsView dispatch).Row(1)
                              ])
-            .Margin(Thickness 20.0)
-            .RowSpacing(25.0)
+            .RowSpacing(24.0) 
+            |> Common.MaterialDesign.withElevation (Common.MaterialDesign.Elevation 4)
 
 
     let private recentProjectsView (recentProjects: Sprightly.DataAccess.RecentProject list ) dispatch = 
@@ -162,7 +165,7 @@ module public StartPage =
             match recentProjects with 
             | [] ->
                 View.Label(text = "No recent projects",
-                           padding = Thickness (25.0, 0.0, 25.0, 0.0),
+                           padding = Thickness (24.0, 0.0, 24.0, 0.0),
                            textColor = Color.Gray)
             | _ ->
                 let recentProjectButtonCmd (rp: DataAccess.RecentProject) = 
@@ -171,20 +174,25 @@ module public StartPage =
                 let recentProjectButtonView (rp: DataAccess.RecentProject) = 
                     View.RecentProjectButton(recentProjectValue = rp,
                                              command = recentProjectButtonCmd rp)
+                        .With(textColor = Color.White, 
+                              fontFamily = Common.MaterialDesign.Fonts.EczarRegular,
+                              fontSize = FontSize.fromValue 14.0)
+                        .BackgroundColor(Common.MaterialDesign.ElevationColors.dp04)
+                        .BorderColor(Common.MaterialDesign.ElevationColors.dp04)
 
                 let recentProjectViewElements = 
                     List.map recentProjectButtonView recentProjects
-                View.ScrollView(View.StackLayout(children = recentProjectViewElements,
-                                                 padding  = Thickness (0.0, 0.0, 25.0, 0.0)))
+                View.ScrollView(View.StackLayout(children = recentProjectViewElements))
 
-        View.Grid(coldefs = [ Star ],
-                  rowdefs = [ Star; Stars 7.0 ],
-                  children = [ View.Label(text = "Recent Projects:", 
-                                          fontSize = FontSize.fromValue 28.0)
-                                   .Row(0)
-                               recentProjectsListView.Row(1)
-                             ])
-            .Margin(Thickness 20.0)
+        View.StackLayout(orientation = StackOrientation.Vertical,
+                         children = [ View.Label(text = "Recent Projects:", 
+                                                 fontSize = FontSize.fromValue 60.0,
+                                                 textColor = Color.White,
+                                                 fontFamily = Common.MaterialDesign.Fonts.RobotoCondensedLight)
+                                          .Margin(Thickness 16.0)
+                                      recentProjectsListView.VerticalOptions(LayoutOptions.FillAndExpand)
+                                    ])
+            |> Common.MaterialDesign.withElevation (Common.MaterialDesign.Elevation 4)
 
 
     /// <summary>
@@ -200,26 +208,15 @@ module public StartPage =
         let recentProjects = recentProjectsView model.RecentProjects dispatch
         let projectButtons = projectButtonsColumnView dispatch
      
-        let divider = 
-          View.BoxView(color = Color.Gray,
-                       width = 2.5)
-              .Padding(Thickness 20.0)
-              .BoxViewCornerRadius(CornerRadius 1.25)
-     
         View.Grid(rowdefs = [ Star ],
-                  coldefs = [ Stars 4.0; Auto; Star ],
+                  coldefs = [ Stars 4.0; Star ],
                   children = 
                     [ recentProjects
-                          .VerticalOptions(LayoutOptions.FillAndExpand)
-                          .HorizontalOptions(LayoutOptions.FillAndExpand)
                           .Column(0)
-                    ; divider
-                          .VerticalOptions(LayoutOptions.FillAndExpand)
-                          .Column(1)
                     ; projectButtons
-                          .VerticalOptions(LayoutOptions.FillAndExpand)
-                          .Column(2);
+                          .Column(1);
                     ])
-              .Spacing(10.0)
-              .Margin(Thickness 20.0)    
+              .ColumnSpacing(16.0)
+              .Margin(Thickness 16.0)    
+            |> Common.MaterialDesign.withElevation (Common.MaterialDesign.Elevation 0)
 

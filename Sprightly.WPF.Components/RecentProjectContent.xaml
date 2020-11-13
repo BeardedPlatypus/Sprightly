@@ -6,7 +6,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid HorizontalAlignment="Stretch"
-          Margin="15 10 15 10">
+          Margin="32 10 32 10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*"/>
             <ColumnDefinition Width="*"/>
@@ -20,18 +20,22 @@
                    Grid.Column="0"
                    Text="{Binding  Path=FileName}"
                    TextAlignment="Left"
-                   HorizontalAlignment="Stretch"
-                   FontWeight="UltraBold"/>
+                   FontFamily="Roboto Condensed"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Stretch"/>
         <TextBlock Grid.Row="0" 
                    Grid.Column="1"
                    Text="{Binding Path=LastOpenedDate}"
                    TextAlignment="Right"
+                   Opacity="0.6"
+                   FontFamily="Roboto Condensed"
+                   FontWeight="Light"
                    HorizontalAlignment="Stretch"/>
         <TextBlock Grid.Row="1" 
                    Grid.Column="0"
                    Text="{Binding Path=DirectoryPath}"
                    TextAlignment="Left"
                    HorizontalAlignment="Stretch"
-                   FontWeight="UltraLight"/>
+                   Opacity="0.6"/>
     </Grid>
 </UserControl>

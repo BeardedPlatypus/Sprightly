@@ -117,7 +117,8 @@ module App =
 
 
         View.ContentPage(content = content,
-                         hasNavigationBar = false)
+                         hasNavigationBar = false,
+                         backgroundColor = Sprightly.Components.Common.MaterialDesign.ElevationColors.dp00)
 
     
     let private mapExternalStartPageCmdMsg (cmdMsg: Pages.StartPage.ExternalCmdMsg) =

@@ -17,10 +17,19 @@ module public Components =
     /// A styled text button with the given <paramref name="text"/>
     /// and <paramref name="command"/>.
     /// </returns>
-    let public textButton text command = 
-        View.Button(text = text, command = command)
-            .FontSize(FontSize.fromValue 12.0)
-            .Padding(Thickness 10.0)
+    let public textButton (text: string) (command: unit -> unit) (elevation: MaterialDesign.Elevation Option) = 
+        let button = 
+            View.Button(text = text.ToUpperInvariant(), 
+                        command = command)
+                .FontSize(FontSize.fromValue 14.0)
+                .FontFamily(MaterialDesign.Fonts.RobotoCondensedBold)
+                .Padding(Thickness 8.0)
+                .BorderWidth(0.0)
+                .TextColor(Color.White)
+
+        match elevation with 
+        | Some elevationValue -> button |> ( MaterialDesign.withElevation elevationValue )
+        | None                -> button
 
     /// <summary>
     /// The Sprightly icon
@@ -29,7 +38,7 @@ module public Components =
         View.Image(source = Image.fromPath "Assets/icon.png")
             .VerticalOptions(LayoutOptions.Center)
             .HorizontalOptions(LayoutOptions.Center)
-            .Padding(Thickness 5.0)
+            .Padding(Thickness 8.0)
 
     /// <summary>
     /// Create a new button with the specified <paramref name="icon"/> and 
@@ -41,9 +50,14 @@ module public Components =
     /// A new icon button
     /// </returns>
     let public fontAwesomeIconButton (icon: string) (command: unit -> unit) =
+        let backgroundColor = Color.FromHex "#3498db"
+
         View.Button(text = icon, 
                     fontFamily = FontAwesome.Fonts.Solid900,
                     fontSize = FontSize.fromValue 28.0,
                     width = 54.0,
                     height = 54.0,
-                    command = command)
+                    command = command,
+                    textColor = Color.Black,
+                    backgroundColor = Color.White,
+                    borderColor = backgroundColor)
