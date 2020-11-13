@@ -171,12 +171,12 @@ module NewProjectPage =
 
     let private navigationButtonsView (model: Model) dispatch = 
         let createProjectButton =
-            (Common.Components.textButton "Create Project"  (fun () -> dispatch RequestNewProject) (Some (Common.MaterialDesign.Elevation 2)))
+            (Common.Components.textButton "Create Project"  (fun () -> dispatch RequestNewProject))
                 .HorizontalOptions(LayoutOptions.Fill)
                 .CommandCanExecute(IsValidNewSolution model)
 
         let returnButton = 
-            (Common.Components.textButton "Back" (fun () -> dispatch RequestStartPage) None)
+            (Common.Components.textButton "Back" (fun () -> dispatch RequestStartPage))
                 .HorizontalOptions(LayoutOptions.Fill)
 
         let topButtons = 

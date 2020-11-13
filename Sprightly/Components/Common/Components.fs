@@ -20,17 +20,12 @@ module public Components =
     /// A styled text button with the given <paramref name="text"/>
     /// and <paramref name="command"/>.
     /// </returns>
-    let public textButton (text: string) (command: unit -> unit) (elevation: MaterialDesign.Elevation Option) = 
-        let button = 
-            View.SprightlyButton(text = text.ToUpperInvariant(), 
-                                 command = command)
-                .FontSize(FontSize.fromValue 14.0)
-                .FontFamily(MaterialDesign.Fonts.RobotoCondensedBold)
-                .TextColor(textColor)
-
-        match elevation with 
-        | Some elevationValue -> button |> ( MaterialDesign.withElevation elevationValue )
-        | None                -> button
+    let public textButton (text: string) (command: unit -> unit) = 
+        View.SprightlyButton(text = text.ToUpperInvariant(), 
+                             command = command)
+            .FontSize(FontSize.fromValue 14.0)
+            .FontFamily(MaterialDesign.Fonts.RobotoCondensedBold)
+            .TextColor(textColor)
 
     /// <summary>
     /// Common header for the Sprightly application.

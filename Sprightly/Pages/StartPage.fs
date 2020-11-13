@@ -132,24 +132,22 @@ module public StartPage =
         | SetRecentProjects recentProjects -> 
             { model with RecentProjects = recentProjects }, []
         | RequestNewProject ->
-            model, []//[ External StartNewProject ]
+            model, [ External StartNewProject ]
         | RequestOpenProjectPicker ->
             model, [ Internal OpenLoadProjectPicker ]
         | RequestOpenProject description -> 
-            model, []//[ External <| OpenLoadingPage
-                   //  External <| OpenProject description 
-                   //]
+            model, [ External <| OpenLoadingPage
+                     External <| OpenProject description 
+                   ]
        
     let private projectButtonsView dispatch = 
         let elevation = Some (Common.MaterialDesign.Elevation 4)
         let newProjectButton = 
             Common.Components.textButton "New Project"  
                                          (fun () -> dispatch RequestNewProject) 
-                                         elevation
         let openProjectButton = 
             Common.Components.textButton "Open Project" 
                                          (fun () -> dispatch RequestOpenProjectPicker) 
-                                         elevation
 
         View.StackLayout(children = [ newProjectButton; openProjectButton ])
 
