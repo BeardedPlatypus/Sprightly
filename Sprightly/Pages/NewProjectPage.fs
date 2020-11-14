@@ -199,6 +199,7 @@ module NewProjectPage =
         View.StackLayout(children = [ topButtons; middleButtons; bottomButtons ])
             .VerticalOptions(LayoutOptions.FillAndExpand)
             .HorizontalOptions(LayoutOptions.FillAndExpand)
+            .Padding(Thickness (0.0, 0.0, 0.0, 8.0))
 
 
     let private navigationButtonsColumnView (model: Model) dispatch = 
