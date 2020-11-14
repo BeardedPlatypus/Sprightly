@@ -25,6 +25,15 @@ module public MaterialDesign =
         let public RobotoCondensedBold = "roboto-condensed-bold"
 
     /// <summary>
+    /// <see cref="PrimaryColors"/> provides the values and methods related to
+    /// the primary colors.
+    /// </summary>
+    module public PrimaryColors = 
+        let public blue = Color.FromHex("#72DEFF")
+        let public green = Color.FromHex("#1EB980")
+
+
+    /// <summary>
     /// <see cref="ElevationColors"/> provides the values and methods related to
     /// the colors of the elavation.
     /// </summary>

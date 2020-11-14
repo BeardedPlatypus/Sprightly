@@ -23,6 +23,9 @@ module public FontAwesome =
         let public image = "\uf03e"
         let public home = "\uf015"
         let public photoVideo = "\uf87c"
+        let public plus = "\uf067"
+        let public pen = "\uf304"
+        let public thrash = "\uf2ed"
  
 
 module Dummy_FontAwesome= 

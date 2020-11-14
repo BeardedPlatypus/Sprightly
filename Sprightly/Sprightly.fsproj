@@ -37,6 +37,7 @@
     <Compile Include="Components\Common\Dialogs\Cmds.fs" />
     <Compile Include="Components\Common\Components.fs" />
     <Compile Include="Components\StartPage\RecentProjectButton.fs" />
+    <Compile Include="Components\ProjectPage\Toolboxes\SpriteToolBox.fs" />
     <Compile Include="Components\ProjectPage\ITextureFactory.fs" />
     <Compile Include="Components\ProjectPage\Viewport.fs" />
     <Compile Include="Pages\LoadingPage.fs" />
@@ -54,8 +55,5 @@
     <PackageReference Include="FSharp.Core" Version="4.6.2" />
     <PackageReference Update="FSharp.Core" Version="5.0.0" /> <!-- workaround for VSMac bug https://github.com/mono/monodevelop/pull/5137 --> 
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Components\ProjectPage\Toolboxes\" />
   </ItemGroup>
 </Project>
