@@ -50,7 +50,7 @@ module ProjectPage =
         ]
 
     let private ToolBoxSelectionButtonsView (model: Model) dispatch = 
-        View.StackLayout(children = List.map (fun x -> Components.fontAwesomeIconButton x (fun () -> ())) placeHolderIcons,
+        View.StackLayout(children = List.map (fun x -> Components.fontAwesomeIconButton x (fun () -> ()) Color.White) placeHolderIcons,
                          orientation = StackOrientation.Vertical)
             .Spacing(0.0)
 

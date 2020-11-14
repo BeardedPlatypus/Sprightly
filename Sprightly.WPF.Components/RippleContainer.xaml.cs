@@ -44,5 +44,7 @@ namespace Sprightly.WPF.Components
                 Ellipse.BeginStoryboard(animation);
             }), true);
         }
-	}
+
+        public object WrappedElement => ContentContainer.Content;
+    }
 }

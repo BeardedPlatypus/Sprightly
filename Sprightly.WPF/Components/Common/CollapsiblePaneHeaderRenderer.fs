@@ -17,20 +17,27 @@ type CollapsiblePaneHeaderRenderer() =
         | _ , null -> do ()
         | _ ->
             let pane = (e.NewElement :?> CollapsiblePaneHeader)
+            
+            let headerContent = CollapsiblePaneHeaderContent()
+            headerContent.SetIsOpen(pane.IsOpen)
+            headerContent.HeaderText <- pane.HeaderText
 
-            if (not (this.Control.Content :? CollapsiblePaneHeaderContent)) then
-                this.Control.Content <- CollapsiblePaneHeaderContent()
+            let color: System.Windows.Media.Color = System.Windows.Media.Color.FromArgb(36uy, 255uy, 255uy, 255uy)
+            let rippleContainer = RippleContainer(headerContent, color)
 
-            let content = this.Control.Content :?> CollapsiblePaneHeaderContent
-            content.SetIsOpen(pane.IsOpen)
-            content.HeaderText <- pane.HeaderText
-
+            this.Control.Content <- rippleContainer
             this.Control.HorizontalContentAlignment <- System.Windows.HorizontalAlignment.Stretch
 
+            let buttonResourceSource = System.Uri("pack://application:,,,/Sprightly.WPF.Components;component/SprightlyButton.xaml")
+            let resourceDictionary = System.Windows.ResourceDictionary()
+            resourceDictionary.Source <- buttonResourceSource
+            this.Control.Style <- resourceDictionary.["SprightlyButton"] :?> System.Windows.Style
 
     override this.OnElementPropertyChanged((sender: obj), (e: PropertyChangedEventArgs)) =
-        if (sender :? CollapsiblePaneHeader) && (this.Control.Content :? CollapsiblePaneHeaderContent) then
-            let content = this.Control.Content :?> CollapsiblePaneHeaderContent
+        if (sender :? CollapsiblePaneHeader) then
+            let contentContainer = this.Control.Content :?> RippleContainer
+            let content = contentContainer.WrappedElement :?> CollapsiblePaneHeaderContent;
+
             let paneHeader = sender :?> CollapsiblePaneHeader
        
             if (e.PropertyName = "IsOpen") then

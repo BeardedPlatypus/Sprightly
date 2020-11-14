@@ -59,15 +59,11 @@ module public Components =
     /// <returns>
     /// A new icon button
     /// </returns>
-    let public fontAwesomeIconButton (icon: string) (command: unit -> unit) =
-        let backgroundColor = Color.FromHex "#3498db"
-
-        View.Button(text = icon, 
-                    fontFamily = FontAwesome.Fonts.Solid900,
-                    fontSize = FontSize.fromValue 28.0,
-                    width = 54.0,
-                    height = 54.0,
-                    command = command,
-                    textColor = Color.Black,
-                    backgroundColor = Color.White,
-                    borderColor = backgroundColor)
+    let public fontAwesomeIconButton (icon: string) (command: unit -> unit) (textColor: Color)=
+        View.SprightlyButton(text = icon, 
+                             command = command)
+            .FontSize(FontSize.fromValue 24.0)
+            .FontFamily(FontAwesome.Fonts.Solid900)
+            .TextColor(textColor)
+            .WidthRequest(54.0)
+            .HeightRequest(54.0)
