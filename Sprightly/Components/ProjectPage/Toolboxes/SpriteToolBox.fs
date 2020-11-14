@@ -10,13 +10,15 @@ open Sprightly.Components.Common
 module public SpriteToolBox = 
     type public Model = 
         { Textures : Texture.T list
-          ActiveTextureId : Texture.Id
+          ActiveTextureId : Texture.Id option
 
           ProjectTreeIsOpen : bool
+          DetailIsOpen : bool
         }
 
     type public Pane =
         | ProjectTree
+        | Detail
 
     type public Msg = 
         | SetIsOpen of Pane * bool
@@ -29,8 +31,9 @@ module public SpriteToolBox =
         | SetIsOpen (pane, newState) -> 
             match pane with 
             | ProjectTree -> { model with ProjectTreeIsOpen = newState }, []
+            | Detail      -> { model with DetailIsOpen = newState }, []
         | SetActiveTextureId textureId ->
-            { model with ActiveTextureId = textureId }, []
+            { model with ActiveTextureId = Some textureId }, []
 
     let private projectTreeView (model: Model) dispatch = 
         let fClickListItem id () = dispatch ( SetActiveTextureId id )
@@ -38,7 +41,7 @@ module public SpriteToolBox =
             Components.listIconElement FontAwesome.Icons.textureIcon 
                                        (match texture.name with Texture.Name n -> n) 
                                        (fClickListItem texture.id)
-                                       (if texture.id = model.ActiveTextureId then MaterialDesign.PrimaryColors.blue else Color.White)
+                                       (if model.ActiveTextureId.IsSome && model.ActiveTextureId.Value = texture.id then MaterialDesign.PrimaryColors.blue else Color.White)
 
         View.StackLayout(orientation = StackOrientation.Vertical,
                          children = List.map toElement model.Textures)
@@ -63,7 +66,15 @@ module public SpriteToolBox =
                              [ projectTreeView model dispatch
                                editButtons
                              ]  
-                             (dispatch << (fun x -> SetIsOpen (ProjectTree, x)))
+                             (dispatch << (fun b -> SetIsOpen (ProjectTree, b)))
+
+    let private textureSpecificView (model: Model) dispatch = 
+        CollapsiblePane.view "Texture Details" 
+                             model.DetailIsOpen
+                             [ 
+                             ]  
+                             (dispatch << (fun b -> SetIsOpen (Detail, b)))
+       
 
     /// <summary>
     /// <see cref="view"/> transforms the <paramref name="model"/> onto
@@ -75,6 +86,7 @@ module public SpriteToolBox =
     /// <see cref='view"/> is executed on the ui thread.
     /// </remarks>
     let public view (model: Model) dispatch = 
-        View.StackLayout(children = [ (projectTreePaneView model dispatch)
+        View.StackLayout(children = [ projectTreePaneView model dispatch
+                                      textureSpecificView model dispatch
                                     ])
 

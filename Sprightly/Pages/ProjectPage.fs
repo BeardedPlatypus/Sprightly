@@ -51,8 +51,9 @@ module ProjectPage =
                                            path = Path.fromString ""
                                          }
                                        ] 
-                            ActiveTextureId = Texture.Id "1"
+                            ActiveTextureId = Some (Texture.Id "1")
                             ProjectTreeIsOpen = true
+                            DetailIsOpen = true
                           }
         }, []
 
