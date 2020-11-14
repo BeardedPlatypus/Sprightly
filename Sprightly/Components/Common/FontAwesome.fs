@@ -26,6 +26,7 @@ module public FontAwesome =
         let public plus = "\uf067"
         let public pen = "\uf304"
         let public thrash = "\uf2ed"
+        let public textureIcon = "\uf1c5"
  
 
 module Dummy_FontAwesome= 

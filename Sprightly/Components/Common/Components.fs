@@ -67,3 +67,19 @@ module public Components =
             .TextColor(textColor)
             .WidthRequest(54.0)
             .HeightRequest(54.0)
+
+    let public listIconElement (icon: string) (text: string) (command: unit -> unit) (textColor: Color) =
+        View.SprightlyIconButton(icon = icon, text = text, command = command, iconSize = 14.0)
+            .FontSize(FontSize.fromValue 14.0)
+            .FontFamily(MaterialDesign.Fonts.RobotoCondensedRegular)
+            .TextColor(textColor)
+
+    let public iconTextButton (icon: string) (text: string) (command: unit -> unit) (textColor: Color) =
+        View.SprightlyIconButton(icon = icon, 
+                                 text = text.ToUpperInvariant(), 
+                                 command = command, 
+                                 iconSize = 14.0, 
+                                 iconOrientation = Orientation.Vertical)
+            .FontSize(FontSize.fromValue 12.0)
+            .FontFamily(MaterialDesign.Fonts.RobotoCondensedBold)
+            .TextColor(textColor)

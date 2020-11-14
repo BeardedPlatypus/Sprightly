@@ -4,15 +4,13 @@ open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
 
-
 /// <summary>
-/// The <see cref="RecentProjectButton"/> provides the recent project view 
-/// element which will be substituted with a custom render to enable
-/// hover behaviour.
+/// The <see cref="SprightlyButton"/> provides the view 
+/// element which will be substituted with a custom render to
+/// allow for the appropriate Material Design behaviour
 /// </summary>
 type SprightlyButton() =
     inherit Button()
-
 
 // Code required to add the RecentProjectButton to the Fabulous view function
 // See: https://fsprojects.github.io/Fabulous/Fabulous.XamarinForms/views-extending.html

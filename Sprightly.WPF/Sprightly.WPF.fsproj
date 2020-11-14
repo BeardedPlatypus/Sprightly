@@ -14,6 +14,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.fs" />
+    <Compile Include="Components\Common\SprightlyIconButtonRenderer.fs" />
     <Compile Include="Components\Common\SprightlyButtonRenderer.fs" />
     <Compile Include="Components\Common\CollapsiblePaneHeaderRenderer.fs" />
     <Compile Include="Components\Common\Dialogs\Utils.fs" />

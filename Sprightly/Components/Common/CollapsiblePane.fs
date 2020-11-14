@@ -17,7 +17,7 @@ module CollapsiblePane =
                          .FontFamily(MaterialDesign.Fonts.RobotoCondensedRegular)
                          .FontSize(FontSize.fromValue 16.0)
                          .TextColor(Color.White)
-                         |> MaterialDesign.withElevation (MaterialDesign.Elevation 6)
+                         |> MaterialDesign.withElevation (MaterialDesign.Elevation 16)
 
         View.StackLayout(orientation = StackOrientation.Vertical, 
                          children = [ yield header  
