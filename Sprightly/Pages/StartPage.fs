@@ -172,7 +172,9 @@ module public StartPage =
             | [] ->
                 View.Label(text = "No recent projects",
                            padding = Thickness (24.0, 0.0, 24.0, 0.0),
-                           textColor = Color.Gray)
+                           textColor = Color.Gray,
+                           fontSize = FontSize.fromValue 14.0,
+                           fontFamily = Common.MaterialDesign.Fonts.RobotoCondensedRegular)
             | _ ->
                 let recentProjectButtonCmd (rp: DataAccess.RecentProject) = 
                     fun () -> dispatch (RequestOpenProject <| DataAccess.SolutionFile.pathToDescription rp.Path )
