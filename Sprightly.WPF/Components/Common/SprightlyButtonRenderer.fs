@@ -19,6 +19,7 @@ type SprightlyButtonRenderer() =
                 RippleContainer(SprightlyButtonContent(e.NewElement.Text), 
                                 color)
             this.Control.HorizontalContentAlignment <- System.Windows.HorizontalAlignment.Stretch
+            this.Control.VerticalContentAlignment <- System.Windows.VerticalAlignment.Stretch
 
             let buttonResourceSource = System.Uri("pack://application:,,,/Sprightly.WPF.Components;component/SprightlyButton.xaml")
             let resourceDictionary = System.Windows.ResourceDictionary()

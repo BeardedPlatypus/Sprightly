@@ -10,17 +10,17 @@
           ClipToBounds="True">
         <Grid.Resources>
             <Storyboard x:Key="EllipseAnimation" Storyboard.TargetName="Ellipse">
-                <DoubleAnimation Storyboard.TargetProperty="Width" From="0" />
+                <DoubleAnimation Storyboard.TargetProperty="Height" From="0" />
                 <ThicknessAnimation Storyboard.TargetProperty="Margin" />
                 <DoubleAnimation BeginTime="0:0:1" Duration="0:0:0.25" Storyboard.TargetProperty="Opacity"
                                  From="1" To="0" />
-                <DoubleAnimation Storyboard.TargetProperty="Width" To="0" BeginTime="0:0:1.25" Duration="0:0:0" />
+                <DoubleAnimation Storyboard.TargetProperty="Height" To="0" BeginTime="0:0:1.25" Duration="0:0:0" />
                 <DoubleAnimation BeginTime="0:0:1.25" Duration="0:0:0" Storyboard.TargetProperty="Opacity" To="1" />
             </Storyboard>
         </Grid.Resources>
 
         <Ellipse x:Name="Ellipse"
-                 Width="0" Height="{Binding Path=Width, RelativeSource={RelativeSource Self}}" 
+                 Height="0" Width="{Binding Path=Height, RelativeSource={RelativeSource Self}}" 
                  HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <ContentPresenter x:Name="ContentContainer"/>
     </Grid>
