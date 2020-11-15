@@ -23,6 +23,7 @@ module SolutionFile =
     /// </summary>
     type public DataAccessRecord = 
         { FileVersion: string 
+          Textures: Texture.DataAccessRecord list
         }
 
     /// <summary>
@@ -40,6 +41,7 @@ module SolutionFile =
     // TODO: refactor this.
     let private emptyRecord : DataAccessRecord = 
         { FileVersion = ( currentFileVersion |> Version.toString )
+          Textures = []
         }
 
     let public writeEmpty (path: Path.T) : unit = 
