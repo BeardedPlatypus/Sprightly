@@ -8,6 +8,14 @@ open Xamarin.Forms
 /// to accessing texture information on disk.
 /// </summary>
 module Texture =
+    /// <summary>
+    /// <see cref='DataAccessRecord"/> defines the data acces information of a 
+    /// single texture.
+    /// </summary>
+    type public DataAccessRecord =
+        { Name : string 
+          FileName : string
+        }
 
     /// <summary>
     /// <see cref="readMetaData"/> obtains the metadata of the 
