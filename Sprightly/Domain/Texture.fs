@@ -6,6 +6,26 @@
 /// </summary>
 module public Texture = 
     /// <summary>
+    /// <see cref="Pixel"/> defines a number of pixels of a texture.
+    /// </summary>
+    type public Pixel = Pixel of int
+
+    /// <summary>
+    /// <see cref="Size"/> defines the size of a texture in kilo bytes (KB)
+    /// </summary>
+    type public Size = Size of float
+
+    /// <summary>
+    /// <see cref="MetaData"/> defines the metadata information of a texture 
+    /// file.
+    /// </summary>
+    type public MetaData =
+        { Width: Pixel
+          Height: Pixel
+          DiskSize: Size
+        }
+
+    /// <summary>
     /// <see cref="Id"/> defines a texture id.
     /// </summary>
     type Id = | Id of string
@@ -22,6 +42,7 @@ module public Texture =
         id: Id
         name: Name
         path: Path.T
+        metaData: MetaData
     }
 
     /// <summary>
@@ -32,9 +53,10 @@ module public Texture =
     /// <returns>
     /// A new texture.
     /// </returns>
-    let construct (id: string) (name: string) (path: Path.T) : T =
+    let construct (id: string) (name: string) (path: Path.T) (metaData: MetaData) : T =
         { id = Id id
           name = Name name
           path = path
+          metaData = metaData
         }
 
