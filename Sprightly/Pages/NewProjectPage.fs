@@ -91,6 +91,9 @@ module NewProjectPage =
         async {
             do! Async.SwitchToThreadPool ()
             Sprightly.DataAccess.SolutionFile.writeEmpty (solutionFileDescription |> Sprightly.DataAccess.SolutionFile.descriptionToPath)
+            // TODO: move this to a better location AB#212
+            System.IO.Directory.CreateDirectory((solutionFileDescription.DirectoryPath / (Sprightly.Domain.Path.fromString "Textures")) |> Sprightly.Domain.Path.toString) |> ignore
+
             return RequestOpenNewProject solutionFileDescription
         } |> Cmd.ofAsyncMsg
 
