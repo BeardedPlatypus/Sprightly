@@ -14,6 +14,8 @@ module public SpriteToolBox =
 
           ProjectTreeIsOpen : bool
           DetailIsOpen : bool
+
+          SolutionDirectoryPath: Path.T
         }
 
     type public Pane =
@@ -24,10 +26,12 @@ module public SpriteToolBox =
         | SetIsOpen of Pane * bool
         | SetActiveTextureId of Texture.Id
         | RequestOpenTexturePicker
-        | RequestOpenTexture of Path.T
+        | RequestImportTexture of Path.T
+        | AddTexture of Texture.T
 
     type public InternalCmdMsg =
         | OpenTexturePicker
+        | ImportTexture of Path.T * Path.T
     
     type public CmdMsg = 
         | Internal of InternalCmdMsg
@@ -41,7 +45,35 @@ module public SpriteToolBox =
                                                      multiSelect = false,
                                                      restoreDirectory = false, 
                                                      title = "Load a new texture")
-        Dialogs.Cmds.openFileDialogCmd config RequestOpenTexture
+        Dialogs.Cmds.openFileDialogCmd config RequestImportTexture
+
+    let private importTextureCmd (solutionDirectoryPath: Path.T) 
+                                 (texPath: Path.T) : Cmd<Msg> =
+        async {
+            do! Async.SwitchToThreadPool ()
+
+            let metaData = Sprightly.DataAccess.Texture.readMetaData texPath
+
+            if metaData.IsNone then
+                return None
+            else
+                // TODO: Move this to a separate place
+                let name = 
+                    Sprightly.Domain.Path.name texPath
+                let destinationPath = 
+                    Sprightly.Domain.Path.combine
+                        (Sprightly.DataAccess.Texture.textureFolder solutionDirectoryPath)
+                        (Sprightly.Domain.Path.fromString name)
+                System.IO.File.Copy(Sprightly.Domain.Path.toString texPath,
+                                    Sprightly.Domain.Path.toString destinationPath)
+
+                return Some <| AddTexture { id = Sprightly.Domain.Texture.Id name
+                                            name = Sprightly.Domain.Texture.Name name
+                                            path = destinationPath
+                                            metaData = metaData.Value
+                                          }
+        } |> Cmd.ofAsyncMsgOption
+
 
     /// <summary>
     /// <see cref="mapInternalCmdMsg> maps the provided <paramref name="cmd"/>
@@ -55,6 +87,8 @@ module public SpriteToolBox =
         match cmd with 
         | OpenTexturePicker ->
             openTexturePickerCmd ()
+        | ImportTexture (solutionPath, texturePath) -> 
+            importTextureCmd solutionPath texturePath
 
     let public update (msg: Msg) (model: Model) : Model * CmdMsg list =
         match msg with 
@@ -65,9 +99,13 @@ module public SpriteToolBox =
         | SetActiveTextureId textureId ->
             { model with ActiveTextureId = Some textureId }, []
         | RequestOpenTexturePicker ->
-            model, [ Internal OpenTexturePicker]
-        | RequestOpenTexture path ->
-            model, []
+            model, [ Internal OpenTexturePicker ]
+        | RequestImportTexture path ->
+            model, [ Internal (ImportTexture (model.SolutionDirectoryPath, path)) ]
+        | AddTexture tex ->
+            { model with Textures = List.sortBy (fun (t: Texture.T) -> (match t.id with | Texture.Id v -> v)) (tex :: model.Textures) 
+                         ActiveTextureId = Some tex.id
+            }, []
 
     let private projectTreeView (model: Model) dispatch = 
         let fClickListItem id () = dispatch ( SetActiveTextureId id )

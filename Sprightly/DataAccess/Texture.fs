@@ -8,6 +8,7 @@ open Xamarin.Forms
 /// to accessing texture information on disk.
 /// </summary>
 module Texture =
+
     /// <summary>
     /// <see cref="readMetaData"/> obtains the metadata of the 
     /// texture file at <paramref name="path"/>.
@@ -21,4 +22,7 @@ module Texture =
         let inspector = DependencyService.Get<ITextureInspector>()
         inspector.ReadMetaData path
 
+    open Domain.Path
+    let public textureFolder (solutionDirectoryPath: Domain.Path.T) : Domain.Path.T =
+        solutionDirectoryPath / (fromString "Textures")
 

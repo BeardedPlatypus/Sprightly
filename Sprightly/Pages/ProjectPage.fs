@@ -46,7 +46,7 @@ module ProjectPage =
         | InternalSpriteToolBoxCmdMsg cmdMsg ->
              SpriteToolBox.mapInternalCmdMsg cmdMsg |> ( Cmd.map (ToolBoxMsg << SpriteToolBoxMsg ))
 
-    let public init: Model * CmdMsg list = 
+    let public init (solutionDirectoryPath : Path.T) : Model * CmdMsg list = 
         let metaData: Texture.MetaData = { Width = Texture.Pixel 1000
                                            Height = Texture.Pixel 1500
                                            DiskSize = Texture.Size 56.3
@@ -77,6 +77,7 @@ module ProjectPage =
                             ActiveTextureId = Some (Texture.Id "1")
                             ProjectTreeIsOpen = true
                             DetailIsOpen = true
+                            SolutionDirectoryPath = solutionDirectoryPath
                           }
         }, []
 

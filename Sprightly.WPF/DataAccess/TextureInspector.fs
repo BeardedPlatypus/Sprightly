@@ -16,7 +16,7 @@ type public TextureInspector() =
 
                 Some { Width = Domain.Texture.Pixel image.Width
                        Height = Domain.Texture.Pixel image.Height
-                       DiskSize = Domain.Texture.Size ((float) fileInfo.Length)
+                       DiskSize = Domain.Texture.Size (System.Math.Round((((float) fileInfo.Length) / 1024.0), 2))
                      }
             with 
             | _ -> None

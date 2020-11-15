@@ -79,7 +79,7 @@ module App =
             { model with PageModel = Pages.NewProjectPage.init () |> NewProjectPageModel}, 
             []
         | _, OpenProject description ->
-            let initModel, cmdMsgs = Pages.ProjectPage.init
+            let initModel, cmdMsgs = Pages.ProjectPage.init description.DirectoryPath
             { model with PageModel = ProjectPageModel initModel
                          IsLoading = false }, 
             [ MoveProjectToTopOfRecentProjects { Path = description |> DataAccess.SolutionFile.descriptionToPath; LastOpened = System.DateTime.Now } ] @
