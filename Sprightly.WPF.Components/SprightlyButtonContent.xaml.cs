@@ -10,7 +10,7 @@ namespace Sprightly.WPF.Components
         public SprightlyButtonContent(string text)
         {
             InitializeComponent();
-            Content.Text = text;
+            ContentBox.Text = text;
         }
     }
 }
