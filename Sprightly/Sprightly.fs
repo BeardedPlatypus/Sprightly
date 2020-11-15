@@ -157,6 +157,14 @@ module App =
             mapExternalNewProjectPageCmdMsg externalCmdMsg
 
 
+    let private mapProjectPageCmdMsg (cmdMsg: Pages.ProjectPage.CmdMsg) =
+        match cmdMsg with 
+        | Pages.ProjectPage.Internal internalCmdMsg -> 
+            Pages.ProjectPage.mapInternalCmdMsg internalCmdMsg |> ( Cmd.map ProjectPageMsg)
+        | Pages.ProjectPage.External externalCmdMsg -> 
+            Cmd.none
+
+
     let private moveProjectToTopOfRecentProjectsCmd (recentProject: DataAccess.RecentProject) =
         async {
             do! Async.SwitchToThreadPool ()
@@ -170,8 +178,8 @@ module App =
         match cmdMsg with 
         | StartPageCmdMsg startPageCmdMsg -> 
             mapStartPageCmdMsg startPageCmdMsg
-        | ProjectPageCmdMsg _ -> 
-            Cmd.none
+        | ProjectPageCmdMsg projectCmdMsg -> 
+            mapProjectPageCmdMsg projectCmdMsg
         | NewProjectPageCmdMsg newProjectCmdMsg -> 
             mapNewProjectPageCmdMsg newProjectCmdMsg
         | MoveProjectToTopOfRecentProjects recentProject ->

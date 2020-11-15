@@ -22,7 +22,8 @@ module ProjectPage =
         | SetIsOpen of bool
         | ToolBoxMsg of ToolBoxMsg
 
-    type public InternalCmdMsg = unit
+    type public InternalCmdMsg =
+        | InternalSpriteToolBoxCmdMsg of SpriteToolBox.InternalCmdMsg
     type public ExternalCmdMsg = unit
 
     /// <summary>
@@ -32,23 +33,45 @@ module ProjectPage =
         | Internal of InternalCmdMsg
         | External of ExternalCmdMsg
 
+    /// <summary>
+    /// <see cref="mapInternalCmdMsg> maps the provided <paramref name="cmd"/>
+    /// to a corresponding cmd.
+    /// </summary>
+    /// <param name="cmd">The command message to convert to a command.</param>
+    /// <returns>
+    /// The command corresponding with the provided <paramref name="cmd"/>.
+    /// </returns>
+    let public mapInternalCmdMsg (cmd: InternalCmdMsg) =
+        match cmd with 
+        | InternalSpriteToolBoxCmdMsg cmdMsg ->
+             SpriteToolBox.mapInternalCmdMsg cmdMsg |> ( Cmd.map (ToolBoxMsg << SpriteToolBoxMsg ))
+
     let public init: Model * CmdMsg list = 
+        let metaData: Texture.MetaData = { Width = Texture.Pixel 1000
+                                           Height = Texture.Pixel 1500
+                                           DiskSize = Texture.Size 56.3
+                                         }
+
         { IsOpen = true 
           SpriteToolBox = { Textures = [ { id = Texture.Id "1" 
                                            name = Texture.Name "Texture 1"
-                                           path = Path.fromString ""
+                                           path = Path.fromString "Texture1.png"
+                                           metaData = metaData
                                          }
                                          { id = Texture.Id "2" 
                                            name = Texture.Name "Texture 2"
-                                           path = Path.fromString ""
+                                           path = Path.fromString "Texture2.png"
+                                           metaData = metaData
                                          }
                                          { id = Texture.Id "3" 
                                            name = Texture.Name "Texture 3"
-                                           path = Path.fromString ""
+                                           path = Path.fromString "Texture3.png"
+                                           metaData = metaData
                                          }
                                          { id = Texture.Id "4" 
                                            name = Texture.Name "Texture 4"
-                                           path = Path.fromString ""
+                                           path = Path.fromString "Texture4.png"
+                                           metaData = metaData
                                          }
                                        ] 
                             ActiveTextureId = Some (Texture.Id "1")
@@ -74,7 +97,13 @@ module ProjectPage =
             match tbMsg with 
             | SpriteToolBoxMsg m ->
                 let newToolboxModel, cmdMsgs = SpriteToolBox.update m model.SpriteToolBox
-                { model with SpriteToolBox = newToolboxModel }, []
+
+                let fMapCmdMsg (cmdMsg: SpriteToolBox.CmdMsg) = 
+                    match cmdMsg with 
+                    | SpriteToolBox.Internal internalMsg -> Internal (InternalSpriteToolBoxCmdMsg internalMsg)
+                 
+
+                { model with SpriteToolBox = newToolboxModel }, List.map fMapCmdMsg cmdMsgs
         | _           -> model, []
 
     let private placeHolderIcons = 

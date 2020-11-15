@@ -23,8 +23,38 @@ module public SpriteToolBox =
     type public Msg = 
         | SetIsOpen of Pane * bool
         | SetActiveTextureId of Texture.Id
+        | RequestOpenTexturePicker
+        | RequestOpenTexture of Path.T
+
+    type public InternalCmdMsg =
+        | OpenTexturePicker
     
-    type public CmdMsg = unit
+    type public CmdMsg = 
+        | Internal of InternalCmdMsg
+
+    let private openTexturePickerCmd () =
+        let config = Dialogs.FileDialogConfiguration(addExtension = true,
+                                                     checkIfFileExists = true,
+                                                     dereferenceLinks = true,
+                                                     filter = "Texture files (*.png)|*.png",
+                                                     filterIndex = 1, 
+                                                     multiSelect = false,
+                                                     restoreDirectory = false, 
+                                                     title = "Load a new texture")
+        Dialogs.Cmds.openFileDialogCmd config RequestOpenTexture
+
+    /// <summary>
+    /// <see cref="mapInternalCmdMsg> maps the provided <paramref name="cmd"/>
+    /// to a corresponding cmd.
+    /// </summary>
+    /// <param name="cmd">The command message to convert to a command.</param>
+    /// <returns>
+    /// The command corresponding with the provided <paramref name="cmd"/>.
+    /// </returns>
+    let public mapInternalCmdMsg (cmd: InternalCmdMsg) =
+        match cmd with 
+        | OpenTexturePicker ->
+            openTexturePickerCmd ()
 
     let public update (msg: Msg) (model: Model) : Model * CmdMsg list =
         match msg with 
@@ -34,6 +64,10 @@ module public SpriteToolBox =
             | Detail      -> { model with DetailIsOpen = newState }, []
         | SetActiveTextureId textureId ->
             { model with ActiveTextureId = Some textureId }, []
+        | RequestOpenTexturePicker ->
+            model, [ Internal OpenTexturePicker]
+        | RequestOpenTexture path ->
+            model, []
 
     let private projectTreeView (model: Model) dispatch = 
         let fClickListItem id () = dispatch ( SetActiveTextureId id )
@@ -51,7 +85,7 @@ module public SpriteToolBox =
     let private projectTreePaneView (model: Model) dispatch = 
         let editButtons = View.Grid(rowdefs = [Star],
                                     coldefs = [ Star; Star; Star; ],
-                                    children = [ (Components.iconTextButton FontAwesome.Icons.plus   "Add"    (fun () -> ()) Color.White)
+                                    children = [ (Components.iconTextButton FontAwesome.Icons.plus   "Add"    (fun () -> dispatch RequestOpenTexturePicker) Color.White)
                                                      .Column(0)
                                                  (Components.iconTextButton FontAwesome.Icons.pen    "Edit"   (fun () -> ()) Color.White)
                                                      .Column(1)
@@ -68,10 +102,96 @@ module public SpriteToolBox =
                              ]  
                              (dispatch << (fun b -> SetIsOpen (ProjectTree, b)))
 
+
+    let private textureDetailsView (texture: Texture.T) =
+        let rowName = View.Grid(coldefs = [ Star; Stars 2.0 ],
+                                children = [ View.Label(text = "Name:",
+                                                        textColor = Color.White,
+                                                        fontSize = FontSize.fromValue 12.0,
+                                                        fontFamily = MaterialDesign.Fonts.RobotoCondensedRegular)
+                                                 .Column(0)
+                                                 .VerticalOptions(LayoutOptions.Center)
+                                             View.Entry(text = (match texture.name with | Texture.Name n -> n),
+                                                        textColor = Color.White,
+                                                        fontSize = FontSize.fromValue 12.0,
+                                                        fontFamily = MaterialDesign.Fonts.RobotoCondensedRegular,
+                                                        backgroundColor = Color.FromRgba(1.0, 1.0, 1.0, 0.04),
+                                                        horizontalTextAlignment = TextAlignment.End)
+                                                 .Column(1)
+                                                 .BorderColor(Color.White)
+                                                 .VerticalOptions(LayoutOptions.Center)])
+
+        let rowFileName = View.Grid(coldefs = [ Star; Stars 2.0 ],
+                                    children = [ View.Label(text = "Filename:",
+                                                            textColor = Color.White,
+                                                            fontSize = FontSize.fromValue 12.0,
+                                                            fontFamily = MaterialDesign.Fonts.RobotoCondensedRegular)
+                                                     .Column(0)
+                                                     .VerticalOptions(LayoutOptions.Center)
+                                                 View.Entry(text = (match texture.path with | Path.T n -> n),
+                                                            textColor = Color.FromRgba(1.0, 1.0, 1.0, 0.38),
+                                                            fontSize = FontSize.fromValue 12.0,
+                                                            fontFamily = MaterialDesign.Fonts.RobotoCondensedRegular,
+                                                            backgroundColor = Color.FromRgba(1.0, 1.0, 1.0, 0.0),
+                                                            horizontalTextAlignment = TextAlignment.End)
+                                                     .Column(1)
+                                                     .BorderColor(Color.FromRgba(1.0, 1.0, 1.0, 0.12))
+                                                     .IsEnabled(false)
+                                                     .VerticalOptions(LayoutOptions.Center)])
+
+        let width = match texture.metaData.Width with | Texture.Pixel v -> v.ToString()
+        let height = match texture.metaData.Height with | Texture.Pixel v -> v.ToString()
+        let dimensions = width + " x " + height
+        let rowDimension = View.Grid(coldefs = [ Star; Stars 2.0 ],
+                                     children = [ View.Label(text = "Dimensions:",
+                                                             textColor = Color.White,
+                                                             fontSize = FontSize.fromValue 12.0,
+                                                             fontFamily = MaterialDesign.Fonts.RobotoCondensedRegular)
+                                                      .Column(0)
+                                                      .VerticalOptions(LayoutOptions.Center)
+                                                  View.Entry(text =  dimensions,
+                                                             textColor = Color.FromRgba(1.0, 1.0, 1.0, 0.38),
+                                                             fontSize = FontSize.fromValue 12.0,
+                                                             fontFamily = MaterialDesign.Fonts.RobotoCondensedRegular,
+                                                             backgroundColor = Color.FromRgba(1.0, 1.0, 1.0, 0.0),
+                                                             horizontalTextAlignment = TextAlignment.End)
+                                                      .Column(1)
+                                                      .BorderColor(Color.FromRgba(1.0, 1.0, 1.0, 0.12))
+                                                      .IsEnabled(false)
+                                                      .VerticalOptions(LayoutOptions.Center)])
+
+        let diskSize = (match texture.metaData.DiskSize with | Texture.Size v -> v.ToString()) + " KB"
+        let rowSize = View.Grid(coldefs = [ Star; Stars 2.0 ],
+                                children = [ View.Label(text = "Size:",
+                                                        textColor = Color.White,
+                                                        fontSize = FontSize.fromValue 12.0,
+                                                        fontFamily = MaterialDesign.Fonts.RobotoCondensedRegular)
+                                                 .Column(0)
+                                                 .VerticalOptions(LayoutOptions.Center)
+                                             View.Entry(text = diskSize,
+                                                        textColor = Color.FromRgba(1.0, 1.0, 1.0, 0.38),
+                                                        fontSize = FontSize.fromValue 12.0,
+                                                        fontFamily = MaterialDesign.Fonts.RobotoCondensedRegular,
+                                                        backgroundColor = Color.FromRgba(1.0, 1.0, 1.0, 0.0),
+                                                        horizontalTextAlignment = TextAlignment.End)
+                                                 .Column(1)
+                                                 .BorderColor(Color.FromRgba(1.0, 1.0, 1.0, 0.12))
+                                                 .IsEnabled(false)
+                                                 .VerticalOptions(LayoutOptions.Center)])
+        View.StackLayout(orientation = StackOrientation.Vertical,
+                         children = [ rowName 
+                                      rowFileName
+                                      rowDimension
+                                      rowSize
+                                    ])
+
     let private textureSpecificView (model: Model) dispatch = 
+        let textureFromId id = List.tryFind (fun (tex: Texture.T) -> tex.id = id) model.Textures
+        let texture = if Option.isSome model.ActiveTextureId then textureFromId model.ActiveTextureId.Value else None
+
         CollapsiblePane.view "Texture Details" 
                              model.DetailIsOpen
-                             [ 
+                             [ if Option.isSome texture then yield textureDetailsView texture.Value
                              ]  
                              (dispatch << (fun b -> SetIsOpen (Detail, b)))
        
