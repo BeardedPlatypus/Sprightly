@@ -13,6 +13,7 @@
     <Page Remove="Assets\**" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccess\TextureInspector.fs" />
     <Compile Include="Properties\AssemblyInfo.fs" />
     <Compile Include="Components\Common\SprightlyIconButtonRenderer.fs" />
     <Compile Include="Components\Common\SprightlyButtonRenderer.fs" />

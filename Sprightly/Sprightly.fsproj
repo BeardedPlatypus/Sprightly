@@ -21,6 +21,8 @@
     </None>
     <Compile Include="Domain\Path.fs" />
     <Compile Include="Domain\Texture.fs" />
+    <Compile Include="DataAccess\ITextureInspector.fs" />
+    <Compile Include="DataAccess\Texture.fs" />
     <Compile Include="DataAccess\Version.fs" />
     <Compile Include="DataAccess\Json.fs" />
     <Compile Include="DataAccess\SolutionFile.fs" />
