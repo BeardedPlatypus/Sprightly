@@ -6,10 +6,19 @@ open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
 
+
+/// <summary>
+/// <see cref="Orientation"/> defines the orientation of a <see cref="SprightlyIconButton"/>.
+/// </summary>
 type Orientation = 
     | Horizontal
     | Vertical
 
+/// <summary>
+/// <see cref="SprightlyIconButton"/> defines the data class for a icon button,
+/// containing both text and an icon.
+/// </summary>
+/// <seealso cref="Button"/>
 type SprightlyIconButton() =
     inherit Button()
     
@@ -18,18 +27,27 @@ type SprightlyIconButton() =
     let mutable icon = ""
     let mutable iconSize = base.FontSize
 
+    /// <summary>
+    /// Gets or sets the icon of this <see cref="SprightlyIconButton"/>.
+    /// </summary>
     member public this.Icon
         with get() = icon 
         and set value =
             icon <- value
             this.OnPropertyChanged "Icon"
 
+    /// <summary>
+    /// Gets or sets the icon size of this <see cref="SprightlyIconButton"/>.
+    /// </summary>
     member public this.IconSize 
         with get() = iconSize
         and set value = 
             iconSize <- value 
             this.OnPropertyChanged "IconSize"
 
+    /// <summary>
+    /// Gets or sets the icon orientation of this <see cref="SprightlyIconButton"/>.
+    /// </summary>
     member val public IconOrientation = Orientation.Horizontal with get, set
 
     interface INotifyPropertyChanged with 
