@@ -13,6 +13,9 @@ open Xamarin.Forms
 type RecentProjectButton() =
     inherit Button()
 
+    /// <summary>
+    /// The recent project value describing the path and last opened value.
+    /// </summary>
     member val public RecentProjectValue : Sprightly.DataAccess.RecentProject = 
         {  Path = Sprightly.Domain.Path.T ""; LastOpened = System.DateTime.Today } with get, set
 
