@@ -14,18 +14,27 @@ open Xamarin.Forms
 /// See: https://fsprojects.github.io/Fabulous/Fabulous.XamarinForms/index.html#getting-started
 /// </remarks>
 module App = 
+    /// <summary>
+    /// The model of the currently active page.
+    /// </summary>
     type public PageModel = 
         | StartPageModel      of Pages.StartPage.Model
         | ProjectPageModel    of Pages.ProjectPage.Model
         | NewProjectPageModel of Pages.NewProjectPage.Model
 
-
+    /// <summary>
+    /// The model of the Sprightly application.
+    /// </summary>
     type public Model = 
         { PageModel : PageModel
           IsLoading : bool
         }
 
 
+    /// <summary>
+    /// The msg of the Sprightly App consisting of page msgs
+    /// and global sprightly msgs.
+    /// </summary>
     type public Msg = 
         | StartPageMsg      of Pages.StartPage.Msg
         | ProjectPageMsg    of Pages.ProjectPage.Msg
@@ -38,7 +47,10 @@ module App =
         | OpenLoadingPage
         | CloseLoadingPage
 
-
+    /// <summary>
+    /// The cmd msg of the Sprightly App consisting of page cmd msgs
+    /// and global sprightly cmd mssgs.
+    /// </summary>
     type public CmdMsg = 
         | StartPageCmdMsg      of Pages.StartPage.CmdMsg
         | ProjectPageCmdMsg    of Pages.ProjectPage.CmdMsg
