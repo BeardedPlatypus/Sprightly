@@ -31,6 +31,13 @@ module Texture =
         inspector.ReadMetaData path
 
     open Domain.Path
+    /// <summary>
+    /// Get the texture folder based on the provided <paramref name="solutionDirectoryPath"/>.
+    /// </summary>
+    /// <param name="solutionDirectoryPath">Path to to the solution directory.</param>
+    /// <returns>
+    /// The folder containing all texture files.
+    /// <returns>
     let public textureFolder (solutionDirectoryPath: Domain.Path.T) : Domain.Path.T =
         solutionDirectoryPath / (fromString "Textures")
 
