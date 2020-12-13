@@ -244,7 +244,7 @@ module public SpriteToolBox =
     /// <see cref='view"/> is executed on the ui thread.
     /// </remarks>
     let public view (model: Model) dispatch = 
-        View.StackLayout(children = [ projectTreePaneView model dispatch
-                                      textureSpecificView model dispatch
+        View.StackLayout(children = [ yield projectTreePaneView model dispatch
+                                      if Option.isSome model.ActiveTextureId then yield textureSpecificView model dispatch
                                     ])
 
