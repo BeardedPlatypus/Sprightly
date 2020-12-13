@@ -35,6 +35,23 @@ module SolutionFile =
         Json.serialize solutionFile 
         |> ( Json.writeJsonString path )
 
+
+    /// <summary>
+    /// Read the <see cref="DataAccessRecord"/> at the specified <paramref name="path"/>
+    /// </summary>
+    /// <param name="path">The path to read from.</param>
+    /// <returns>
+    /// The <see cref="DataAccessRecord"/> at the specified <paramref name="path"/>
+    /// if it was read succesfully, else <see cref="Option.None"/>.
+    /// </returns>
+    let read (path: Path.T) : DataAccessRecord option =
+        let result = Json.readJsonString path 
+                     |> Json.deserialize<DataAccessRecord>
+        
+        match result with 
+        | Result.Ok v -> Some v
+        | _           -> None
+
     /// <summary>
     /// Create an empty document.
     /// </summary>

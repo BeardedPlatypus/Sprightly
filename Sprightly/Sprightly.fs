@@ -91,11 +91,22 @@ module App =
             { model with PageModel = Pages.NewProjectPage.init () |> NewProjectPageModel}, 
             []
         | _, OpenProject description ->
-            let initModel, cmdMsgs = Pages.ProjectPage.init description.DirectoryPath
-            { model with PageModel = ProjectPageModel initModel
-                         IsLoading = false }, 
-            [ MoveProjectToTopOfRecentProjects { Path = description |> DataAccess.SolutionFile.descriptionToPath; LastOpened = System.DateTime.Now } ] @
-            List.map ProjectPageCmdMsg cmdMsgs
+            // TODO: Move this code into a separate function.
+            let solutionFilePath = 
+                Domain.Path.combine description.DirectoryPath (Domain.Path.fromString description.FileName)
+
+            match DataAccess.SolutionFile.read solutionFilePath with
+            | None -> init ()
+            | Some solutionFile -> 
+                let textures = List.map ( DataAccess.Texture.loadDomainTexture description.DirectoryPath ) solutionFile.Textures
+                               |> List.choose id
+                
+                
+                let initModel, cmdMsgs = Pages.ProjectPage.init description.DirectoryPath textures
+                { model with PageModel = ProjectPageModel initModel
+                             IsLoading = false }, 
+                [ MoveProjectToTopOfRecentProjects { Path = description |> DataAccess.SolutionFile.descriptionToPath; LastOpened = System.DateTime.Now } ] @
+                  List.map ProjectPageCmdMsg cmdMsgs
         | _, ReturnToStartPage ->
             init ()
         | _, OpenLoadingPage ->

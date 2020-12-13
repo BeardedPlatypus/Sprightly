@@ -46,35 +46,10 @@ module ProjectPage =
         | InternalSpriteToolBoxCmdMsg cmdMsg ->
              SpriteToolBox.mapInternalCmdMsg cmdMsg |> ( Cmd.map (ToolBoxMsg << SpriteToolBoxMsg ))
 
-    let public init (solutionDirectoryPath : Path.T) : Model * CmdMsg list = 
-        let metaData: Texture.MetaData = { Width = Texture.Pixel 1000
-                                           Height = Texture.Pixel 1500
-                                           DiskSize = Texture.Size 56.3
-                                         }
-
+    let public init (solutionDirectoryPath : Path.T) (textures : Texture.T list) : Model * CmdMsg list = 
         { IsOpen = true 
-          SpriteToolBox = { Textures = [ { id = Texture.Id "1" 
-                                           name = Texture.Name "Texture 1"
-                                           path = Path.fromString "Texture1.png"
-                                           metaData = metaData
-                                         }
-                                         { id = Texture.Id "2" 
-                                           name = Texture.Name "Texture 2"
-                                           path = Path.fromString "Texture2.png"
-                                           metaData = metaData
-                                         }
-                                         { id = Texture.Id "3" 
-                                           name = Texture.Name "Texture 3"
-                                           path = Path.fromString "Texture3.png"
-                                           metaData = metaData
-                                         }
-                                         { id = Texture.Id "4" 
-                                           name = Texture.Name "Texture 4"
-                                           path = Path.fromString "Texture4.png"
-                                           metaData = metaData
-                                         }
-                                       ] 
-                            ActiveTextureId = Some (Texture.Id "1")
+          SpriteToolBox = { Textures = textures
+                            ActiveTextureId = None
                             ProjectTreeIsOpen = true
                             DetailIsOpen = true
                             SolutionDirectoryPath = solutionDirectoryPath
