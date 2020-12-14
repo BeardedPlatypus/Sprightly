@@ -1,4 +1,4 @@
-﻿namespace Sprightly.Pages
+﻿namespace Sprightly.Presentation.Pages
 
 open Fabulous
 open Fabulous.XamarinForms
@@ -6,9 +6,10 @@ open Xamarin.Forms
 
 open Sprightly.Common
 open Sprightly.Domain
-open Sprightly.Components.Common
-open Sprightly.Components.ProjectPage
-open Sprightly.Components.ProjectPage.ToolBoxes
+open Sprightly.Presentation.Components.Common
+open Sprightly.Presentation.Components.ProjectPage
+open Sprightly.Presentation.Components.ProjectPage.ToolBoxes
+
 
 module ProjectPage =
     type public Model = 
@@ -125,7 +126,3 @@ module ProjectPage =
                                           .VerticalOptions(LayoutOptions.FillAndExpand)
                              ])
             .Spacing(0.0)
-
-
-
-

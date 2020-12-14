@@ -1,7 +1,7 @@
 ﻿namespace Sprightly.WPF.Components.Common.Dialogs
 
 open Sprightly.Common
-open Sprightly.Components.Common.Dialogs
+open Sprightly.Presentation.Components.Common.Dialogs
 
 module public Utils = 
     let public configureProperty (optionalValue: 'T option) (propAssign: 'T -> unit) : unit =

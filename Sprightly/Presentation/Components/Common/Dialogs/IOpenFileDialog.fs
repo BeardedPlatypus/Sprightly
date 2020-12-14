@@ -1,14 +1,14 @@
-﻿namespace Sprightly.Components.Common.Dialogs
+﻿namespace Sprightly.Presentation.Components.Common.Dialogs
 
 open Sprightly
 
 /// <summary>
-/// <see cref="ISaveFileDialog"/> defines the interface with which a 
-/// save file dialog can be created.
+/// <see cref="IOpenFileDialog"/> defines the interface with which a 
+/// open file dialog can be created.
 /// </summary>
-type public ISaveFileDialog = 
+type public IOpenFileDialog = 
     /// <summary>
-    /// Pick a file through an save file dialog and return the result as a path.
+    /// Pick a file through an open file dialog and return the result as a path.
     /// </summary>
     /// <returns>
     /// Upon success the path will be returned; otherwise None.
@@ -20,4 +20,3 @@ type public ISaveFileDialog =
     /// <see cref="FileBrowserDialogConfiguration"/>.
     /// </summary>
     abstract Configuration : FileDialogConfiguration option with get, set
-

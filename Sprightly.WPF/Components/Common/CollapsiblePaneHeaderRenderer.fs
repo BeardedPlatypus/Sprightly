@@ -4,7 +4,7 @@ open System.ComponentModel
 open Xamarin.Forms.Platform.WPF
 open Sprightly.WPF.Components
 
-open Sprightly.Components.Common
+open Sprightly.Presentation.Components.Common
 
 type CollapsiblePaneHeaderRenderer() =
     inherit ButtonRenderer()
@@ -50,6 +50,6 @@ type CollapsiblePaneHeaderRenderer() =
 
 // Dummy module to ensure this renderer is exported and picked up by Xamarin.Forms
 module Dummy_CollapsiblePaneHeaderRenderer= 
-    [<assembly: ExportRenderer(typeof<Sprightly.Components.Common.CollapsiblePaneHeader>, 
+    [<assembly: ExportRenderer(typeof<Sprightly.Presentation.Components.Common.CollapsiblePaneHeader>, 
                                typeof<CollapsiblePaneHeaderRenderer>)>]
     do ()

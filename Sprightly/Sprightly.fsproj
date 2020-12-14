@@ -10,15 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Assets\Fonts\Eczar-Regular.ttf" />
-    <EmbeddedResource Include="Assets\Fonts\fa-regular-400.ttf" />
-    <EmbeddedResource Include="Assets\Fonts\fa-solid-900.ttf" />
-    <EmbeddedResource Include="Assets\Fonts\RobotoCondensed-Bold.ttf" />
-    <EmbeddedResource Include="Assets\Fonts\RobotoCondensed-Light.ttf" />
-    <EmbeddedResource Include="Assets\Fonts\RobotoCondensed-Regular.ttf" />
-    <None Include="Assets\icon.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <Compile Include="Common\Path.fs" />
     <Compile Include="Domain\Texture.fs" />
     <Compile Include="DataAccess\ITextureInspector.fs" />
@@ -28,25 +19,34 @@
     <Compile Include="DataAccess\SolutionFile.fs" />
     <Compile Include="DataAccess\RecentProject.fs" />
     <EmbeddedResource Include="DataAccess\sprightly_project.json" />
-    <Compile Include="Components\Common\SprightlyIconButton.fs" />
-    <Compile Include="Components\Common\SprightlyButton.fs" />
-    <Compile Include="Components\Common\MaterialDesign.fs" />
-    <Compile Include="Components\Common\FontAwesome.fs" />
-    <Compile Include="Components\Common\CollapsiblePaneHeader.fs" />
-    <Compile Include="Components\Common\CollapsiblePane.fs" />
-    <Compile Include="Components\Common\Dialogs\FileDialogConfiguration.fs" />
-    <Compile Include="Components\Common\Dialogs\ISaveFileDialog.fs" />
-    <Compile Include="Components\Common\Dialogs\IOpenFileDialog.fs" />
-    <Compile Include="Components\Common\Dialogs\Cmds.fs" />
-    <Compile Include="Components\Common\Components.fs" />
-    <Compile Include="Components\StartPage\RecentProjectButton.fs" />
-    <Compile Include="Components\ProjectPage\Toolboxes\SpriteToolBox.fs" />
-    <Compile Include="Components\ProjectPage\ITextureFactory.fs" />
-    <Compile Include="Components\ProjectPage\Viewport.fs" />
-    <Compile Include="Pages\LoadingPage.fs" />
-    <Compile Include="Pages\StartPage.fs" />
-    <Compile Include="Pages\NewProjectPage.fs" />
-    <Compile Include="Pages\ProjectPage.fs" />
+    <EmbeddedResource Include="Presentation\Assets\Fonts\Eczar-Regular.ttf" />
+    <EmbeddedResource Include="Presentation\Assets\Fonts\fa-regular-400.ttf" />
+    <EmbeddedResource Include="Presentation\Assets\Fonts\fa-solid-900.ttf" />
+    <EmbeddedResource Include="Presentation\Assets\Fonts\RobotoCondensed-Bold.ttf" />
+    <EmbeddedResource Include="Presentation\Assets\Fonts\RobotoCondensed-Light.ttf" />
+    <EmbeddedResource Include="Presentation\Assets\Fonts\RobotoCondensed-Regular.ttf" />
+    <None Include="Presentation\Assets\icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <Compile Include="Presentation\Components\Common\SprightlyIconButton.fs" />
+    <Compile Include="Presentation\Components\Common\SprightlyButton.fs" />
+    <Compile Include="Presentation\Components\Common\MaterialDesign.fs" />
+    <Compile Include="Presentation\Components\Common\FontAwesome.fs" />
+    <Compile Include="Presentation\Components\Common\CollapsiblePaneHeader.fs" />
+    <Compile Include="Presentation\Components\Common\CollapsiblePane.fs" />
+    <Compile Include="Presentation\Components\Common\Dialogs\FileDialogConfiguration.fs" />
+    <Compile Include="Presentation\Components\Common\Dialogs\ISaveFileDialog.fs" />
+    <Compile Include="Presentation\Components\Common\Dialogs\IOpenFileDialog.fs" />
+    <Compile Include="Presentation\Components\Common\Dialogs\Cmds.fs" />
+    <Compile Include="Presentation\Components\Common\Components.fs" />
+    <Compile Include="Presentation\Components\StartPage\RecentProjectButton.fs" />
+    <Compile Include="Presentation\Components\ProjectPage\Toolboxes\SpriteToolBox.fs" />
+    <Compile Include="Presentation\Components\ProjectPage\ITextureFactory.fs" />
+    <Compile Include="Presentation\Components\ProjectPage\Viewport.fs" />
+    <Compile Include="Presentation\Pages\LoadingPage.fs" />
+    <Compile Include="Presentation\Pages\StartPage.fs" />
+    <Compile Include="Presentation\Pages\NewProjectPage.fs" />
+    <Compile Include="Presentation\Pages\ProjectPage.fs" />
     <Compile Include="Sprightly.fs" />
   </ItemGroup>
   <ItemGroup>
@@ -59,5 +59,4 @@
     <PackageReference Update="FSharp.Core" Version="5.0.0" /> <!-- workaround for VSMac bug https://github.com/mono/monodevelop/pull/5137 --> 
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
-  <ItemGroup />
 </Project>

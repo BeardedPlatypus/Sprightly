@@ -1,12 +1,13 @@
-﻿namespace Sprightly.Pages
+﻿namespace Sprightly.Presentation.Pages
 
 open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
 
 open Sprightly
-open Sprightly.Components
-open Sprightly.Components.StartPage.FabulousRecentProjectButton
+open Sprightly.Presentation.Components
+open Sprightly.Presentation.Components.StartPage.FabulousRecentProjectButton
+
 
 /// <summary>
 /// <see cref="StartPage"/> defines the introduction page shown when
@@ -21,7 +22,6 @@ module public StartPage =
         { RecentProjects : DataAccess.RecentProject list
         }
 
-
     /// <summary>
     /// <see cref="Msg"/> defines the messages for the <see cref="StartPage"/>.
     /// </summary>
@@ -30,7 +30,6 @@ module public StartPage =
         | RequestNewProject 
         | RequestOpenProjectPicker
         | RequestOpenProject of DataAccess.SolutionFile.Description
-
 
     /// <summary>
     /// <see cref="InternalCmdMsg"/> defines the internal command messages for 
@@ -42,7 +41,6 @@ module public StartPage =
         | SaveRecentProjects of DataAccess.RecentProject list
         | OpenLoadProjectPicker
 
-
     /// <summary>
     /// <see cref="ExternalCmdMsg"/> defines the external command messages for 
     /// the <see cref="StartPage"/>, which need to be mapped in the application
@@ -53,14 +51,12 @@ module public StartPage =
         | OpenLoadingPage
         | OpenProject of DataAccess.SolutionFile.Description
 
-
     /// <summary>
     /// <see cref="Msg"/> defines the command messages for the <see cref="StartPage"/>.
     /// </summary>
     type public CmdMsg =
         | Internal of InternalCmdMsg
         | External of ExternalCmdMsg
-
 
     let private loadRecentProjectsCmd () =
         async {
@@ -70,7 +66,6 @@ module public StartPage =
                    |> Option.map SetRecentProjects
         } |> Cmd.ofAsyncMsgOption
 
-
     let private saveRecentProjectsCmd (recentProjects: Sprightly.DataAccess.RecentProject list) = 
         async {
             do! Async.SwitchToThreadPool ()
@@ -78,7 +73,6 @@ module public StartPage =
 
             return None
         } |> Cmd.ofAsyncMsgOption
-
 
     let private openLoadProjectPickerCmd () =
         let config = Common.Dialogs.FileDialogConfiguration(addExtension = true,
@@ -90,7 +84,6 @@ module public StartPage =
                                                             restoreDirectory = false, 
                                                             title = "Load a sprightly solution")
         Common.Dialogs.Cmds.openFileDialogCmd config ( RequestOpenProject << DataAccess.SolutionFile.pathToDescription )
-
 
     /// <summary>
     /// <see cref="mapInternalCmdMsg> maps the provided <paramref name="cmd"/>
@@ -109,13 +102,11 @@ module public StartPage =
         | OpenLoadProjectPicker ->
             openLoadProjectPickerCmd ()
 
-
     /// <summary>
     /// Initialise a model and CmdMsg for the <see cref="StartPage"/>.
     /// </summary>
     let public init : Model * CmdMsg list = 
         { RecentProjects = [] }, [ Internal LoadRecentProjects ]
-
 
     /// <summary>
     /// Update the provided <paramref name="model"/> to its new state given the
@@ -149,7 +140,6 @@ module public StartPage =
                                          (fun () -> dispatch RequestOpenProjectPicker) 
 
         View.StackLayout(children = [ newProjectButton; openProjectButton ])
-
 
     let private projectButtonsColumnView dispatch = 
         View.Grid(coldefs = [ Star ],
@@ -198,7 +188,6 @@ module public StartPage =
                                     ])
             |> Common.MaterialDesign.withElevation (Common.MaterialDesign.Elevation 4)
 
-
     /// <summary>
     /// <see cref="view"/> transforms the <paramref name="model"/> onto
     /// its corresponding view.
@@ -223,4 +212,3 @@ module public StartPage =
               .ColumnSpacing(16.0)
               .Margin(Thickness 16.0)    
             |> Common.MaterialDesign.withElevation (Common.MaterialDesign.Elevation 0)
-

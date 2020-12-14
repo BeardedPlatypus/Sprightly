@@ -1,4 +1,4 @@
-﻿namespace Sprightly.Components.ProjectPage
+﻿namespace Sprightly.Presentation.Components.ProjectPage
 
 open Sprightly
 

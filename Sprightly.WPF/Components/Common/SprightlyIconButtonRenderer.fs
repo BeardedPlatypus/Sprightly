@@ -3,7 +3,7 @@
 open Xamarin.Forms.Platform.WPF
 open Sprightly.WPF.Components
 
-open Sprightly.Components.Common
+open Sprightly.Presentation.Components.Common
 
 type SprightlyIconButtonRenderer() =
     inherit ButtonRenderer()
@@ -36,6 +36,6 @@ type SprightlyIconButtonRenderer() =
 
 // Dummy module to ensure this renderer is exported and picked up by Xamarin.Forms
 module Dummy_SprightlyListElementRenderer= 
-    [<assembly: ExportRenderer(typeof<Sprightly.Components.Common.SprightlyIconButton>, 
+    [<assembly: ExportRenderer(typeof<Sprightly.Presentation.Components.Common.SprightlyIconButton>, 
                                typeof<SprightlyIconButtonRenderer>)>]
     do ()

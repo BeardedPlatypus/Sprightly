@@ -1,4 +1,4 @@
-﻿namespace Sprightly.Components.Common.Dialogs
+﻿namespace Sprightly.Presentation.Components.Common.Dialogs
 
 open Sprightly
 

@@ -1,4 +1,4 @@
-﻿namespace Sprightly.Pages
+﻿namespace Sprightly.Presentation.Pages
 
 open Fabulous.XamarinForms
 open Xamarin.Forms
@@ -25,8 +25,3 @@ module LoadingPage =
     /// </remarks>
     let public view (model: Model) dispatch = 
         View.BoxView(color = Color.Black)
-
-
-
-
-

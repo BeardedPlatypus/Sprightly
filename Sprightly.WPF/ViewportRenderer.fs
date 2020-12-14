@@ -9,9 +9,9 @@ open Sprightly.WPF.Components
 /// to render the <see cref="Viewport"/> as a <see cref="ViewportControl"/>.
 /// </summary>
 type ViewportRenderer() =
-    inherit ViewRenderer<Sprightly.Components.ProjectPage.Viewport, ViewportControl>()
+    inherit ViewRenderer<Sprightly.Presentation.Components.ProjectPage.Viewport, ViewportControl>()
 
-    override this.OnElementChanged(e: ElementChangedEventArgs<Sprightly.Components.ProjectPage.Viewport>) = 
+    override this.OnElementChanged(e: ElementChangedEventArgs<Sprightly.Presentation.Components.ProjectPage.Viewport>) = 
         base.OnElementChanged(e)
 
         match this.Control with
@@ -23,7 +23,7 @@ type ViewportRenderer() =
 
 // Dummy module to ensure this renderer is exported and picked up by Xamarin.Forms
 module Dummy_ViewPortRenderer = 
-    [<assembly: ExportRenderer(typeof<Sprightly.Components.ProjectPage.Viewport>, 
+    [<assembly: ExportRenderer(typeof<Sprightly.Presentation.Components.ProjectPage.Viewport>, 
                                typeof<ViewportRenderer>)>]
     do ()
 

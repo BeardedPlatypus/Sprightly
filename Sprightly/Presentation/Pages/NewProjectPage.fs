@@ -1,11 +1,13 @@
-﻿namespace Sprightly.Pages
+﻿namespace Sprightly.Presentation.Pages
+
+open Sprightly.Common
+open Sprightly.Common.Path
+
+open Sprightly.Presentation.Components
 
 open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
-open Sprightly.Components
-open Sprightly.Common
-open Sprightly.Common.Path
 
 
 /// <summary>
@@ -22,7 +24,6 @@ module NewProjectPage =
           CreateNewDirectory: bool
         }
 
-
     /// <summary>
     /// Initialise a new default <see cref="Model"/>.
     /// </summary>
@@ -31,7 +32,6 @@ module NewProjectPage =
           DirectoryPath = None
           CreateNewDirectory = true
         }
-
 
     /// <summary>
     /// <see cref="Msg"/> defines the messages for the <see cref="NewProjectPage"/>.
@@ -46,7 +46,6 @@ module NewProjectPage =
         | RequestOpenFilePicker
         | RequestOpenNewProject of Sprightly.DataAccess.SolutionFile.Description
 
-
     /// <summary>
     /// <see cref="InternalCmdMsg"/> defines the internal command messages for 
     /// the <see cref="NewProject"/>, which can be mapped through the 
@@ -55,7 +54,6 @@ module NewProjectPage =
     type public InternalCmdMsg =
         | OpenFilePicker
         | CreateSolutionFile of Sprightly.DataAccess.SolutionFile.Description
-
 
     /// <summary>
     /// <see cref="ExternalCmdMsg"/> defines the external command messages for 
@@ -67,14 +65,12 @@ module NewProjectPage =
         | OpenLoadingPage
         | ReturnToStartPage
 
-
     /// <summary>
     /// <see cref="Msg"/> defines the command messages for the <see cref="NewProjectPage"/>.
     /// </summary>
     type public CmdMsg =
         | Internal of InternalCmdMsg
         | External of ExternalCmdMsg
-
 
     let private openProjectFolderSelectionCmd () =
         let config = Common.Dialogs.FileDialogConfiguration(addExtension = true,
@@ -86,7 +82,6 @@ module NewProjectPage =
                                                             restoreDirectory = false, 
                                                             title = "Select new sprightly solution location")
         Common.Dialogs.Cmds.openFileDialogCmd config SetDirectoryPath
-
    
     let private createSolutionFileCmd (solutionFileDescription: Sprightly.DataAccess.SolutionFile.Description) : Cmd<Msg> =
         async {
@@ -97,7 +92,6 @@ module NewProjectPage =
 
             return RequestOpenNewProject solutionFileDescription
         } |> Cmd.ofAsyncMsg
-
 
     /// <summary>
     /// <see cref="mapInternalCmdMsg> maps the provided <paramref name="cmd"/>
@@ -133,7 +127,6 @@ module NewProjectPage =
         | _ ->
             []
 
-
     /// <summary>
     /// Update the provided <paramref name="model"/> to its new state given the
     /// provided <paramref name="msg"/>.
@@ -166,7 +159,6 @@ module NewProjectPage =
         | RequestOpenNewProject description ->
             model, [ External <| OpenNewProject description ]
 
-
     let private IsValidNewSolution (model: Model): bool =
         match model.DirectoryPath, model.ProjectName with
         | Some directoryPath, Some projectName ->
@@ -175,7 +167,6 @@ module NewProjectPage =
             projectName.Length > 0
         | _ -> 
             false
-
 
     let private navigationButtonsView (model: Model) dispatch = 
         let createProjectButton =
@@ -205,7 +196,6 @@ module NewProjectPage =
             .HorizontalOptions(LayoutOptions.FillAndExpand)
             .Padding(Thickness (0.0, 0.0, 0.0, 8.0))
 
-
     let private navigationButtonsColumnView (model: Model) dispatch = 
         View.Grid(coldefs = [ Star ],
                   rowdefs = [ Star; Stars 2.0 ],
@@ -220,9 +210,7 @@ module NewProjectPage =
             .RowSpacing(24.0)
             |> Common.MaterialDesign.withElevation (Common.MaterialDesign.Elevation 4)
 
-
     let private entryBoxColumnDef = [ Stars 21.0; Star ]
-
 
     let private nameEntryView (name: string) dispatch =
         let fTextChanged (args: TextChangedEventArgs) = 
@@ -246,7 +234,6 @@ module NewProjectPage =
         View.StackLayout(orientation = StackOrientation.Vertical,
                          children = [ label; entry ])
             .Spacing(12.0)
-
 
     let private directoryEntryView (directoryPath: string) (isChecked: bool) dispatch =
         let fTextChanged (args: TextChangedEventArgs) = 
@@ -284,7 +271,6 @@ module NewProjectPage =
                          children = [ label; entry; checkbox])
             .Spacing(12.0)
 
-
     let private newProjectDataFieldsView (model : Model) dispatch =
         let projectName = match model.ProjectName with | None -> "" | Some v -> v
         let directoryPath = match model.DirectoryPath with | None -> "" | Some ( Path.T v) -> v
@@ -297,7 +283,6 @@ module NewProjectPage =
             .Spacing(24.0)
             .Padding(Thickness (32.0, 10.0, 32.0, 10.0))
 
-
     let private newProjectDataEntryView (model: Model) dispatch = 
         View.StackLayout(orientation = StackOrientation.Vertical,
                          children = [ (Common.Components.header "Create new project:")
@@ -306,7 +291,6 @@ module NewProjectPage =
                                           .VerticalOptions(LayoutOptions.FillAndExpand)
                                     ])
             |> Common.MaterialDesign.withElevation (Common.MaterialDesign.Elevation 4)
-
 
     /// <summary>
     /// <see cref="view"/> transforms the <paramref name="model"/> onto
@@ -335,4 +319,3 @@ module NewProjectPage =
             .ColumnSpacing(16.0)
             .Margin(Thickness 16.0)    
             |> Common.MaterialDesign.withElevation (Common.MaterialDesign.Elevation 0)
-

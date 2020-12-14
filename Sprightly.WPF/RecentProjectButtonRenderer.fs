@@ -3,7 +3,7 @@
 open Xamarin.Forms.Platform.WPF
 open Sprightly.WPF.Components
 
-open Sprightly.Components.StartPage
+open Sprightly.Presentation.Components.StartPage
 
 type RecentProjectButtonRenderer() =
     inherit ButtonRenderer()
@@ -34,7 +34,7 @@ type RecentProjectButtonRenderer() =
 
 // Dummy module to ensure this renderer is exported and picked up by Xamarin.Forms
 module Dummy_RecentProjectButtonRenderer= 
-    [<assembly: ExportRenderer(typeof<Sprightly.Components.StartPage.RecentProjectButton>, 
+    [<assembly: ExportRenderer(typeof<Sprightly.Presentation.Components.StartPage.RecentProjectButton>, 
                                typeof<RecentProjectButtonRenderer>)>]
     do ()
 

@@ -1,4 +1,4 @@
-﻿namespace Sprightly.Components.Common
+﻿namespace Sprightly.Presentation.Components.Common
 
 open Fabulous
 open Fabulous.XamarinForms
@@ -45,7 +45,7 @@ module public Components =
     /// The Sprightly icon
     /// </summary>
     let public sprightlyIcon =
-        View.Image(source = Image.fromPath "Assets/icon.png")
+        View.Image(source = Image.fromPath "Presentation/Assets/icon.png")
             .VerticalOptions(LayoutOptions.Center)
             .HorizontalOptions(LayoutOptions.Center)
             .Padding(Thickness 8.0)

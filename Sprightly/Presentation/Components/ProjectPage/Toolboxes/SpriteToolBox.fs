@@ -1,4 +1,4 @@
-﻿namespace Sprightly.Components.ProjectPage.ToolBoxes
+﻿namespace Sprightly.Presentation.Components.ProjectPage.ToolBoxes
 
 open Fabulous
 open Fabulous.XamarinForms
@@ -6,7 +6,7 @@ open Xamarin.Forms
 
 open Sprightly.Common
 open Sprightly.Domain
-open Sprightly.Components.Common
+open Sprightly.Presentation.Components.Common
 
 module public SpriteToolBox = 
     type public Model = 

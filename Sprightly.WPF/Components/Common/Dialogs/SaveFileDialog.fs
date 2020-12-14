@@ -1,7 +1,7 @@
 ﻿namespace Sprightly.WPF.Components.Common.Dialogs
 
-open Sprightly.Components.Common.Dialogs
 open Sprightly.Common.Path
+open Sprightly.Presentation.Components.Common.Dialogs
 
 open Xamarin.Forms
 

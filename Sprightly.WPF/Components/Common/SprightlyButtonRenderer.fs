@@ -29,7 +29,7 @@ type SprightlyButtonRenderer() =
 
 // Dummy module to ensure this renderer is exported and picked up by Xamarin.Forms
 module Dummy_SprightlyButtonRenderer= 
-    [<assembly: ExportRenderer(typeof<Sprightly.Components.Common.SprightlyButton>, 
+    [<assembly: ExportRenderer(typeof<Sprightly.Presentation.Components.Common.SprightlyButton>, 
                                typeof<SprightlyButtonRenderer>)>]
     do ()
 

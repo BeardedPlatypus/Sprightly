@@ -1,10 +1,13 @@
 ﻿namespace Sprightly
 
+open Sprightly.Presentation
+
 open System.Diagnostics
 open Fabulous
 open Fabulous.XamarinForms
 open Fabulous.XamarinForms.LiveUpdate
 open Xamarin.Forms
+
 
 /// <summary>
 /// <see cref="App"/> is the main application module of our Sprightly application.
@@ -141,7 +144,7 @@ module App =
 
         View.ContentPage(content = content,
                          hasNavigationBar = false,
-                         backgroundColor = Sprightly.Components.Common.MaterialDesign.ElevationColors.dp00)
+                         backgroundColor = Components.Common.MaterialDesign.ElevationColors.dp00)
 
     
     let private mapExternalStartPageCmdMsg (cmdMsg: Pages.StartPage.ExternalCmdMsg) =
