@@ -1,7 +1,7 @@
 ﻿namespace Sprightly.WPF
 
+open Sprightly.Common.Path
 open Sprightly.Domain.Texture
-open Sprightly.Domain.Path
 
 open Xamarin.Forms
 
@@ -18,7 +18,7 @@ type public TextureFactory() =
             match id with | Id idVal -> viewport.HasTexture <| idVal.ToString()
 
         member this.RequestTextureLoad (id: Sprightly.Domain.Texture.Id) 
-                                       (path: Sprightly.Domain.Path.T) = 
+                                       (path: Sprightly.Common.Path.T) = 
             match id, path with 
             | (Id idVal, T pathVal) -> viewport.LoadTexture (idVal.ToString(), pathVal)
 

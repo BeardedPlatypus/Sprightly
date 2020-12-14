@@ -18,7 +18,7 @@ type RecentProjectButtonRenderer() =
             let recentProjectButton = (e.NewElement :?> RecentProjectButton)
             let recentProject = recentProjectButton.RecentProjectValue
 
-            let path = match recentProject.Path with | Sprightly.Domain.Path.T v -> v
+            let path = match recentProject.Path with | Sprightly.Common.Path.T v -> v
             let color: System.Windows.Media.Color = System.Windows.Media.Color.FromArgb(36uy, 255uy, 255uy, 255uy)
 
             this.Control.Content <- 

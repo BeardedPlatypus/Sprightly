@@ -13,7 +13,7 @@ type public ISaveFileDialog =
     /// <returns>
     /// Upon success the path will be returned; otherwise None.
     /// </returns>
-    abstract Pick : unit -> Domain.Path.T Option
+    abstract Pick : unit -> Common.Path.T Option
 
     /// <summary>
     /// Configure this <see cref="ISaveFileDialog"/> with the provided 

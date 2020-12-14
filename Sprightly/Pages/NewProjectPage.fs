@@ -4,7 +4,8 @@ open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
 open Sprightly.Components
-open Sprightly.Domain.Path
+open Sprightly.Common
+open Sprightly.Common.Path
 
 
 /// <summary>
@@ -17,7 +18,7 @@ module NewProjectPage =
     /// </summary>
     type public Model =
         { ProjectName : string option
-          DirectoryPath : Sprightly.Domain.Path.T option
+          DirectoryPath : Path.T option
           CreateNewDirectory: bool
         }
 
@@ -37,7 +38,7 @@ module NewProjectPage =
     /// </summary>
     type public Msg = 
         | SetProjectName of string
-        | SetDirectoryPath of Sprightly.Domain.Path.T
+        | SetDirectoryPath of Path.T
         | UpdateDirectoryPath of string
         | SetCreateNewDirectory of bool
         | RequestNewProject
@@ -92,7 +93,7 @@ module NewProjectPage =
             do! Async.SwitchToThreadPool ()
             Sprightly.DataAccess.SolutionFile.writeEmpty (solutionFileDescription |> Sprightly.DataAccess.SolutionFile.descriptionToPath)
             // TODO: move this to a better location AB#212
-            System.IO.Directory.CreateDirectory((solutionFileDescription.DirectoryPath / (Sprightly.Domain.Path.fromString "Textures")) |> Sprightly.Domain.Path.toString) |> ignore
+            System.IO.Directory.CreateDirectory((solutionFileDescription.DirectoryPath / (Path.fromString "Textures")) |> Path.toString) |> ignore
 
             return RequestOpenNewProject solutionFileDescription
         } |> Cmd.ofAsyncMsg
@@ -148,11 +149,11 @@ module NewProjectPage =
         | SetProjectName newName   -> 
             { model with ProjectName = Some newName }, []
         | SetDirectoryPath newPath -> 
-            { model with ProjectName   = Some ( Sprightly.Domain.Path.name newPath )
-                         DirectoryPath = Some ( Sprightly.Domain.Path.parentDirectory newPath ) 
+            { model with ProjectName   = Some ( Path.name newPath )
+                         DirectoryPath = Some ( Path.parentDirectory newPath ) 
             }, []
         | UpdateDirectoryPath newPath -> 
-            { model with DirectoryPath = Some ( Sprightly.Domain.Path.fromString newPath ) 
+            { model with DirectoryPath = Some ( Path.fromString newPath ) 
             }, []
         | SetCreateNewDirectory newCreateDirectoryFlag ->
             { model with CreateNewDirectory = newCreateDirectoryFlag }, []
@@ -169,8 +170,8 @@ module NewProjectPage =
     let private IsValidNewSolution (model: Model): bool =
         match model.DirectoryPath, model.ProjectName with
         | Some directoryPath, Some projectName ->
-            Sprightly.Domain.Path.isValid directoryPath &&
-            Sprightly.Domain.Path.isRooted directoryPath && 
+            Path.isValid directoryPath &&
+            Path.isRooted directoryPath && 
             projectName.Length > 0
         | _ -> 
             false
@@ -286,7 +287,7 @@ module NewProjectPage =
 
     let private newProjectDataFieldsView (model : Model) dispatch =
         let projectName = match model.ProjectName with | None -> "" | Some v -> v
-        let directoryPath = match model.DirectoryPath with | None -> "" | Some ( Sprightly.Domain.Path.T v) -> v
+        let directoryPath = match model.DirectoryPath with | None -> "" | Some ( Path.T v) -> v
 
         View.StackLayout(orientation = StackOrientation.Vertical,
                          children = [ nameEntryView projectName dispatch

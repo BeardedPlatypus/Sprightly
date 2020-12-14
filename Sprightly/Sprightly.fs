@@ -93,7 +93,7 @@ module App =
         | _, OpenProject description ->
             // TODO: Move this code into a separate function.
             let solutionFilePath = 
-                Domain.Path.combine description.DirectoryPath (Domain.Path.fromString description.FileName)
+                Common.Path.combine description.DirectoryPath (Common.Path.fromString description.FileName)
 
             match DataAccess.SolutionFile.read solutionFilePath with
             | None -> init ()

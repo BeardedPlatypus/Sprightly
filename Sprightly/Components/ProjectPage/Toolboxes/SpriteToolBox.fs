@@ -4,6 +4,7 @@ open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
 
+open Sprightly.Common
 open Sprightly.Domain
 open Sprightly.Components.Common
 
@@ -59,13 +60,12 @@ module public SpriteToolBox =
             else
                 // TODO: Move this to a separate place
                 let name = 
-                    Sprightly.Domain.Path.name texPath
+                    Path.name texPath
                 let destinationPath = 
-                    Sprightly.Domain.Path.combine
+                    Path.combine
                         (Sprightly.DataAccess.Texture.textureFolder solutionDirectoryPath)
-                        (Sprightly.Domain.Path.fromString name)
-                System.IO.File.Copy(Sprightly.Domain.Path.toString texPath,
-                                    Sprightly.Domain.Path.toString destinationPath)
+                        (Path.fromString name)
+                System.IO.File.Copy(Path.toString texPath, Path.toString destinationPath)
 
                 return Some <| AddTexture { id = Sprightly.Domain.Texture.Id name
                                             name = Sprightly.Domain.Texture.Name name

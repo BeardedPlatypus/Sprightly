@@ -17,7 +17,7 @@ module public Cmds =
     /// <returns>
     /// An async command to open an open file dialog.
     /// </returns>
-    let public openFileDialogCmd (config: FileDialogConfiguration) (toMsg: Domain.Path.T -> 'Msg) =
+    let public openFileDialogCmd (config: FileDialogConfiguration) (toMsg: Common.Path.T -> 'Msg) =
         async {
             do! Async.SwitchToThreadPool ()
 
@@ -35,7 +35,7 @@ module public Cmds =
     /// <returns>
     /// An async command to open a save file dialog.
     /// </returns>
-    let public saveFileDialogCmd (config: FileDialogConfiguration) (toMsg: Domain.Path.T -> 'Msg) =
+    let public saveFileDialogCmd (config: FileDialogConfiguration) (toMsg: Common.Path.T -> 'Msg) =
         async {
             do! Async.SwitchToThreadPool ()
 

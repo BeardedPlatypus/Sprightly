@@ -14,5 +14,5 @@ type public ITextureInspector =
     /// Some <see cref="MetaData"/> if the file can be read correctly;
     /// otherwise None.
     /// </returns>
-    abstract ReadMetaData : Domain.Path.T -> Domain.Texture.MetaData option
+    abstract ReadMetaData : Common.Path.T -> Domain.Texture.MetaData option
 

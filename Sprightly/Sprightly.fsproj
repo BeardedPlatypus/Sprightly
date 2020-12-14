@@ -19,7 +19,7 @@
     <None Include="Assets\icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Compile Include="Domain\Path.fs" />
+    <Compile Include="Common\Path.fs" />
     <Compile Include="Domain\Texture.fs" />
     <Compile Include="DataAccess\ITextureInspector.fs" />
     <Compile Include="DataAccess\Texture.fs" />
@@ -59,4 +59,5 @@
     <PackageReference Update="FSharp.Core" Version="5.0.0" /> <!-- workaround for VSMac bug https://github.com/mono/monodevelop/pull/5137 --> 
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
+  <ItemGroup />
 </Project>

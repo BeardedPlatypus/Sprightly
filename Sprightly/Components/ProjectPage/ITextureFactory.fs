@@ -23,4 +23,4 @@ type ITextureFactory =
     /// </summary>
     /// <param name="label">The new label for the texture.</param>
     /// <param name="texturePath">The path at which the texture is located.</param>
-    abstract RequestTextureLoad : id:Domain.Texture.Id -> texturePath:Domain.Path.T -> unit
+    abstract RequestTextureLoad : id:Domain.Texture.Id -> texturePath:Common.Path.T -> unit

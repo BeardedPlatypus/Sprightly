@@ -1,4 +1,4 @@
-﻿namespace Sprightly.Domain
+﻿namespace Sprightly.Common
 
 /// <summary>
 /// A Path module that adds some convenience over the <see cref="System.IO.Path"/>

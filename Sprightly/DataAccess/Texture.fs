@@ -26,11 +26,11 @@ module Texture =
     /// Some <see cref="MetaData"/> if the file can be read correctly;
     /// otherwise None.
     /// </returns>
-    let public readMetaData (path: Domain.Path.T) : Domain.Texture.MetaData option =
+    let public readMetaData (path: Common.Path.T) : Domain.Texture.MetaData option =
         let inspector = DependencyService.Get<ITextureInspector>()
         inspector.ReadMetaData path
 
-    open Domain.Path
+    open Common.Path
     /// <summary>
     /// Get the texture folder based on the provided <paramref name="solutionDirectoryPath"/>.
     /// </summary>
@@ -38,7 +38,7 @@ module Texture =
     /// <returns>
     /// The folder containing all texture files.
     /// <returns>
-    let public textureFolder (solutionDirectoryPath: Domain.Path.T) : Domain.Path.T =
+    let public textureFolder (solutionDirectoryPath: Common.Path.T) : Common.Path.T =
         solutionDirectoryPath / (fromString "Textures")
 
     open Domain.Texture
@@ -51,9 +51,9 @@ module Texture =
     /// The <see cref="Domain.Texture.T"/> if one can be read correctly from the specified
     /// <paramref name="dao"/>, else <see cref="Option.None"/>.
     /// </returns>
-    let public loadDomainTexture (solutionDirectoryPath: Domain.Path.T) 
+    let public loadDomainTexture (solutionDirectoryPath: Common.Path.T) 
                                  (dao: DataAccessRecord) : Domain.Texture.T option =
-        let fullPath = (textureFolder solutionDirectoryPath) / (Domain.Path.fromString dao.FileName)
+        let fullPath = (textureFolder solutionDirectoryPath) / (Common.Path.fromString dao.FileName)
         let metaData = readMetaData fullPath
 
         // TODO: verify whether we can use name here for id

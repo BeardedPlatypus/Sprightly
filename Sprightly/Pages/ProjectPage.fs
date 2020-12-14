@@ -4,6 +4,7 @@ open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
 
+open Sprightly.Common
 open Sprightly.Domain
 open Sprightly.Components.Common
 open Sprightly.Components.ProjectPage

@@ -5,7 +5,7 @@
     /// path and a date when it was last opened.
     /// </summary>
     type public RecentProject = 
-        { Path : Sprightly.Domain.Path.T 
+        { Path : Sprightly.Common.Path.T 
           LastOpened : System.DateTime
         }
 

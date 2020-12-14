@@ -1,6 +1,6 @@
 ﻿namespace Sprightly.DataAccess
 
-open Sprightly.Domain
+open Sprightly.Common
 
 /// <summary>
 /// <see cref="Json"/> wraps the methods to serialize, deserialize, read and write

@@ -17,7 +17,7 @@ type RecentProjectButton() =
     /// The recent project value describing the path and last opened value.
     /// </summary>
     member val public RecentProjectValue : Sprightly.DataAccess.RecentProject = 
-        {  Path = Sprightly.Domain.Path.T ""; LastOpened = System.DateTime.Today } with get, set
+        {  Path = Sprightly.Common.Path.T ""; LastOpened = System.DateTime.Today } with get, set
 
 
 // Code required to add the RecentProjectButton to the Fabulous view function

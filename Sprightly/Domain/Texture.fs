@@ -1,5 +1,7 @@
 ﻿namespace Sprightly.Domain
 
+open Sprightly.Common
+
 /// <summary>
 /// <see cref="Texture"/> defines the <see cref="Texture.T"/> and related
 /// functions.

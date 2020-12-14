@@ -8,9 +8,9 @@ open Xamarin.Forms
 [<Sealed>]
 type public TextureInspector() = 
     interface ITextureInspector with 
-        member this.ReadMetaData (path: Domain.Path.T) : Domain.Texture.MetaData option =
+        member this.ReadMetaData (path: Common.Path.T) : Domain.Texture.MetaData option =
             try
-                let fileInfo = System.IO.FileInfo(path |> Domain.Path.toString)
+                let fileInfo = System.IO.FileInfo(path |> Common.Path.toString)
                 use stream = fileInfo.OpenRead()
                 use image = System.Drawing.Image.FromStream(stream, false, false)
 

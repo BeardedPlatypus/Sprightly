@@ -1,7 +1,7 @@
 ﻿namespace Sprightly.DataAccess
 
-open Sprightly.Domain
-open Sprightly.Domain.Path
+open Sprightly.Common
+open Sprightly.Common.Path
 
 ///<summary>
 /// <see cref="SolutionFile"/> defines the types and functions related

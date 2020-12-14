@@ -1,7 +1,7 @@
 ﻿namespace Sprightly.WPF.Components.Common.Dialogs
 
 open Sprightly.Components.Common.Dialogs
-open Sprightly.Domain.Path
+open Sprightly.Common.Path
 
 open Xamarin.Forms
 
@@ -14,7 +14,7 @@ type public OpenFileDialog() =
     let mutable configuration : FileDialogConfiguration Option = None
 
     interface IOpenFileDialog with 
-        member this.Pick () : Sprightly.Domain.Path.T Option =
+        member this.Pick () : Sprightly.Common.Path.T Option =
             let dialog = Microsoft.Win32.OpenFileDialog()
 
             let config = (this :> IOpenFileDialog).Configuration

@@ -1,6 +1,6 @@
 ﻿namespace Sprightly.WPF.Components.Common.Dialogs
 
-open Sprightly.Domain
+open Sprightly.Common
 open Sprightly.Components.Common.Dialogs
 
 module public Utils = 

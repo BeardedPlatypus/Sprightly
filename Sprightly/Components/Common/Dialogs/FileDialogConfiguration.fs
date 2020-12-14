@@ -11,7 +11,7 @@ type public FileDialogConfiguration (?addExtension: bool,
                                      ?dereferenceLinks: bool,
                                      ?filter: string,
                                      ?filterIndex: int,
-                                     ?initialDirectory: Domain.Path.T,
+                                     ?initialDirectory: Common.Path.T,
                                      ?multiSelect: bool,
                                      ?readOnlyChecked: bool,
                                      ?restoreDirectory: bool,
@@ -51,7 +51,7 @@ type public FileDialogConfiguration (?addExtension: bool,
     /// <summary>
     /// The initial directory displayed by the file dialog box.
     /// </summary>
-    member val InitialDirectory: Domain.Path.T option = initialDirectory
+    member val InitialDirectory: Common.Path.T option = initialDirectory
 
     /// <summary>
     /// Value indicating whether the dialog box allows multiple files to be selected.
