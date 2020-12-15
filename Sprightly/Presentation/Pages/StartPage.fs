@@ -19,17 +19,17 @@ module public StartPage =
     /// This consists of a list of recent projects.
     /// </summary>
     type public Model = 
-        { RecentProjects : DataAccess.RecentProject list
+        { RecentProjects : Persistence.RecentProject list
         }
 
     /// <summary>
     /// <see cref="Msg"/> defines the messages for the <see cref="StartPage"/>.
     /// </summary>
     type public Msg  =
-        | SetRecentProjects of DataAccess.RecentProject list
+        | SetRecentProjects of Persistence.RecentProject list
         | RequestNewProject 
         | RequestOpenProjectPicker
-        | RequestOpenProject of DataAccess.SolutionFile.Description
+        | RequestOpenProject of Persistence.SolutionFile.Description
 
     /// <summary>
     /// <see cref="InternalCmdMsg"/> defines the internal command messages for 
@@ -38,7 +38,7 @@ module public StartPage =
     /// </summary>
     type public InternalCmdMsg =
         | LoadRecentProjects
-        | SaveRecentProjects of DataAccess.RecentProject list
+        | SaveRecentProjects of Persistence.RecentProject list
         | OpenLoadProjectPicker
 
     /// <summary>
@@ -49,7 +49,7 @@ module public StartPage =
     type public ExternalCmdMsg =
         | StartNewProject
         | OpenLoadingPage
-        | OpenProject of DataAccess.SolutionFile.Description
+        | OpenProject of Persistence.SolutionFile.Description
 
     /// <summary>
     /// <see cref="Msg"/> defines the command messages for the <see cref="StartPage"/>.
@@ -62,14 +62,14 @@ module public StartPage =
         async {
             do! Async.SwitchToThreadPool ()
 
-            return DataAccess.RecentProject.loadRecentProjects ()
+            return Persistence.RecentProject.loadRecentProjects ()
                    |> Option.map SetRecentProjects
         } |> Cmd.ofAsyncMsgOption
 
-    let private saveRecentProjectsCmd (recentProjects: Sprightly.DataAccess.RecentProject list) = 
+    let private saveRecentProjectsCmd (recentProjects: Persistence.RecentProject list) = 
         async {
             do! Async.SwitchToThreadPool ()
-            DataAccess.RecentProject.saveRecentProjects recentProjects
+            Persistence.RecentProject.saveRecentProjects recentProjects
 
             return None
         } |> Cmd.ofAsyncMsgOption
@@ -83,7 +83,7 @@ module public StartPage =
                                                             multiSelect = false,
                                                             restoreDirectory = false, 
                                                             title = "Load a sprightly solution")
-        Common.Dialogs.Cmds.openFileDialogCmd config ( RequestOpenProject << DataAccess.SolutionFile.pathToDescription )
+        Common.Dialogs.Cmds.openFileDialogCmd config ( RequestOpenProject << Persistence.SolutionFile.pathToDescription )
 
     /// <summary>
     /// <see cref="mapInternalCmdMsg> maps the provided <paramref name="cmd"/>
@@ -156,7 +156,7 @@ module public StartPage =
             |> Common.MaterialDesign.withElevation (Common.MaterialDesign.Elevation 4)
 
 
-    let private recentProjectsView (recentProjects: Sprightly.DataAccess.RecentProject list ) dispatch = 
+    let private recentProjectsView (recentProjects: Persistence.RecentProject list ) dispatch = 
         let recentProjectsListView = 
             match recentProjects with 
             | [] ->
@@ -166,10 +166,10 @@ module public StartPage =
                            fontSize = FontSize.fromValue 14.0,
                            fontFamily = Common.MaterialDesign.Fonts.RobotoCondensedRegular)
             | _ ->
-                let recentProjectButtonCmd (rp: DataAccess.RecentProject) = 
-                    fun () -> dispatch (RequestOpenProject <| DataAccess.SolutionFile.pathToDescription rp.Path )
+                let recentProjectButtonCmd (rp: Persistence.RecentProject) = 
+                    fun () -> dispatch (RequestOpenProject <| Persistence.SolutionFile.pathToDescription rp.Path )
 
-                let recentProjectButtonView (rp: DataAccess.RecentProject) = 
+                let recentProjectButtonView (rp: Persistence.RecentProject) = 
                     View.RecentProjectButton(recentProjectValue = rp,
                                              command = recentProjectButtonCmd rp)
                         .With(textColor = Color.White, 

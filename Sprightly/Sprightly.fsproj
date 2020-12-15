@@ -12,13 +12,13 @@
   <ItemGroup>
     <Compile Include="Common\Path.fs" />
     <Compile Include="Domain\Texture.fs" />
-    <Compile Include="DataAccess\ITextureInspector.fs" />
-    <Compile Include="DataAccess\Texture.fs" />
-    <Compile Include="DataAccess\Version.fs" />
-    <Compile Include="DataAccess\Json.fs" />
-    <Compile Include="DataAccess\SolutionFile.fs" />
-    <Compile Include="DataAccess\RecentProject.fs" />
-    <EmbeddedResource Include="DataAccess\sprightly_project.json" />
+    <Compile Include="Persistence\ITextureInspector.fs" />
+    <Compile Include="Persistence\Texture.fs" />
+    <Compile Include="Persistence\Version.fs" />
+    <Compile Include="Persistence\Json.fs" />
+    <Compile Include="Persistence\SolutionFile.fs" />
+    <Compile Include="Persistence\RecentProject.fs" />
+    <EmbeddedResource Include="Persistence\sprightly_project.json" />
     <EmbeddedResource Include="Presentation\Assets\Fonts\Eczar-Regular.ttf" />
     <EmbeddedResource Include="Presentation\Assets\Fonts\fa-regular-400.ttf" />
     <EmbeddedResource Include="Presentation\Assets\Fonts\fa-solid-900.ttf" />

@@ -44,7 +44,7 @@ module NewProjectPage =
         | RequestNewProject
         | RequestStartPage
         | RequestOpenFilePicker
-        | RequestOpenNewProject of Sprightly.DataAccess.SolutionFile.Description
+        | RequestOpenNewProject of Sprightly.Persistence.SolutionFile.Description
 
     /// <summary>
     /// <see cref="InternalCmdMsg"/> defines the internal command messages for 
@@ -53,7 +53,7 @@ module NewProjectPage =
     /// </summary>
     type public InternalCmdMsg =
         | OpenFilePicker
-        | CreateSolutionFile of Sprightly.DataAccess.SolutionFile.Description
+        | CreateSolutionFile of Sprightly.Persistence.SolutionFile.Description
 
     /// <summary>
     /// <see cref="ExternalCmdMsg"/> defines the external command messages for 
@@ -61,7 +61,7 @@ module NewProjectPage =
     /// level.
     /// </summary>
     type public ExternalCmdMsg =
-        | OpenNewProject of Sprightly.DataAccess.SolutionFile.Description
+        | OpenNewProject of Sprightly.Persistence.SolutionFile.Description
         | OpenLoadingPage
         | ReturnToStartPage
 
@@ -83,10 +83,10 @@ module NewProjectPage =
                                                             title = "Select new sprightly solution location")
         Common.Dialogs.Cmds.openFileDialogCmd config SetDirectoryPath
    
-    let private createSolutionFileCmd (solutionFileDescription: Sprightly.DataAccess.SolutionFile.Description) : Cmd<Msg> =
+    let private createSolutionFileCmd (solutionFileDescription: Sprightly.Persistence.SolutionFile.Description) : Cmd<Msg> =
         async {
             do! Async.SwitchToThreadPool ()
-            Sprightly.DataAccess.SolutionFile.writeEmpty (solutionFileDescription |> Sprightly.DataAccess.SolutionFile.descriptionToPath)
+            Sprightly.Persistence.SolutionFile.writeEmpty (solutionFileDescription |> Sprightly.Persistence.SolutionFile.descriptionToPath)
             // TODO: move this to a better location AB#212
             System.IO.Directory.CreateDirectory((solutionFileDescription.DirectoryPath / (Path.fromString "Textures")) |> Path.toString) |> ignore
 
@@ -120,7 +120,7 @@ module NewProjectPage =
                 else 
                     directoryPath
 
-            let fileDescription = Sprightly.DataAccess.SolutionFile.description projectName  directoryPath
+            let fileDescription = Sprightly.Persistence.SolutionFile.description projectName  directoryPath
             [ Internal <| CreateSolutionFile fileDescription
               External <| OpenLoadingPage
             ]

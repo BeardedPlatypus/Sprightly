@@ -53,7 +53,7 @@ module public SpriteToolBox =
         async {
             do! Async.SwitchToThreadPool ()
 
-            let metaData = Sprightly.DataAccess.Texture.readMetaData texPath
+            let metaData = Sprightly.Persistence.Texture.readMetaData texPath
 
             if metaData.IsNone then
                 return None
@@ -63,7 +63,7 @@ module public SpriteToolBox =
                     Path.name texPath
                 let destinationPath = 
                     Path.combine
-                        (Sprightly.DataAccess.Texture.textureFolder solutionDirectoryPath)
+                        (Sprightly.Persistence.Texture.textureFolder solutionDirectoryPath)
                         (Path.fromString name)
                 System.IO.File.Copy(Path.toString texPath, Path.toString destinationPath)
 

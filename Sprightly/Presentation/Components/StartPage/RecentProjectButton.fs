@@ -16,7 +16,7 @@ type RecentProjectButton() =
     /// <summary>
     /// The recent project value describing the path and last opened value.
     /// </summary>
-    member val public RecentProjectValue : Sprightly.DataAccess.RecentProject = 
+    member val public RecentProjectValue : Sprightly.Persistence.RecentProject = 
         {  Path = Sprightly.Common.Path.T ""; LastOpened = System.DateTime.Today } with get, set
 
 
@@ -25,10 +25,10 @@ type RecentProjectButton() =
 [<AutoOpen>]
 module FabulousRecentProjectButton = 
     let recentProjectValueAttribKey = 
-        AttributeKey<Sprightly.DataAccess.RecentProject> "RecentProjectButton_RecentProjectValue"
+        AttributeKey<Sprightly.Persistence.RecentProject> "RecentProjectButton_RecentProjectValue"
 
     type Fabulous.XamarinForms.View with 
-        static member inline RecentProjectButton(?recentProjectValue: Sprightly.DataAccess.RecentProject,
+        static member inline RecentProjectButton(?recentProjectValue: Sprightly.Persistence.RecentProject,
                                                  // Inherited attributes
                                                  ?command: (unit -> unit),
                                                  ?horizontalOptions, ?verticalOptions, ?margin, ?gestureRecognizers, ?anchorX, ?anchorY, ?backgroundColor, 
@@ -45,7 +45,7 @@ module FabulousRecentProjectButton =
                                                    ?rotation=rotation, ?rotationX=rotationX, ?rotationY=rotationY, ?scale=scale, ?style=style, ?translationX=translationX, ?translationY=translationY, 
                                                    ?resources=resources, ?styles=styles, ?styleSheets=styleSheets, ?classId=classId, ?styleId=styleId, ?automationId=automationId)
 
-            match recentProjectValue with | None -> () | Some (v: Sprightly.DataAccess.RecentProject) -> attribs.Add (recentProjectValueAttribKey, v)
+            match recentProjectValue with | None -> () | Some (v: Sprightly.Persistence.RecentProject) -> attribs.Add (recentProjectValueAttribKey, v)
 
             let update registry (prevOpt: ViewElement voption) (source: ViewElement) (target: RecentProjectButton) =
                 ViewBuilders.UpdateButton(registry, prevOpt, source, target)

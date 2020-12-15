@@ -1,4 +1,4 @@
-﻿namespace Sprightly.DataAccess
+﻿namespace Sprightly.Persistence
 
 open Sprightly
 open Xamarin.Forms

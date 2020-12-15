@@ -45,7 +45,7 @@ module App =
 
         | StartNewProject
         | ReturnToStartPage
-        | OpenProject of DataAccess.SolutionFile.Description
+        | OpenProject of Persistence.SolutionFile.Description
 
         | OpenLoadingPage
         | CloseLoadingPage
@@ -59,7 +59,7 @@ module App =
         | ProjectPageCmdMsg    of Pages.ProjectPage.CmdMsg
         | NewProjectPageCmdMsg of Pages.NewProjectPage.CmdMsg
         
-        | MoveProjectToTopOfRecentProjects of Sprightly.DataAccess.RecentProject
+        | MoveProjectToTopOfRecentProjects of Persistence.RecentProject
 
 
     let private toCmdMsg (mapFunc: 'a -> CmdMsg) (cmdMsgList: 'a list) : CmdMsg list =
@@ -98,17 +98,17 @@ module App =
             let solutionFilePath = 
                 Common.Path.combine description.DirectoryPath (Common.Path.fromString description.FileName)
 
-            match DataAccess.SolutionFile.read solutionFilePath with
+            match Persistence.SolutionFile.read solutionFilePath with
             | None -> init ()
             | Some solutionFile -> 
-                let textures = List.map ( DataAccess.Texture.loadDomainTexture description.DirectoryPath ) solutionFile.Textures
+                let textures = List.map ( Persistence.Texture.loadDomainTexture description.DirectoryPath ) solutionFile.Textures
                                |> List.choose id
                 
                 
                 let initModel, cmdMsgs = Pages.ProjectPage.init description.DirectoryPath textures
                 { model with PageModel = ProjectPageModel initModel
                              IsLoading = false }, 
-                [ MoveProjectToTopOfRecentProjects { Path = description |> DataAccess.SolutionFile.descriptionToPath; LastOpened = System.DateTime.Now } ] @
+                [ MoveProjectToTopOfRecentProjects { Path = description |> Persistence.SolutionFile.descriptionToPath; LastOpened = System.DateTime.Now } ] @
                   List.map ProjectPageCmdMsg cmdMsgs
         | _, ReturnToStartPage ->
             init ()
@@ -191,11 +191,11 @@ module App =
             Cmd.none
 
 
-    let private moveProjectToTopOfRecentProjectsCmd (recentProject: DataAccess.RecentProject) =
+    let private moveProjectToTopOfRecentProjectsCmd (recentProject: Persistence.RecentProject) =
         async {
             do! Async.SwitchToThreadPool ()
 
-            DataAccess.RecentProject.moveProjectToTopOfRecentProjects recentProject
+            Persistence.RecentProject.moveProjectToTopOfRecentProjects recentProject
             return None
         } |> Cmd.ofAsyncMsgOption
 

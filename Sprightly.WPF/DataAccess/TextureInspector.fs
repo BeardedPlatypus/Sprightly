@@ -1,7 +1,7 @@
 ﻿namespace Sprightly.WPF.DataAccess
 
 open Sprightly
-open Sprightly.DataAccess
+open Sprightly.Persistence
 
 open Xamarin.Forms
 

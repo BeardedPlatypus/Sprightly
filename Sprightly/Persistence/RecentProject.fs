@@ -1,4 +1,4 @@
-﻿namespace Sprightly.DataAccess
+﻿namespace Sprightly.Persistence
 
     /// <summary>
     /// <see cref="RecentProject"/> defines a single recent project with a 
