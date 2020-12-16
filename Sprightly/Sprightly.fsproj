@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <Compile Include="Common\Path.fs" />
+    <Compile Include="Domain\RecentProject.fs" />
     <Compile Include="Domain\Texture.fs" />
     <Compile Include="Persistence\ITextureInspector.fs" />
     <Compile Include="Persistence\Texture.fs" />
@@ -19,6 +20,7 @@
     <Compile Include="Persistence\SolutionFile.fs" />
     <Compile Include="Persistence\RecentProject.fs" />
     <EmbeddedResource Include="Persistence\sprightly_project.json" />
+    <Compile Include="Application\Project.fs" />
     <EmbeddedResource Include="Presentation\Assets\Fonts\Eczar-Regular.ttf" />
     <EmbeddedResource Include="Presentation\Assets\Fonts\fa-regular-400.ttf" />
     <EmbeddedResource Include="Presentation\Assets\Fonts\fa-solid-900.ttf" />
@@ -58,5 +60,8 @@
     <PackageReference Include="FSharp.Core" Version="4.6.2" />
     <PackageReference Update="FSharp.Core" Version="5.0.0" /> <!-- workaround for VSMac bug https://github.com/mono/monodevelop/pull/5137 --> 
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Infrastructure\" />
   </ItemGroup>
 </Project>

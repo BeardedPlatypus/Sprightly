@@ -19,14 +19,14 @@ module public StartPage =
     /// This consists of a list of recent projects.
     /// </summary>
     type public Model = 
-        { RecentProjects : Persistence.RecentProject list
+        { RecentProjects : Domain.RecentProject list
         }
 
     /// <summary>
     /// <see cref="Msg"/> defines the messages for the <see cref="StartPage"/>.
     /// </summary>
     type public Msg  =
-        | SetRecentProjects of Persistence.RecentProject list
+        | SetRecentProjects of Domain.RecentProject list
         | RequestNewProject 
         | RequestOpenProjectPicker
         | RequestOpenProject of Persistence.SolutionFile.Description
@@ -38,7 +38,7 @@ module public StartPage =
     /// </summary>
     type public InternalCmdMsg =
         | LoadRecentProjects
-        | SaveRecentProjects of Persistence.RecentProject list
+        | SaveRecentProjects of Domain.RecentProject list
         | OpenLoadProjectPicker
 
     /// <summary>
@@ -58,15 +58,16 @@ module public StartPage =
         | Internal of InternalCmdMsg
         | External of ExternalCmdMsg
 
+    // TODO: move these to a separate file.
     let private loadRecentProjectsCmd () =
         async {
             do! Async.SwitchToThreadPool ()
 
-            return Persistence.RecentProject.loadRecentProjects ()
+            return Application.Project.loadRecentProjects Persistence.RecentProject.loadRecentProjects ()
                    |> Option.map SetRecentProjects
         } |> Cmd.ofAsyncMsgOption
 
-    let private saveRecentProjectsCmd (recentProjects: Persistence.RecentProject list) = 
+    let private saveRecentProjectsCmd (recentProjects: Domain.RecentProject list) = 
         async {
             do! Async.SwitchToThreadPool ()
             Persistence.RecentProject.saveRecentProjects recentProjects
@@ -156,7 +157,7 @@ module public StartPage =
             |> Common.MaterialDesign.withElevation (Common.MaterialDesign.Elevation 4)
 
 
-    let private recentProjectsView (recentProjects: Persistence.RecentProject list ) dispatch = 
+    let private recentProjectsView (recentProjects: Domain.RecentProject list ) dispatch = 
         let recentProjectsListView = 
             match recentProjects with 
             | [] ->
@@ -166,10 +167,10 @@ module public StartPage =
                            fontSize = FontSize.fromValue 14.0,
                            fontFamily = Common.MaterialDesign.Fonts.RobotoCondensedRegular)
             | _ ->
-                let recentProjectButtonCmd (rp: Persistence.RecentProject) = 
+                let recentProjectButtonCmd (rp: Domain.RecentProject) = 
                     fun () -> dispatch (RequestOpenProject <| Persistence.SolutionFile.pathToDescription rp.Path )
 
-                let recentProjectButtonView (rp: Persistence.RecentProject) = 
+                let recentProjectButtonView (rp: Domain.RecentProject) = 
                     View.RecentProjectButton(recentProjectValue = rp,
                                              command = recentProjectButtonCmd rp)
                         .With(textColor = Color.White, 

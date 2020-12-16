@@ -59,7 +59,7 @@ module App =
         | ProjectPageCmdMsg    of Pages.ProjectPage.CmdMsg
         | NewProjectPageCmdMsg of Pages.NewProjectPage.CmdMsg
         
-        | MoveProjectToTopOfRecentProjects of Persistence.RecentProject
+        | MoveProjectToTopOfRecentProjects of Domain.RecentProject
 
 
     let private toCmdMsg (mapFunc: 'a -> CmdMsg) (cmdMsgList: 'a list) : CmdMsg list =
@@ -191,11 +191,14 @@ module App =
             Cmd.none
 
 
-    let private moveProjectToTopOfRecentProjectsCmd (recentProject: Persistence.RecentProject) =
+    let private moveProjectToTopOfRecentProjectsCmd (recentProject: Domain.RecentProject) =
         async {
             do! Async.SwitchToThreadPool ()
 
-            Persistence.RecentProject.moveProjectToTopOfRecentProjects recentProject
+            Application.Project.moveProjectToTopOfRecentProjects 
+                Persistence.RecentProject.loadRecentProjects
+                Persistence.RecentProject.saveRecentProjects
+                recentProject
             return None
         } |> Cmd.ofAsyncMsgOption
 
