@@ -33,15 +33,17 @@ module App =
           IsLoading : bool
         }
 
+    type public PresentationMsg = 
+        | StartPageMsg      of Pages.StartPage.Msg
+        | ProjectPageMsg    of Pages.ProjectPage.Msg
+        | NewProjectPageMsg of Pages.NewProjectPage.Msg
 
     /// <summary>
     /// The msg of the Sprightly App consisting of page msgs
     /// and global sprightly msgs.
     /// </summary>
     type public Msg = 
-        | StartPageMsg      of Pages.StartPage.Msg
-        | ProjectPageMsg    of Pages.ProjectPage.Msg
-        | NewProjectPageMsg of Pages.NewProjectPage.Msg
+        | PresentationMsg of PresentationMsg
 
         | StartNewProject
         | ReturnToStartPage
@@ -61,19 +63,15 @@ module App =
         
         | MoveProjectToTopOfRecentProjects of Domain.RecentProject
 
-
     let private toCmdMsg (mapFunc: 'a -> CmdMsg) (cmdMsgList: 'a list) : CmdMsg list =
         List.map mapFunc cmdMsgList
 
-
-    let init () =
+    let public init () =
         let model, cmdMsgs = Pages.StartPage.init
-        { PageModel = model |> StartPageModel
-          IsLoading = false
-        }, cmdMsgs |> ( toCmdMsg StartPageCmdMsg )
 
+        { PageModel = model |> StartPageModel; IsLoading = false }, cmdMsgs |> ( toCmdMsg StartPageCmdMsg )
 
-    let update (msg: Msg) (model: Model) : Model * CmdMsg list =
+    let private updatePresentation (msg: PresentationMsg) (model: Model) : Model * CmdMsg list =
         match model.PageModel, msg with 
         | (StartPageModel startPageModel, StartPageMsg startPageMsg) ->
             let updatedModel, cmdMsgs = Pages.StartPage.update startPageMsg startPageModel
@@ -90,10 +88,16 @@ module App =
             
             { model with PageModel = updatedModel |> NewProjectPageModel }, 
             cmdMsgs |> ( toCmdMsg NewProjectPageCmdMsg )
-        | _, StartNewProject ->
-            { model with PageModel = Pages.NewProjectPage.init () |> NewProjectPageModel}, 
-            []
-        | _, OpenProject description ->
+        | _ ->
+            model, []
+
+    let update (msg: Msg) (model: Model) : Model * CmdMsg list =
+        match msg with 
+        | PresentationMsg presentationMsg -> 
+            updatePresentation presentationMsg model
+        | StartNewProject ->
+            { model with PageModel = Pages.NewProjectPage.init () |> NewProjectPageModel}, []
+        | OpenProject description ->
             // TODO: Move this code into a separate function.
             let solutionFilePath = 
                 Common.Path.combine description.DirectoryPath (Common.Path.fromString description.FileName)
@@ -110,25 +114,23 @@ module App =
                              IsLoading = false }, 
                 [ MoveProjectToTopOfRecentProjects { Path = description |> Persistence.SolutionFile.descriptionToPath; LastOpened = System.DateTime.Now } ] @
                   List.map ProjectPageCmdMsg cmdMsgs
-        | _, ReturnToStartPage ->
+        | ReturnToStartPage ->
             init ()
-        | _, OpenLoadingPage ->
+        | OpenLoadingPage ->
             { model with IsLoading = true }, []
-        | _, CloseLoadingPage ->
+        | CloseLoadingPage ->
             { model with IsLoading = false }, []
-        | _ -> 
-            model, []
-
 
     let view (model: Model) dispatch =
+        let pageDispatch = dispatch << PresentationMsg
         let pageContent = 
             match model.PageModel with 
             | StartPageModel startPageModel ->
-                Pages.StartPage.view startPageModel ( dispatch << StartPageMsg )
+                Pages.StartPage.view startPageModel ( pageDispatch << StartPageMsg )
             | ProjectPageModel projectPageModel ->
-                Pages.ProjectPage.view projectPageModel ( dispatch << ProjectPageMsg )
+                Pages.ProjectPage.view projectPageModel ( pageDispatch << ProjectPageMsg )
             | NewProjectPageModel newProjectPageModel ->
-                Pages.NewProjectPage.view newProjectPageModel ( dispatch << NewProjectPageMsg )
+                Pages.NewProjectPage.view newProjectPageModel ( pageDispatch << NewProjectPageMsg )
 
         let content = 
             if model.IsLoading then 
@@ -139,8 +141,6 @@ module App =
                                      ])
             else 
                 pageContent
-
-
 
         View.ContentPage(content = content,
                          hasNavigationBar = false,
@@ -160,7 +160,8 @@ module App =
     let private mapStartPageCmdMsg (cmdMsg: Pages.StartPage.CmdMsg) = 
         match cmdMsg with 
         | Pages.StartPage.Internal internalCmdMsg -> 
-            Pages.StartPage.mapInternalCmdMsg internalCmdMsg |> ( Cmd.map StartPageMsg )
+            Pages.StartPage.mapInternalCmdMsg internalCmdMsg 
+            |> ( Cmd.map (StartPageMsg >> PresentationMsg))
         | Pages.StartPage.External externalCmdMsg ->
             mapExternalStartPageCmdMsg externalCmdMsg
 
@@ -178,7 +179,8 @@ module App =
     let private mapNewProjectPageCmdMsg (cmdMsg: Pages.NewProjectPage.CmdMsg) =
         match cmdMsg with 
         | Pages.NewProjectPage.Internal internalCmdMsg -> 
-            Pages.NewProjectPage.mapInternalCmdMsg internalCmdMsg |> ( Cmd.map NewProjectPageMsg)
+            Pages.NewProjectPage.mapInternalCmdMsg internalCmdMsg 
+            |> ( Cmd.map (NewProjectPageMsg >> PresentationMsg))
         | Pages.NewProjectPage.External externalCmdMsg -> 
             mapExternalNewProjectPageCmdMsg externalCmdMsg
 
@@ -186,7 +188,8 @@ module App =
     let private mapProjectPageCmdMsg (cmdMsg: Pages.ProjectPage.CmdMsg) =
         match cmdMsg with 
         | Pages.ProjectPage.Internal internalCmdMsg -> 
-            Pages.ProjectPage.mapInternalCmdMsg internalCmdMsg |> ( Cmd.map ProjectPageMsg)
+            Pages.ProjectPage.mapInternalCmdMsg internalCmdMsg 
+            |> ( Cmd.map (ProjectPageMsg >> PresentationMsg))
         | Pages.ProjectPage.External externalCmdMsg -> 
             Cmd.none
 
