@@ -146,6 +146,16 @@ module App =
                          hasNavigationBar = false,
                          backgroundColor = Components.Common.MaterialDesign.ElevationColors.dp00)
 
+    let private loadRecentProjectsCmd () =
+        async {
+            do! Async.SwitchToThreadPool ()
+
+            return Application.Project.loadRecentProjects 
+                Persistence.RecentProject.loadRecentProjects ()
+                   |> Option.map ( Pages.StartPage.SetRecentProjects 
+                                   >> StartPageMsg 
+                                   >> PresentationMsg )
+        } |> Cmd.ofAsyncMsgOption
     
     let private mapExternalStartPageCmdMsg (cmdMsg: Pages.StartPage.ExternalCmdMsg) =
         match cmdMsg with 
@@ -155,16 +165,16 @@ module App =
             Cmd.ofMsg ( OpenProject description )
         | Pages.StartPage.OpenLoadingPage ->
             Cmd.ofMsg OpenLoadingPage
-
+        | Pages.StartPage.LoadRecentProjects ->
+            loadRecentProjectsCmd ()
 
     let private mapStartPageCmdMsg (cmdMsg: Pages.StartPage.CmdMsg) = 
         match cmdMsg with 
         | Pages.StartPage.Internal internalCmdMsg -> 
             Pages.StartPage.mapInternalCmdMsg internalCmdMsg 
-            |> ( Cmd.map (StartPageMsg >> PresentationMsg))
+            |> ( Cmd.map ( StartPageMsg >> PresentationMsg ))
         | Pages.StartPage.External externalCmdMsg ->
             mapExternalStartPageCmdMsg externalCmdMsg
-
 
     let private mapExternalNewProjectPageCmdMsg (cmdMsg: Pages.NewProjectPage.ExternalCmdMsg) =
         match cmdMsg with 
@@ -175,24 +185,21 @@ module App =
         | Pages.NewProjectPage.OpenLoadingPage -> 
             Cmd.ofMsg OpenLoadingPage
 
-
     let private mapNewProjectPageCmdMsg (cmdMsg: Pages.NewProjectPage.CmdMsg) =
         match cmdMsg with 
         | Pages.NewProjectPage.Internal internalCmdMsg -> 
             Pages.NewProjectPage.mapInternalCmdMsg internalCmdMsg 
-            |> ( Cmd.map (NewProjectPageMsg >> PresentationMsg))
+            |> ( Cmd.map ( NewProjectPageMsg >> PresentationMsg ))
         | Pages.NewProjectPage.External externalCmdMsg -> 
             mapExternalNewProjectPageCmdMsg externalCmdMsg
-
 
     let private mapProjectPageCmdMsg (cmdMsg: Pages.ProjectPage.CmdMsg) =
         match cmdMsg with 
         | Pages.ProjectPage.Internal internalCmdMsg -> 
             Pages.ProjectPage.mapInternalCmdMsg internalCmdMsg 
-            |> ( Cmd.map (ProjectPageMsg >> PresentationMsg))
+            |> ( Cmd.map ( ProjectPageMsg >> PresentationMsg ))
         | Pages.ProjectPage.External externalCmdMsg -> 
             Cmd.none
-
 
     let private moveProjectToTopOfRecentProjectsCmd (recentProject: Domain.RecentProject) =
         async {
@@ -205,7 +212,6 @@ module App =
             return None
         } |> Cmd.ofAsyncMsgOption
 
-
     let private mapCmdMsg (cmdMsg: CmdMsg) =
         match cmdMsg with 
         | StartPageCmdMsg startPageCmdMsg -> 
@@ -216,7 +222,6 @@ module App =
             mapNewProjectPageCmdMsg newProjectCmdMsg
         | MoveProjectToTopOfRecentProjects recentProject ->
             moveProjectToTopOfRecentProjectsCmd recentProject
-
 
     // Note, this declaration is needed if you enable LiveUpdate
     let program = Program.mkProgramWithCmdMsg init update view mapCmdMsg

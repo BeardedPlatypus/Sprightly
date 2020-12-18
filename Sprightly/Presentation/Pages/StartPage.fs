@@ -1,6 +1,5 @@
 ﻿namespace Sprightly.Presentation.Pages
 
-open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
 
@@ -37,8 +36,6 @@ module public StartPage =
     /// <see cref="mapInternalCmdMsg"/> method.
     /// </summary>
     type public InternalCmdMsg =
-        | LoadRecentProjects
-        | SaveRecentProjects of Domain.RecentProject list
         | OpenLoadProjectPicker
 
     /// <summary>
@@ -50,6 +47,7 @@ module public StartPage =
         | StartNewProject
         | OpenLoadingPage
         | OpenProject of Persistence.SolutionFile.Description
+        | LoadRecentProjects
 
     /// <summary>
     /// <see cref="Msg"/> defines the command messages for the <see cref="StartPage"/>.
@@ -57,23 +55,6 @@ module public StartPage =
     type public CmdMsg =
         | Internal of InternalCmdMsg
         | External of ExternalCmdMsg
-
-    // TODO: move these to a separate file.
-    let private loadRecentProjectsCmd () =
-        async {
-            do! Async.SwitchToThreadPool ()
-
-            return Application.Project.loadRecentProjects Persistence.RecentProject.loadRecentProjects ()
-                   |> Option.map SetRecentProjects
-        } |> Cmd.ofAsyncMsgOption
-
-    let private saveRecentProjectsCmd (recentProjects: Domain.RecentProject list) = 
-        async {
-            do! Async.SwitchToThreadPool ()
-            Persistence.RecentProject.saveRecentProjects recentProjects
-
-            return None
-        } |> Cmd.ofAsyncMsgOption
 
     let private openLoadProjectPickerCmd () =
         let config = Common.Dialogs.FileDialogConfiguration(addExtension = true,
@@ -96,10 +77,6 @@ module public StartPage =
     /// </returns>
     let public mapInternalCmdMsg (cmd: InternalCmdMsg) =
         match cmd with 
-        | LoadRecentProjects -> 
-            loadRecentProjectsCmd ()
-        | SaveRecentProjects recentProjects -> 
-            saveRecentProjectsCmd recentProjects
         | OpenLoadProjectPicker ->
             openLoadProjectPickerCmd ()
 
@@ -107,7 +84,7 @@ module public StartPage =
     /// Initialise a model and CmdMsg for the <see cref="StartPage"/>.
     /// </summary>
     let public init : Model * CmdMsg list = 
-        { RecentProjects = [] }, [ Internal LoadRecentProjects ]
+        { RecentProjects = [] }, [ External LoadRecentProjects ]
 
     /// <summary>
     /// Update the provided <paramref name="model"/> to its new state given the
@@ -155,7 +132,6 @@ module public StartPage =
                              ])
             .RowSpacing(24.0) 
             |> Common.MaterialDesign.withElevation (Common.MaterialDesign.Elevation 4)
-
 
     let private recentProjectsView (recentProjects: Domain.RecentProject list ) dispatch = 
         let recentProjectsListView = 
