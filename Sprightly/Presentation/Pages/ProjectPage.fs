@@ -11,19 +11,37 @@ open Sprightly.Presentation.Components.ProjectPage
 open Sprightly.Presentation.Components.ProjectPage.ToolBoxes
 
 
+/// <summary>
+/// <see cref="ProjectPage"/> defines the project page which allows the 
+/// user to load textures, define sprites, and define sprite animations.
+/// </summary>
 module ProjectPage =
     type public Model = 
+        /// <summary>
+        /// <see cref="Model"/> defines the model for the <see cref="ProjectPage"/>.
+        /// </summary>
         { IsOpen : bool 
           SpriteToolBox : SpriteToolBox.Model
         }
 
+    /// <summary>
+    /// <see cref="ToolBoxMsg"/> defines all possible toolbox messages.
+    /// </summary>
     type public ToolBoxMsg = 
         | SpriteToolBoxMsg of SpriteToolBox.Msg
 
+    /// <summary>
+    /// <see cref="Msg"/> defines the messages for the <see cref="ProjectPage"/>.
+    /// </summary>
     type public Msg =
         | SetIsOpen of bool
         | ToolBoxMsg of ToolBoxMsg
 
+    /// <summary>
+    /// <see cref="InternalCmdMsg"/> defines the internal command messages for 
+    /// the <see cref="NewProject"/>, which can be mapped through the 
+    /// <see cref="mapInternalCmdMsg"/> method.
+    /// </summary>
     type public InternalCmdMsg =
         | InternalSpriteToolBoxCmdMsg of SpriteToolBox.InternalCmdMsg
     type public ExternalCmdMsg = unit
