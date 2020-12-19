@@ -5,6 +5,7 @@
 /// <see cref="IViewport"/>.
 /// </summary>
 module internal ViewportFactory = 
+    // Currently this is a singleton that creates a single Viewport.
     let private viewport : Sprightly.WPF.Components.IViewport =
         Sprightly.WPF.Components.Viewport() :> Sprightly.WPF.Components.IViewport
 

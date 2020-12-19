@@ -13,7 +13,7 @@ open Xamarin.Forms
 type public TextureFactory() =
     let viewport = ViewportFactory.Create()
 
-    interface Sprightly.Presentation.Components.ProjectPage.ITextureFactory with
+    interface Sprightly.Infrastructure.ITextureFactory with
         member this.HasTexture (id: Sprightly.Domain.Texture.Id) :  bool = 
             match id with | Id idVal -> viewport.HasTexture <| idVal.ToString()
 
