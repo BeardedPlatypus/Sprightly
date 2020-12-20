@@ -67,10 +67,11 @@ module public SpriteToolBox =
                         (Path.fromString name)
                 System.IO.File.Copy(Path.toString texPath, Path.toString destinationPath)
 
-                return Some <| AddTexture { id = Sprightly.Domain.Texture.Id name
-                                            name = Sprightly.Domain.Texture.Name name
-                                            path = destinationPath
-                                            metaData = metaData.Value
+                return Some <| AddTexture { Id = Sprightly.Domain.Texture.Id name
+                                            Data = { Name = Sprightly.Domain.Texture.Name name
+                                                     Path = destinationPath
+                                                     MetaData = metaData.Value
+                                                   }
                                           }
         } |> Cmd.ofAsyncMsgOption
 
@@ -103,17 +104,17 @@ module public SpriteToolBox =
         | RequestImportTexture path ->
             model, [ Internal (ImportTexture (model.SolutionDirectoryPath, path)) ]
         | AddTexture tex ->
-            { model with Textures = List.sortBy (fun (t: Texture.T) -> (match t.id with | Texture.Id v -> v)) (tex :: model.Textures) 
-                         ActiveTextureId = Some tex.id
+            { model with Textures = List.sortBy (fun (t: Texture.T) -> (match t.Id with | Texture.Id v -> v)) (tex :: model.Textures) 
+                         ActiveTextureId = Some tex.Id
             }, []
 
     let private projectTreeView (model: Model) dispatch = 
         let fClickListItem id () = dispatch ( SetActiveTextureId id )
         let toElement (texture: Texture.T) = 
             Components.listIconElement FontAwesome.Icons.textureIcon 
-                                       (match texture.name with Texture.Name n -> n) 
-                                       (fClickListItem texture.id)
-                                       (if model.ActiveTextureId.IsSome && model.ActiveTextureId.Value = texture.id then MaterialDesign.PrimaryColors.blue else Color.White)
+                                       (match texture.Data.Name with Texture.Name n -> n) 
+                                       (fClickListItem texture.Id)
+                                       (if model.ActiveTextureId.IsSome && model.ActiveTextureId.Value = texture.Id then MaterialDesign.PrimaryColors.blue else Color.White)
 
         View.StackLayout(orientation = StackOrientation.Vertical,
                          children = List.map toElement model.Textures)
@@ -149,7 +150,7 @@ module public SpriteToolBox =
                                                         fontFamily = MaterialDesign.Fonts.RobotoCondensedRegular)
                                                  .Column(0)
                                                  .VerticalOptions(LayoutOptions.Center)
-                                             View.Entry(text = (match texture.name with | Texture.Name n -> n),
+                                             View.Entry(text = (match texture.Data.Name with | Texture.Name n -> n),
                                                         textColor = Color.White,
                                                         fontSize = FontSize.fromValue 12.0,
                                                         fontFamily = MaterialDesign.Fonts.RobotoCondensedRegular,
@@ -166,7 +167,7 @@ module public SpriteToolBox =
                                                             fontFamily = MaterialDesign.Fonts.RobotoCondensedRegular)
                                                      .Column(0)
                                                      .VerticalOptions(LayoutOptions.Center)
-                                                 View.Entry(text = (match texture.path with | Path.T n -> n),
+                                                 View.Entry(text = (match texture.Data.Path with | Path.T n -> n),
                                                             textColor = Color.FromRgba(1.0, 1.0, 1.0, 0.38),
                                                             fontSize = FontSize.fromValue 12.0,
                                                             fontFamily = MaterialDesign.Fonts.RobotoCondensedRegular,
@@ -177,8 +178,8 @@ module public SpriteToolBox =
                                                      .IsEnabled(false)
                                                      .VerticalOptions(LayoutOptions.Center)])
 
-        let width = match texture.metaData.Width with | Texture.Pixel v -> v.ToString()
-        let height = match texture.metaData.Height with | Texture.Pixel v -> v.ToString()
+        let width = match texture.Data.MetaData.Width with | Texture.Pixel v -> v.ToString()
+        let height = match texture.Data.MetaData.Height with | Texture.Pixel v -> v.ToString()
         let dimensions = width + " x " + height
         let rowDimension = View.Grid(coldefs = [ Star; Stars 2.0 ],
                                      children = [ View.Label(text = "Dimensions:",
@@ -198,7 +199,7 @@ module public SpriteToolBox =
                                                       .IsEnabled(false)
                                                       .VerticalOptions(LayoutOptions.Center)])
 
-        let diskSize = (match texture.metaData.DiskSize with | Texture.Size v -> v.ToString()) + " KB"
+        let diskSize = (match texture.Data.MetaData.DiskSize with | Texture.Size v -> v.ToString()) + " KB"
         let rowSize = View.Grid(coldefs = [ Star; Stars 2.0 ],
                                 children = [ View.Label(text = "Size:",
                                                         textColor = Color.White,
@@ -224,7 +225,7 @@ module public SpriteToolBox =
                                     ])
 
     let private textureSpecificView (model: Model) dispatch = 
-        let textureFromId id = List.tryFind (fun (tex: Texture.T) -> tex.id = id) model.Textures
+        let textureFromId id = List.tryFind (fun (tex: Texture.T) -> tex.Id = id) model.Textures
         let texture = if Option.isSome model.ActiveTextureId then textureFromId model.ActiveTextureId.Value else None
 
         CollapsiblePane.view "Texture Details" 

@@ -57,8 +57,9 @@ module Texture =
         let metaData = readMetaData fullPath
 
         // TODO: verify whether we can use name here for id
-        metaData |> Option.map (fun md -> { id = Domain.Texture.Id dao.Name
-                                            name = dao.Name |> Domain.Texture.Name
-                                            path = fullPath
-                                            metaData= md
+        metaData |> Option.map (fun md -> { Id = Domain.Texture.Id dao.Name
+                                            Data = { Name = dao.Name |> Domain.Texture.Name
+                                                     Path = fullPath
+                                                     MetaData= md
+                                                   }
                                           })

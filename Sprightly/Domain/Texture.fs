@@ -38,13 +38,20 @@ module public Texture =
     type Name = | Name of string
 
     /// <summary>
+    /// The data of a single texture.
+    /// </summary>
+    type public Data = {
+        Name: Name
+        Path: Path.T
+        MetaData: MetaData
+    }
+
+    /// <summary>
     /// <see cref="T"/> defines the texture type.
     /// </summary>
     type public T = {
-        id: Id
-        name: Name
-        path: Path.T
-        metaData: MetaData
+        Id: Id
+        Data: Data
     }
 
     /// <summary>
@@ -56,9 +63,10 @@ module public Texture =
     /// A new texture.
     /// </returns>
     let construct (id: string) (name: string) (path: Path.T) (metaData: MetaData) : T =
-        { id = Id id
-          name = Name name
-          path = path
-          metaData = metaData
+        { Id = Id id
+          Data = { Name = Name name
+                   Path = path
+                   MetaData = metaData
+                 }
         }
 
