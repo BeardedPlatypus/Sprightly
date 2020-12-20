@@ -1,9 +1,9 @@
-﻿namespace Sprightly.WPF
+﻿namespace Sprightly.Presentation.WPF
 
 open Xamarin.Forms.Platform.WPF
-open Sprightly.WPF.Components
 
 open Sprightly.Presentation.Components.Common
+open Sprightly.Presentation.WPF.Components
 
 type SprightlyIconButtonRenderer() =
     inherit ButtonRenderer()
@@ -28,14 +28,7 @@ type SprightlyIconButtonRenderer() =
             this.Control.Content <- rippleContainer
             this.Control.HorizontalContentAlignment <- System.Windows.HorizontalAlignment.Stretch
 
-            let buttonResourceSource = System.Uri("pack://application:,,,/Sprightly.WPF.Components;component/SprightlyButton.xaml")
+            let buttonResourceSource = System.Uri("pack://application:,,,/Sprightly.Presentation.WPF.Components;component/SprightlyButton.xaml")
             let resourceDictionary = System.Windows.ResourceDictionary()
             resourceDictionary.Source <- buttonResourceSource
             this.Control.Style <- resourceDictionary.["SprightlyButton"] :?> System.Windows.Style
-
-
-// Dummy module to ensure this renderer is exported and picked up by Xamarin.Forms
-module Dummy_SprightlyListElementRenderer= 
-    [<assembly: ExportRenderer(typeof<Sprightly.Presentation.Components.Common.SprightlyIconButton>, 
-                               typeof<SprightlyIconButtonRenderer>)>]
-    do ()

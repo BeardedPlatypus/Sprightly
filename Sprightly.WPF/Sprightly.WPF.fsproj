@@ -13,15 +13,12 @@
     <Page Remove="Assets\**" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Renderers.fs" />
     <Compile Include="Dependencies.fs" />
     <Compile Include="DataAccess\InspectorImpl.fs" />
     <Compile Include="Properties\AssemblyInfo.fs" />
-    <Compile Include="Components\Common\SprightlyIconButtonRenderer.fs" />
-    <Compile Include="Components\Common\SprightlyButtonRenderer.fs" />
-    <Compile Include="Components\Common\CollapsiblePaneHeaderRenderer.fs" />
     <Compile Include="ViewportFactory.fs" />
     <Compile Include="TextureFactory.fs" />
-    <Compile Include="RecentProjectButtonRenderer.fs" />
     <Compile Include="ViewportRenderer.fs" />
     <Compile Include="App.fs" />
     <None Include="app.config" />
@@ -38,6 +35,7 @@
     <ProjectReference Include="..\Sprightly.Domain\Sprightly.Domain.fsproj" />
     <ProjectReference Include="..\Sprightly.Infrastructure\Sprightly.Infrastructure.fsproj" />
     <ProjectReference Include="..\Sprightly.Persistence\Sprightly.Persistence.fsproj" />
+    <ProjectReference Include="..\Sprightly.Presentation.WPF.Components\Sprightly.Presentation.WPF.Components.csproj" />
     <ProjectReference Include="..\Sprightly.Presentation.WPF\Sprightly.Presentation.WPF.fsproj" />
     <ProjectReference Include="..\Sprightly.Presentation\Sprightly.Presentation.fsproj" />
     <ProjectReference Include="..\Sprightly.WPF.Components\Sprightly.WPF.Components.csproj" />

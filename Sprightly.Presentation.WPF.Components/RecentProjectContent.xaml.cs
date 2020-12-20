@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Windows.Controls;
 
-namespace Sprightly.WPF.Components
+namespace Sprightly.Presentation.WPF.Components
 {
     /// <summary>
     /// Interaction logic for RecentProjectContent.xaml

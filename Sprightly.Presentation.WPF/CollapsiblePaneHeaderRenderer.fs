@@ -1,8 +1,8 @@
-﻿namespace Sprightly.WPF
+﻿namespace Sprightly.Presentation.WPF
 
 open System.ComponentModel
 open Xamarin.Forms.Platform.WPF
-open Sprightly.WPF.Components
+open Sprightly.Presentation.WPF.Components
 
 open Sprightly.Presentation.Components.Common
 
@@ -28,7 +28,7 @@ type CollapsiblePaneHeaderRenderer() =
             this.Control.Content <- rippleContainer
             this.Control.HorizontalContentAlignment <- System.Windows.HorizontalAlignment.Stretch
 
-            let buttonResourceSource = System.Uri("pack://application:,,,/Sprightly.WPF.Components;component/SprightlyButton.xaml")
+            let buttonResourceSource = System.Uri("pack://application:,,,/Sprightly.Presentation.WPF.Components;component/SprightlyButton.xaml")
             let resourceDictionary = System.Windows.ResourceDictionary()
             resourceDictionary.Source <- buttonResourceSource
             this.Control.Style <- resourceDictionary.["SprightlyButton"] :?> System.Windows.Style
@@ -46,10 +46,3 @@ type CollapsiblePaneHeaderRenderer() =
                 content.HeaderText <- paneHeader.HeaderText
         else 
             do ()
-
-
-// Dummy module to ensure this renderer is exported and picked up by Xamarin.Forms
-module Dummy_CollapsiblePaneHeaderRenderer= 
-    [<assembly: ExportRenderer(typeof<Sprightly.Presentation.Components.Common.CollapsiblePaneHeader>, 
-                               typeof<CollapsiblePaneHeaderRenderer>)>]
-    do ()
