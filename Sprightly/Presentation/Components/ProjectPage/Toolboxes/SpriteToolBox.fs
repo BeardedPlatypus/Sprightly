@@ -53,7 +53,8 @@ module public SpriteToolBox =
         async {
             do! Async.SwitchToThreadPool ()
 
-            let metaData = Sprightly.Persistence.Texture.readMetaData texPath
+            let inspector = DependencyService.Get<Sprightly.Domain.ITextureInspector>()
+            let metaData = inspector.ReadMetaData texPath
 
             if metaData.IsNone then
                 return None
@@ -178,8 +179,8 @@ module public SpriteToolBox =
                                                      .IsEnabled(false)
                                                      .VerticalOptions(LayoutOptions.Center)])
 
-        let width = match texture.Data.MetaData.Width with | Texture.Pixel v -> v.ToString()
-        let height = match texture.Data.MetaData.Height with | Texture.Pixel v -> v.ToString()
+        let width = match texture.Data.MetaData.Width with | MetaData.Pixel v -> v.ToString()
+        let height = match texture.Data.MetaData.Height with | MetaData.Pixel v -> v.ToString()
         let dimensions = width + " x " + height
         let rowDimension = View.Grid(coldefs = [ Star; Stars 2.0 ],
                                      children = [ View.Label(text = "Dimensions:",
@@ -199,7 +200,7 @@ module public SpriteToolBox =
                                                       .IsEnabled(false)
                                                       .VerticalOptions(LayoutOptions.Center)])
 
-        let diskSize = (match texture.Data.MetaData.DiskSize with | Texture.Size v -> v.ToString()) + " KB"
+        let diskSize = (match texture.Data.MetaData.DiskSize with | MetaData.Size v -> v.ToString()) + " KB"
         let rowSize = View.Grid(coldefs = [ Star; Stars 2.0 ],
                                 children = [ View.Label(text = "Size:",
                                                         textColor = Color.White,

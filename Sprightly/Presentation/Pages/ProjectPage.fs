@@ -44,7 +44,13 @@ module ProjectPage =
     /// </summary>
     type public InternalCmdMsg =
         | InternalSpriteToolBoxCmdMsg of SpriteToolBox.InternalCmdMsg
-    type public ExternalCmdMsg = unit
+
+    /// <summary>
+    /// <see cref="ExternalCmdMsg"/> defines the external command messages for 
+    /// the <see cref="NewProject"/>.
+    /// </summary>
+    type public ExternalCmdMsg =
+        | Initialize 
 
     /// <summary>
     /// <see cref="Msg"/> defines the command messages for the <see cref="ProjectPage"/>.

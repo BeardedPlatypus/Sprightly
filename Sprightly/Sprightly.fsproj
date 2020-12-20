@@ -11,9 +11,10 @@
 
   <ItemGroup>
     <Compile Include="Common\Path.fs" />
-    <Compile Include="Domain\RecentProject.fs" />
+    <Compile Include="Domain\MetaData.fs" />
+    <Compile Include="Domain\ITextureInspector.fs" />
     <Compile Include="Domain\Texture.fs" />
-    <Compile Include="Persistence\ITextureInspector.fs" />
+    <Compile Include="Domain\RecentProject.fs" />
     <Compile Include="Persistence\Texture.fs" />
     <Compile Include="Persistence\Version.fs" />
     <Compile Include="Persistence\Json.fs" />
@@ -21,6 +22,7 @@
     <Compile Include="Persistence\RecentProject.fs" />
     <EmbeddedResource Include="Persistence\sprightly_project.json" />
     <Compile Include="Infrastructure\ITextureFactory.fs" />
+    <Compile Include="Application\Texture.fs" />
     <Compile Include="Application\Project.fs" />
     <EmbeddedResource Include="Presentation\Assets\Fonts\Eczar-Regular.ttf" />
     <EmbeddedResource Include="Presentation\Assets\Fonts\fa-regular-400.ttf" />

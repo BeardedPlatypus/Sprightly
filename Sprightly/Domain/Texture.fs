@@ -8,26 +8,6 @@ open Sprightly.Common
 /// </summary>
 module public Texture = 
     /// <summary>
-    /// <see cref="Pixel"/> defines a number of pixels of a texture.
-    /// </summary>
-    type public Pixel = Pixel of int
-
-    /// <summary>
-    /// <see cref="Size"/> defines the size of a texture in kilo bytes (KB)
-    /// </summary>
-    type public Size = Size of float
-
-    /// <summary>
-    /// <see cref="MetaData"/> defines the metadata information of a texture 
-    /// file.
-    /// </summary>
-    type public MetaData =
-        { Width: Pixel
-          Height: Pixel
-          DiskSize: Size
-        }
-
-    /// <summary>
     /// <see cref="Id"/> defines a texture id.
     /// </summary>
     type public Id = | Id of string * uint
@@ -43,6 +23,9 @@ module public Texture =
     let public toKeyString (id: Id): string = 
         match id with | Id (idVal, idInt) -> idVal + "#" + idInt.ToString()
 
+    let private getIdString (id: Id) : string = match id with Id (s, _) -> s
+    let private getIdIndex (id: Id) : uint = match id with Id (_, i) -> i
+
     /// <summary>
     /// <see cref="Name"/> defines a texture name.
     /// </summary>
@@ -54,7 +37,7 @@ module public Texture =
     type public Data = {
         Name: Name
         Path: Path.T
-        MetaData: MetaData
+        MetaData: MetaData.T
     }
 
     /// <summary>
@@ -73,7 +56,7 @@ module public Texture =
     /// <returns>
     /// A new texture.
     /// </returns>
-    let construct (id: (string * uint)) (name: string) (path: Path.T) (metaData: MetaData) : T =
+    let construct (id: (string * uint)) (name: string) (path: Path.T) (metaData: MetaData.T) : T =
         { Id = Id id
           Data = { Name = Name name
                    Path = path
@@ -81,3 +64,20 @@ module public Texture =
                  }
         }
 
+    /// <summary>
+    /// <see cref="Store"/> defines a store of textures.
+    /// </summary>
+    type public Store = T list
+
+    let private getUniqueId (store: Store) (idString: string) : Id = 
+        let usedIndices: uint Set = List.filter (fun (e: T) -> getIdString e.Id = idString) store
+                                    |> List.map (fun (e: T) -> getIdIndex e.Id)
+                                    |> Set.ofList
+
+        let rec generateId (id: uint) =
+            if Set.contains id usedIndices then 
+                generateId (id + uint 1)
+            else 
+                id
+
+        Id (idString, generateId <| uint 0)

@@ -55,6 +55,16 @@ module public Path =
         System.IO.Path.GetFileName (toString path)
 
     /// <summary>
+    /// Get the name without extension of provided <paramref name="path"/> as a string.
+    /// </summary>
+    /// <param name="path">The path from which to obtain the name. </param>
+    /// <returns>
+    /// The name without extension of the directory or file to which <paramref name="path"/> points.
+    /// </returns>
+    let nameWithoutExtension (path: T) : string = 
+        System.IO.Path.GetFileNameWithoutExtension (toString path)
+
+    /// <summary>
     /// Get the parent directory of the provided <paramref name="path"/>.
     /// </summary>
     /// <param name="path">The path from which to obtain the name. </param>
