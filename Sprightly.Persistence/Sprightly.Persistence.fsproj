@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Json.fs" />
+    <Compile Include="Texture.fs" />
+    <Compile Include="Version.fs" />
+    <Compile Include="SolutionFile.fs" />
+    <Compile Include="RecentProject.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Fabulous.XamarinForms" Version="0.57.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sprightly.Common\Sprightly.Common.fsproj" />
+    <ProjectReference Include="..\Sprightly.Domain\Sprightly.Domain.fsproj" />
+  </ItemGroup>
+
+</Project>
