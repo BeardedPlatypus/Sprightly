@@ -7,17 +7,17 @@ open Xamarin.Forms
 
 [<Sealed>]
 /// <summary>
-/// <see cref="SaveFileDialog"/> implements the <see cref="ISaveFileDialog"/> interface
+/// <see cref="SaveFileDialogImpl"/> implements the <see cref="SaveFileDialog"/> interface
 /// to retrieve a file path.
 /// </summary>
-type public SaveFileDialog() =
+type public SaveFileDialogImpl() =
     let mutable configuration : FileDialogConfiguration Option = None
 
-    interface ISaveFileDialog with 
+    interface SaveFileDialog with 
         member this.Pick () : Sprightly.Common.Path.T Option =
             let dialog = Microsoft.Win32.SaveFileDialog()
 
-            let config = (this :> ISaveFileDialog).Configuration
+            let config = (this :> SaveFileDialog).Configuration
             if config.IsSome then
                 Utils.configureDialogWith dialog config.Value
 
@@ -31,5 +31,5 @@ type public SaveFileDialog() =
                                          set(v) = configuration <- v
 
 
-[<assembly: Dependency(typeof<SaveFileDialog>)>]
+[<assembly: Dependency(typeof<SaveFileDialogImpl>)>]
 do ()

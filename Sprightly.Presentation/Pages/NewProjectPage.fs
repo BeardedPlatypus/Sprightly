@@ -44,7 +44,7 @@ module NewProjectPage =
         | RequestNewProject
         | RequestStartPage
         | RequestOpenFilePicker
-        | RequestOpenNewProject of Sprightly.Persistence.SolutionFile.Description
+        | RequestOpenNewProject of Path.T
 
     /// <summary>
     /// <see cref="InternalCmdMsg"/> defines the internal command messages for 
@@ -53,7 +53,6 @@ module NewProjectPage =
     /// </summary>
     type public InternalCmdMsg =
         | OpenFilePicker
-        | CreateSolutionFile of Sprightly.Persistence.SolutionFile.Description
 
     /// <summary>
     /// <see cref="ExternalCmdMsg"/> defines the external command messages for 
@@ -61,7 +60,8 @@ module NewProjectPage =
     /// level.
     /// </summary>
     type public ExternalCmdMsg =
-        | OpenNewProject of Sprightly.Persistence.SolutionFile.Description
+        | CreateSolutionFile of Path.T
+        | OpenNewProject of Path.T
         | OpenLoadingPage
         | ReturnToStartPage
 
@@ -83,16 +83,6 @@ module NewProjectPage =
                                                             title = "Select new sprightly solution location")
         Common.Dialogs.Cmds.openFileDialogCmd config SetDirectoryPath
    
-    let private createSolutionFileCmd (solutionFileDescription: Sprightly.Persistence.SolutionFile.Description) : Cmd<Msg> =
-        async {
-            do! Async.SwitchToThreadPool ()
-            Sprightly.Persistence.SolutionFile.writeEmpty (solutionFileDescription |> Sprightly.Persistence.SolutionFile.descriptionToPath)
-            // TODO: move this to a better location AB#212
-            System.IO.Directory.CreateDirectory((solutionFileDescription.DirectoryPath / (Path.fromString "Textures")) |> Path.toString) |> ignore
-
-            return RequestOpenNewProject solutionFileDescription
-        } |> Cmd.ofAsyncMsg
-
     /// <summary>
     /// <see cref="mapInternalCmdMsg> maps the provided <paramref name="cmd"/>
     /// to a corresponding cmd.
@@ -105,23 +95,21 @@ module NewProjectPage =
         match cmd with 
         | OpenFilePicker -> 
             openProjectFolderSelectionCmd ()
-        | CreateSolutionFile description -> 
-            createSolutionFileCmd description
        
     let private getCreateNewProjectCmdMsg (model: Model) : CmdMsg list =
         match model.DirectoryPath, model.ProjectName with 
         | Some directoryPath, Some projectName -> 
-            let nameWithoutExtension = 
-                System.IO.Path.GetFileNameWithoutExtension projectName
 
-            let directoryPath = 
+            let path = 
                 if model.CreateNewDirectory then
-                    directoryPath / ( fromString nameWithoutExtension)
-                else 
-                    directoryPath
+                    let nameWithoutExtension = 
+                        System.IO.Path.GetFileNameWithoutExtension projectName
 
-            let fileDescription = Sprightly.Persistence.SolutionFile.description projectName  directoryPath
-            [ Internal <| CreateSolutionFile fileDescription
+                    directoryPath / ( fromString nameWithoutExtension) / ( fromString projectName )
+                else 
+                    directoryPath / ( fromString projectName)
+
+            [ External <| CreateSolutionFile path
               External <| OpenLoadingPage
             ]
         | _ ->

@@ -47,7 +47,7 @@ module App =
 
         | StartNewProject
         | ReturnToStartPage
-        | OpenProject of Persistence.SolutionFile.Description
+        | OpenProject of Common.Path.T
 
         | OpenLoadingPage
         | CloseLoadingPage
@@ -97,23 +97,22 @@ module App =
             updatePresentation presentationMsg model
         | StartNewProject ->
             { model with PageModel = Pages.NewProjectPage.init () |> NewProjectPageModel}, []
-        | OpenProject description ->
-            // TODO: Move this code into a separate function.
-            let solutionFilePath = 
-                Common.Path.combine description.DirectoryPath (Common.Path.fromString description.FileName)
+        | OpenProject solutionFilePath ->
 
             match Persistence.SolutionFile.read solutionFilePath with
             | None -> init ()
             | Some solutionFile -> 
+                let directoryPath = Common.Path.parentDirectory solutionFilePath
                 let inspector = DependencyService.Get<Sprightly.Domain.Textures.Inspector>()
-                let textures = List.map ( Persistence.Texture.loadDomainTexture inspector description.DirectoryPath ) solutionFile.Textures
+                let textures = List.map ( Persistence.Texture.loadDomainTexture inspector directoryPath ) solutionFile.Textures
                                |> List.choose id
                 
                 
-                let initModel, cmdMsgs = Pages.ProjectPage.init description.DirectoryPath textures
+                let initModel, cmdMsgs = Pages.ProjectPage.init directoryPath textures
                 { model with PageModel = ProjectPageModel initModel
                              IsLoading = false }, 
-                [ MoveProjectToTopOfRecentProjects { Path = description |> Persistence.SolutionFile.descriptionToPath; LastOpened = System.DateTime.Now } ] @
+
+                [ MoveProjectToTopOfRecentProjects { Path = solutionFilePath; LastOpened = System.DateTime.Now } ] @
                   List.map ProjectPageCmdMsg cmdMsgs
         | ReturnToStartPage ->
             init ()
@@ -177,6 +176,21 @@ module App =
         | Pages.StartPage.External externalCmdMsg ->
             mapExternalStartPageCmdMsg externalCmdMsg
 
+    let private createSolutionFileCmd (path: Common.Path.T) : Cmd<Msg> =
+        async {
+            do! Async.SwitchToThreadPool ()
+            let solutionFileDescription : Sprightly.Persistence.SolutionFile.Description = 
+                { FileName = Common.Path.name path
+                  DirectoryPath = Common.Path.parentDirectory path 
+                }
+
+            Sprightly.Persistence.SolutionFile.writeEmpty (solutionFileDescription |> Sprightly.Persistence.SolutionFile.descriptionToPath)
+            // TODO: move this to a better location AB#212
+            System.IO.Directory.CreateDirectory(Common.Path.combine solutionFileDescription.DirectoryPath (Common.Path.fromString "Textures") |> Common.Path.toString) |> ignore
+
+            return PresentationMsg ( NewProjectPageMsg ( Pages.NewProjectPage.RequestOpenNewProject path ))
+        } |> Cmd.ofAsyncMsg
+
     let private mapExternalNewProjectPageCmdMsg (cmdMsg: Pages.NewProjectPage.ExternalCmdMsg) =
         match cmdMsg with 
         | Pages.NewProjectPage.ReturnToStartPage ->
@@ -185,7 +199,9 @@ module App =
             Cmd.ofMsg ( OpenProject description )
         | Pages.NewProjectPage.OpenLoadingPage -> 
             Cmd.ofMsg OpenLoadingPage
-
+        | Pages.NewProjectPage.CreateSolutionFile path ->
+            createSolutionFileCmd path
+            
     let private mapNewProjectPageCmdMsg (cmdMsg: Pages.NewProjectPage.CmdMsg) =
         match cmdMsg with 
         | Pages.NewProjectPage.Internal internalCmdMsg -> 

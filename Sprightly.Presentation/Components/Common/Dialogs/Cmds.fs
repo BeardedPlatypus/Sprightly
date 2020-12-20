@@ -21,7 +21,7 @@ module public Cmds =
         async {
             do! Async.SwitchToThreadPool ()
 
-            let picker = DependencyService.Get<IOpenFileDialog>()
+            let picker = DependencyService.Get<OpenFileDialog>()
             picker.Configuration <- Some config
 
             return Option.map toMsg <| picker.Pick ()
@@ -39,7 +39,7 @@ module public Cmds =
         async {
             do! Async.SwitchToThreadPool ()
 
-            let picker = DependencyService.Get<ISaveFileDialog>()
+            let picker = DependencyService.Get<SaveFileDialog>()
             picker.Configuration <- Some config
 
             return Option.map toMsg <| picker.Pick ()

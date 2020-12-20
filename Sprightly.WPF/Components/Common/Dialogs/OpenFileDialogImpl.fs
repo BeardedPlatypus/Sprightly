@@ -7,17 +7,17 @@ open Xamarin.Forms
 
 [<Sealed>]
 /// <summary>
-/// <see cref="OpenFileDialog"/> implements the <see cref="IOpenFileDialog"/> interface
+/// <see cref="OpenFileDialogImpl"/> implements the <see cref="OpenFileDialog"/> interface
 /// to retrieve a file path through an open file dialog.
 /// </summary>
-type public OpenFileDialog() =
+type public OpenFileDialogImpl() =
     let mutable configuration : FileDialogConfiguration Option = None
 
-    interface IOpenFileDialog with 
+    interface OpenFileDialog with 
         member this.Pick () : Sprightly.Common.Path.T Option =
             let dialog = Microsoft.Win32.OpenFileDialog()
 
-            let config = (this :> IOpenFileDialog).Configuration
+            let config = (this :> OpenFileDialog).Configuration
 
             if config.IsSome then
                 Utils.configureDialogWith dialog config.Value
@@ -39,5 +39,5 @@ type public OpenFileDialog() =
                                          set(v) = configuration <- v
 
 
-[<assembly: Dependency(typeof<OpenFileDialog>)>]
+[<assembly: Dependency(typeof<OpenFileDialogImpl>)>]
 do ()

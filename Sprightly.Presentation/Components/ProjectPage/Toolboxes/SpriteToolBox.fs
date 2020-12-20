@@ -64,7 +64,7 @@ module public SpriteToolBox =
                     Path.name texPath
                 let destinationPath = 
                     Path.combine
-                        (Sprightly.Persistence.Texture.textureFolder solutionDirectoryPath)
+                        (Path.combine solutionDirectoryPath (Path.fromString "Textures"))
                         (Path.fromString name)
                 System.IO.File.Copy(Path.toString texPath, Path.toString destinationPath)
 

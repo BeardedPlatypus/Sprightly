@@ -3,10 +3,10 @@
 open Sprightly
 
 /// <summary>
-/// <see cref="ISaveFileDialog"/> defines the interface with which a 
+/// <see cref="SaveFileDialog"/> defines the interface with which a 
 /// save file dialog can be created.
 /// </summary>
-type public ISaveFileDialog = 
+type public SaveFileDialog = 
     /// <summary>
     /// Pick a file through an save file dialog and return the result as a path.
     /// </summary>
@@ -16,7 +16,7 @@ type public ISaveFileDialog =
     abstract Pick : unit -> Common.Path.T Option
 
     /// <summary>
-    /// Configure this <see cref="ISaveFileDialog"/> with the provided 
+    /// Configure this <see cref="SaveFileDialog"/> with the provided 
     /// <see cref="FileBrowserDialogConfiguration"/>.
     /// </summary>
     abstract Configuration : FileDialogConfiguration option with get, set

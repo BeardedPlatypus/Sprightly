@@ -28,7 +28,7 @@ module public StartPage =
         | SetRecentProjects of Domain.RecentProject list
         | RequestNewProject 
         | RequestOpenProjectPicker
-        | RequestOpenProject of Persistence.SolutionFile.Description
+        | RequestOpenProject of Common.Path.T
 
     /// <summary>
     /// <see cref="InternalCmdMsg"/> defines the internal command messages for 
@@ -46,7 +46,7 @@ module public StartPage =
     type public ExternalCmdMsg =
         | StartNewProject
         | OpenLoadingPage
-        | OpenProject of Persistence.SolutionFile.Description
+        | OpenProject of Common.Path.T
         | LoadRecentProjects
 
     /// <summary>
@@ -65,7 +65,7 @@ module public StartPage =
                                                             multiSelect = false,
                                                             restoreDirectory = false, 
                                                             title = "Load a sprightly solution")
-        Common.Dialogs.Cmds.openFileDialogCmd config ( RequestOpenProject << Persistence.SolutionFile.pathToDescription )
+        Common.Dialogs.Cmds.openFileDialogCmd config RequestOpenProject
 
     /// <summary>
     /// <see cref="mapInternalCmdMsg> maps the provided <paramref name="cmd"/>
@@ -144,7 +144,7 @@ module public StartPage =
                            fontFamily = Common.MaterialDesign.Fonts.RobotoCondensedRegular)
             | _ ->
                 let recentProjectButtonCmd (rp: Domain.RecentProject) = 
-                    fun () -> dispatch (RequestOpenProject <| Persistence.SolutionFile.pathToDescription rp.Path )
+                    fun () -> dispatch (RequestOpenProject rp.Path )
 
                 let recentProjectButtonView (rp: Domain.RecentProject) = 
                     View.RecentProjectButton(recentProjectValue = rp,

@@ -3,10 +3,10 @@
 open Sprightly
 
 /// <summary>
-/// <see cref="IOpenFileDialog"/> defines the interface with which a 
+/// <see cref="OpenFileDialog"/> defines the interface with which a 
 /// open file dialog can be created.
 /// </summary>
-type public IOpenFileDialog = 
+type public OpenFileDialog = 
     /// <summary>
     /// Pick a file through an open file dialog and return the result as a path.
     /// </summary>
@@ -16,7 +16,7 @@ type public IOpenFileDialog =
     abstract Pick : unit -> Common.Path.T Option
 
     /// <summary>
-    /// Configure this <see cref="ISaveFileDialog"/> with the provided 
+    /// Configure this <see cref="OpenFileDialog"/> with the provided 
     /// <see cref="FileBrowserDialogConfiguration"/>.
     /// </summary>
     abstract Configuration : FileDialogConfiguration option with get, set

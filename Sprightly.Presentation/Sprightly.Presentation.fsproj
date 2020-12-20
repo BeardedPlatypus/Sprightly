@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Components\Common\Dialogs\FileDialogConfiguration.fs" />
+    <Compile Include="Components\Common\Dialogs\OpenFileDialog.fs" />
+    <Compile Include="Components\Common\Dialogs\SaveFileDialog.fs" />
+    <Compile Include="Components\Common\Dialogs\Cmds.fs" />
+    <Compile Include="Components\Common\FontAwesome.fs" />
+    <Compile Include="Components\Common\MaterialDesign.fs" />
+    <Compile Include="Components\Common\SprightlyButton.fs" />
+    <Compile Include="Components\Common\SprightlyIconButton.fs" />
+    <Compile Include="Components\Common\CollapsiblePaneHeader.fs" />
+    <Compile Include="Components\Common\CollapsiblePane.fs" />
+    <Compile Include="Components\Common\Components.fs" />
+    <Compile Include="Components\ProjectPage\Toolboxes\SpriteToolBox.fs" />
+    <Compile Include="Components\ProjectPage\Viewport.fs" />
+    <Compile Include="Components\StartPage\RecentProjectButton.fs" />
+    <Compile Include="Pages\LoadingPage.fs" />
+    <Compile Include="Pages\NewProjectPage.fs" />
+    <Compile Include="Pages\ProjectPage.fs" />
+    <Compile Include="Pages\StartPage.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Fabulous.XamarinForms" Version="0.57.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sprightly.Common\Sprightly.Common.fsproj" />
+    <ProjectReference Include="..\Sprightly.Domain\Sprightly.Domain.fsproj" />
+  </ItemGroup>
+
+</Project>
