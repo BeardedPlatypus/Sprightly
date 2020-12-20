@@ -1,7 +1,7 @@
 ﻿namespace Sprightly.WPF
 
 open Sprightly.Common.Path
-open Sprightly.Domain.Texture
+open Sprightly.Domain.Textures.Texture
 
 open Xamarin.Forms
 
@@ -14,10 +14,10 @@ type public TextureFactory() =
     let viewport = ViewportFactory.Create()
     
     interface Sprightly.Infrastructure.ITextureFactory with
-        member this.HasTexture (id: Sprightly.Domain.Texture.Id) :  bool = 
+        member this.HasTexture (id: Id) :  bool = 
             match id with | Id (idVal, idInt) -> viewport.HasTexture <| idVal.ToString()
 
-        member this.RequestTextureLoad (id: Sprightly.Domain.Texture.Id) 
+        member this.RequestTextureLoad (id: Id) 
                                        (path: Sprightly.Common.Path.T) = 
             viewport.LoadTexture (toKeyString id, toString path)
 

@@ -5,7 +5,7 @@ open Fabulous.XamarinForms
 open Xamarin.Forms
 
 open Sprightly.Common
-open Sprightly.Domain
+open Sprightly.Domain.Textures
 open Sprightly.Presentation.Components.Common
 
 module public SpriteToolBox = 
@@ -53,7 +53,7 @@ module public SpriteToolBox =
         async {
             do! Async.SwitchToThreadPool ()
 
-            let inspector = DependencyService.Get<Sprightly.Domain.ITextureInspector>()
+            let inspector = DependencyService.Get<Sprightly.Domain.Textures.Inspector>()
             let metaData = inspector.ReadMetaData texPath
 
             if metaData.IsNone then
@@ -68,8 +68,8 @@ module public SpriteToolBox =
                         (Path.fromString name)
                 System.IO.File.Copy(Path.toString texPath, Path.toString destinationPath)
 
-                return Some <| AddTexture { Id = Sprightly.Domain.Texture.Id (name, uint 0)
-                                            Data = { Name = Sprightly.Domain.Texture.Name name
+                return Some <| AddTexture { Id = Texture.Id (name, uint 0)
+                                            Data = { Name = Texture.Name name
                                                      Path = destinationPath
                                                      MetaData = metaData.Value
                                                    }

@@ -27,7 +27,7 @@ module Texture =
     let public textureFolder (solutionDirectoryPath: Common.Path.T) : Common.Path.T =
         solutionDirectoryPath / (fromString "Textures")
 
-    open Domain.Texture
+    open Domain.Textures.Texture
     /// <summary>
     /// Load the <see cref="Domain.Texture.T"/> from the specified <paramref name="dao"/>
     /// with the given new <paramref name="id"/>.
@@ -37,15 +37,15 @@ module Texture =
     /// The <see cref="Domain.Texture.T"/> if one can be read correctly from the specified
     /// <paramref name="dao"/>, else <see cref="Option.None"/>.
     /// </returns>
-    let public loadDomainTexture (inspector: Domain.ITextureInspector)
+    let public loadDomainTexture (inspector: Domain.Textures.Inspector)
                                  (solutionDirectoryPath: Common.Path.T) 
-                                 (dao: DataAccessRecord) : Domain.Texture.T option =
+                                 (dao: DataAccessRecord) : T option =
         let fullPath = (textureFolder solutionDirectoryPath) / (Common.Path.fromString dao.FileName)
         let metaData = inspector.ReadMetaData fullPath
 
         // TODO: verify whether we can use name here for id
-        metaData |> Option.map (fun md -> { Id = Domain.Texture.Id (dao.Name, uint 0)
-                                            Data = { Name = dao.Name |> Domain.Texture.Name
+        metaData |> Option.map (fun md -> { Id = Id (dao.Name, uint 0)
+                                            Data = { Name = dao.Name |> Name
                                                      Path = fullPath
                                                      MetaData= md
                                                    }

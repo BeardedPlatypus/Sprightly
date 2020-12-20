@@ -1,6 +1,7 @@
 ﻿namespace Sprightly.Infrastructure
 
 open Sprightly
+open Sprightly.Domain.Textures
 
 /// <summary>
 /// <see cref="ITextureFactory"/> exposes the relevant methods to generate new 
@@ -15,7 +16,7 @@ type ITextureFactory =
     /// True if there exists a texture with the associated <param name="label"/>;
     /// False otherwise.
     /// </returns>
-    abstract HasTexture : id:Domain.Texture.Id -> bool
+    abstract HasTexture : id:Texture.Id -> bool
 
     /// <summary>
     /// Load the the texture at the specified <paramref name="texturePath"/> and
@@ -23,4 +24,4 @@ type ITextureFactory =
     /// </summary>
     /// <param name="label">The new label for the texture.</param>
     /// <param name="texturePath">The path at which the texture is located.</param>
-    abstract RequestTextureLoad : id:Domain.Texture.Id -> texturePath:Common.Path.T -> unit
+    abstract RequestTextureLoad : id:Texture.Id -> texturePath:Common.Path.T -> unit

@@ -10,10 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Domain\MetaData.fs" />
-    <Compile Include="Domain\ITextureInspector.fs" />
-    <Compile Include="Domain\Texture.fs" />
-    <Compile Include="Domain\RecentProject.fs" />
     <Compile Include="Persistence\Texture.fs" />
     <Compile Include="Persistence\Version.fs" />
     <Compile Include="Persistence\Json.fs" />
@@ -64,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sprightly.Common\Sprightly.Common.fsproj" />
+    <ProjectReference Include="..\Sprightly.Domain\Sprightly.Domain.fsproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common\" />

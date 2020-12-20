@@ -1,4 +1,4 @@
-﻿namespace Sprightly.Domain
+﻿namespace Sprightly.Domain.Textures
 
 open Sprightly.Common
 

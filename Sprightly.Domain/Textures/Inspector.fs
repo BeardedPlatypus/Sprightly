@@ -1,12 +1,11 @@
-﻿namespace Sprightly.Domain
+﻿namespace Sprightly.Domain.Textures
 
 open Sprightly
 
 /// <summary>
-/// <see crfe="ITextureInspector"/> defines the interface with
-/// which a texture inspector can be created.
+/// <see crfe="Inspector"/> defines the interface of an Inspector.
 /// </summary>
-type public ITextureInspector =
+type public Inspector =
     /// <summary>
     /// Read the metadata of the file at the specified path.
     /// </summary>

@@ -105,7 +105,7 @@ module App =
             match Persistence.SolutionFile.read solutionFilePath with
             | None -> init ()
             | Some solutionFile -> 
-                let inspector = DependencyService.Get<Sprightly.Domain.ITextureInspector>()
+                let inspector = DependencyService.Get<Sprightly.Domain.Textures.Inspector>()
                 let textures = List.map ( Persistence.Texture.loadDomainTexture inspector description.DirectoryPath ) solutionFile.Textures
                                |> List.choose id
                 

@@ -1,4 +1,4 @@
-﻿namespace Sprightly.Domain
+﻿namespace Sprightly.Domain.Textures
 
 /// <summary>
 /// The <see cref="MetaData"/> module defines all logic related to meta data.

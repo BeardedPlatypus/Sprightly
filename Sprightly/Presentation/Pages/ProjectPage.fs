@@ -5,7 +5,7 @@ open Fabulous.XamarinForms
 open Xamarin.Forms
 
 open Sprightly.Common
-open Sprightly.Domain
+open Sprightly.Domain.Textures
 open Sprightly.Presentation.Components.Common
 open Sprightly.Presentation.Components.ProjectPage
 open Sprightly.Presentation.Components.ProjectPage.ToolBoxes
