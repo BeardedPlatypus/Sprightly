@@ -2,9 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Assets\Fonts\Eczar-Regular.ttf" />
+    <EmbeddedResource Include="Assets\Fonts\fa-regular-400.ttf" />
+    <EmbeddedResource Include="Assets\Fonts\fa-solid-900.ttf" />
+    <EmbeddedResource Include="Assets\Fonts\RobotoCondensed-Bold.ttf" />
+    <EmbeddedResource Include="Assets\Fonts\RobotoCondensed-Light.ttf" />
+    <EmbeddedResource Include="Assets\Fonts\RobotoCondensed-Regular.ttf" />
+    <None Include="Assets\icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Compile Include="Components\Common\Dialogs\FileDialogConfiguration.fs" />
     <Compile Include="Components\Common\Dialogs\OpenFileDialog.fs" />
     <Compile Include="Components\Common\Dialogs\SaveFileDialog.fs" />

@@ -10,15 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Presentation\Assets\Fonts\Eczar-Regular.ttf" />
-    <EmbeddedResource Include="Presentation\Assets\Fonts\fa-regular-400.ttf" />
-    <EmbeddedResource Include="Presentation\Assets\Fonts\fa-solid-900.ttf" />
-    <EmbeddedResource Include="Presentation\Assets\Fonts\RobotoCondensed-Bold.ttf" />
-    <EmbeddedResource Include="Presentation\Assets\Fonts\RobotoCondensed-Light.ttf" />
-    <EmbeddedResource Include="Presentation\Assets\Fonts\RobotoCondensed-Regular.ttf" />
-    <None Include="Presentation\Assets\icon.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <Compile Include="Sprightly.fs" />
   </ItemGroup>
   <ItemGroup>
