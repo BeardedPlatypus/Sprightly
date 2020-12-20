@@ -1,4 +1,4 @@
-﻿namespace Sprightly.WPF.Components.Common.Dialogs
+﻿namespace Sprightly.Presentation.WPF.Dialogs
 
 open Sprightly.Common
 open Sprightly.Presentation.Components.Common.Dialogs

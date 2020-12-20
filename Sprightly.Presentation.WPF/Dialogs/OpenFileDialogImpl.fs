@@ -1,9 +1,7 @@
-﻿namespace Sprightly.WPF.Components.Common.Dialogs
+﻿namespace Sprightly.Presentation.WPF.Dialogs
 
-open Sprightly.Presentation.Components.Common.Dialogs
 open Sprightly.Common.Path
-
-open Xamarin.Forms
+open Sprightly.Presentation.Components.Common.Dialogs
 
 [<Sealed>]
 /// <summary>
@@ -37,7 +35,3 @@ type public OpenFileDialogImpl() =
 
         override this.Configuration with get() = configuration and 
                                          set(v) = configuration <- v
-
-
-[<assembly: Dependency(typeof<OpenFileDialogImpl>)>]
-do ()
