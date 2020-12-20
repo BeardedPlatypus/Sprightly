@@ -67,7 +67,7 @@ module public SpriteToolBox =
                         (Path.fromString name)
                 System.IO.File.Copy(Path.toString texPath, Path.toString destinationPath)
 
-                return Some <| AddTexture { Id = Sprightly.Domain.Texture.Id name
+                return Some <| AddTexture { Id = Sprightly.Domain.Texture.Id (name, uint 0)
                                             Data = { Name = Sprightly.Domain.Texture.Name name
                                                      Path = destinationPath
                                                      MetaData = metaData.Value
@@ -104,7 +104,7 @@ module public SpriteToolBox =
         | RequestImportTexture path ->
             model, [ Internal (ImportTexture (model.SolutionDirectoryPath, path)) ]
         | AddTexture tex ->
-            { model with Textures = List.sortBy (fun (t: Texture.T) -> (match t.Id with | Texture.Id v -> v)) (tex :: model.Textures) 
+            { model with Textures = List.sortBy (fun (t: Texture.T) -> (match t.Id with | Texture.Id (v, _) -> v)) (tex :: model.Textures) 
                          ActiveTextureId = Some tex.Id
             }, []
 

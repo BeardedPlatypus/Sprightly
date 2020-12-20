@@ -30,12 +30,23 @@ module public Texture =
     /// <summary>
     /// <see cref="Id"/> defines a texture id.
     /// </summary>
-    type Id = | Id of string
+    type public Id = | Id of string * uint
+
+    /// <summary>
+    /// Convert the specified <paramref name="id"/> to its corresponding key
+    /// string value.
+    /// </summary>
+    /// <param name="id">The <see cref='Id"/> to convert.</param>
+    /// <returns>
+    /// The corresponding key string.
+    /// </returns>
+    let public toKeyString (id: Id): string = 
+        match id with | Id (idVal, idInt) -> idVal + "#" + idInt.ToString()
 
     /// <summary>
     /// <see cref="Name"/> defines a texture name.
     /// </summary>
-    type Name = | Name of string
+    type public Name = | Name of string
 
     /// <summary>
     /// The data of a single texture.
@@ -62,7 +73,7 @@ module public Texture =
     /// <returns>
     /// A new texture.
     /// </returns>
-    let construct (id: string) (name: string) (path: Path.T) (metaData: MetaData) : T =
+    let construct (id: (string * uint)) (name: string) (path: Path.T) (metaData: MetaData) : T =
         { Id = Id id
           Data = { Name = Name name
                    Path = path
