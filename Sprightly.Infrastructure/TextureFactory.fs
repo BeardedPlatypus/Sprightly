@@ -7,7 +7,7 @@ open Sprightly.Domain.Textures
 /// <see cref="ITextureFactory"/> exposes the relevant methods to generate new 
 /// underlying texture objects to be used in the <see cref="Viewport"/>.
 /// </summary>
-type ITextureFactory = 
+type TextureFactory = 
     /// <summary>
     /// Check if the texture with the specified <paramref name="label"/> exists.
     /// </summary>

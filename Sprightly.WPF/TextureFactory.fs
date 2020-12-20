@@ -10,10 +10,10 @@ open Xamarin.Forms
 /// of the <see cref="Sprightly.ITextureFactory"/> interface.
 /// </summary>
 [<Sealed>]
-type public TextureFactory() =
+type public TextureFactoryImpl() =
     let viewport = ViewportFactory.Create()
     
-    interface Sprightly.Infrastructure.ITextureFactory with
+    interface Sprightly.Infrastructure.TextureFactory with
         member this.HasTexture (id: Id) :  bool = 
             match id with | Id (idVal, idInt) -> viewport.HasTexture <| idVal.ToString()
 
@@ -23,5 +23,5 @@ type public TextureFactory() =
 
 
 module Dummy_TextureFactory =
-    [<assembly: Dependency(typeof<TextureFactory>)>]
+    [<assembly: Dependency(typeof<TextureFactoryImpl>)>]
     do ()

@@ -5,7 +5,7 @@ open Sprightly
 open Xamarin.Forms
 
 [<Sealed>]
-type public TextureInspector() = 
+type public InspectorImpl() = 
     interface Domain.Textures.Inspector with 
         member this.ReadMetaData (path: Common.Path.T) : Domain.Textures.MetaData.T option =
             try
@@ -22,5 +22,5 @@ type public TextureInspector() =
 
 
 module Dummy_TextureInspector =
-    [<assembly: Dependency(typeof<TextureInspector>)>]
+    [<assembly: Dependency(typeof<InspectorImpl>)>]
     do ()

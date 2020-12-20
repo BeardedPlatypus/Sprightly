@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="TextureFactory.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sprightly.Common\Sprightly.Common.fsproj" />
+    <ProjectReference Include="..\Sprightly.Domain\Sprightly.Domain.fsproj" />
+  </ItemGroup>
+
+</Project>
