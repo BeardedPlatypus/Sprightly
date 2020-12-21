@@ -12,9 +12,9 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Sprightly.WPF", "Sprightly.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sprightly.WPF.Components", "Sprightly.WPF.Components\Sprightly.WPF.Components.csproj", "{F1B0D51C-D93F-49C5-84F6-0218E4EB9F39}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Sprightly.Common", "Sprightly.Common\Sprightly.Common.fsproj", "{86947FC5-3FA7-459E-8964-3A5D7C8F015C}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Sprightly.Common", "Sprightly.Common\Sprightly.Common.fsproj", "{86947FC5-3FA7-459E-8964-3A5D7C8F015C}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Sprightly.Domain", "Sprightly.Domain\Sprightly.Domain.fsproj", "{876BFEE4-FD65-44EE-89E2-DF60AB29D5BB}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Sprightly.Domain", "Sprightly.Domain\Sprightly.Domain.fsproj", "{876BFEE4-FD65-44EE-89E2-DF60AB29D5BB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{247C06F3-CDE6-452D-98D3-9F98E355319B}"
 EndProject
@@ -28,17 +28,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{2899FC97-391A-4309-AE53-5D68D197DD50}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Sprightly.Persistence", "Sprightly.Persistence\Sprightly.Persistence.fsproj", "{FFCBA926-2B57-4DCA-B43B-F72ACBA79CB9}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Sprightly.Persistence", "Sprightly.Persistence\Sprightly.Persistence.fsproj", "{FFCBA926-2B57-4DCA-B43B-F72ACBA79CB9}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Sprightly.Infrastructure", "Sprightly.Infrastructure\Sprightly.Infrastructure.fsproj", "{5B3139B9-547B-4182-BAEA-B28D032B5A01}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Sprightly.Infrastructure", "Sprightly.Infrastructure\Sprightly.Infrastructure.fsproj", "{5B3139B9-547B-4182-BAEA-B28D032B5A01}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Sprightly.Application", "Sprightly.Application\Sprightly.Application.fsproj", "{80B44BCA-5704-4E23-AFF4-74886205D583}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Sprightly.Application", "Sprightly.Application\Sprightly.Application.fsproj", "{80B44BCA-5704-4E23-AFF4-74886205D583}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Sprightly.Presentation", "Sprightly.Presentation\Sprightly.Presentation.fsproj", "{6DED4578-A1EF-4888-9858-9FE21156399F}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Sprightly.Presentation", "Sprightly.Presentation\Sprightly.Presentation.fsproj", "{6DED4578-A1EF-4888-9858-9FE21156399F}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Sprightly.Presentation.WPF", "Sprightly.Presentation.WPF\Sprightly.Presentation.WPF.fsproj", "{91224C7F-14CC-43D1-B156-1E9CB1F47F0F}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Sprightly.Presentation.WPF", "Sprightly.Presentation.WPF\Sprightly.Presentation.WPF.fsproj", "{91224C7F-14CC-43D1-B156-1E9CB1F47F0F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sprightly.Presentation.WPF.Components", "Sprightly.Presentation.WPF.Components\Sprightly.Presentation.WPF.Components.csproj", "{AEAF08EE-C343-4E5E-BAA1-3615156D788F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sprightly.Presentation.WPF.Components", "Sprightly.Presentation.WPF.Components\Sprightly.Presentation.WPF.Components.csproj", "{AEAF08EE-C343-4E5E-BAA1-3615156D788F}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Sprightly.Persistence.WPF", "Sprightly.Persistence.WPF\Sprightly.Persistence.WPF.fsproj", "{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -596,6 +598,54 @@ Global
 		{AEAF08EE-C343-4E5E-BAA1-3615156D788F}.Release|x64.Build.0 = Release|Any CPU
 		{AEAF08EE-C343-4E5E-BAA1-3615156D788F}.Release|x86.ActiveCfg = Release|Any CPU
 		{AEAF08EE-C343-4E5E-BAA1-3615156D788F}.Release|x86.Build.0 = Release|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Ad-Hoc|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Ad-Hoc|Any CPU.Build.0 = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Ad-Hoc|ARM.ActiveCfg = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Ad-Hoc|ARM.Build.0 = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Ad-Hoc|iPhone.ActiveCfg = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Ad-Hoc|iPhone.Build.0 = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Ad-Hoc|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Ad-Hoc|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Ad-Hoc|x64.ActiveCfg = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Ad-Hoc|x64.Build.0 = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Ad-Hoc|x86.ActiveCfg = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Ad-Hoc|x86.Build.0 = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.AppStore|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.AppStore|Any CPU.Build.0 = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.AppStore|ARM.ActiveCfg = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.AppStore|ARM.Build.0 = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.AppStore|iPhone.ActiveCfg = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.AppStore|iPhone.Build.0 = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.AppStore|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.AppStore|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.AppStore|x64.ActiveCfg = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.AppStore|x64.Build.0 = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.AppStore|x86.ActiveCfg = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.AppStore|x86.Build.0 = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Debug|ARM.Build.0 = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Debug|x64.Build.0 = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Debug|x86.Build.0 = Debug|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Release|ARM.ActiveCfg = Release|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Release|ARM.Build.0 = Release|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Release|iPhone.Build.0 = Release|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Release|x64.ActiveCfg = Release|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Release|x64.Build.0 = Release|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Release|x86.ActiveCfg = Release|Any CPU
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -610,6 +660,7 @@ Global
 		{6DED4578-A1EF-4888-9858-9FE21156399F} = {2899FC97-391A-4309-AE53-5D68D197DD50}
 		{91224C7F-14CC-43D1-B156-1E9CB1F47F0F} = {2899FC97-391A-4309-AE53-5D68D197DD50}
 		{AEAF08EE-C343-4E5E-BAA1-3615156D788F} = {2899FC97-391A-4309-AE53-5D68D197DD50}
+		{AC2DD221-843D-4F91-ADE1-DB01CC20CDD6} = {DB88B745-A014-48FA-938C-D05F6DE09B4C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F6D05029-56B8-4E45-AF2D-0E76295DDBA2}

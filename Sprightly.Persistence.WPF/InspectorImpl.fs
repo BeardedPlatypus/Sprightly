@@ -1,8 +1,6 @@
-﻿namespace Sprightly.WPF.DataAccess
+﻿namespace Sprightly.Persistence.WPF
 
 open Sprightly
-
-open Xamarin.Forms
 
 [<Sealed>]
 type public InspectorImpl() = 
@@ -19,8 +17,3 @@ type public InspectorImpl() =
                      }
             with 
             | _ -> None
-
-
-module Dummy_TextureInspector =
-    [<assembly: Dependency(typeof<InspectorImpl>)>]
-    do ()
