@@ -25,16 +25,9 @@
     <PackageReference Include="OpenTK" Version="4.2.0" />
     <PackageReference Include="OpenTK.GLControl" Version="3.1.0" />
     <PackageReference Include="Xamarin.Forms.Platform.WPF" Version="4.8.0.1687" />
-    <ProjectReference Include="..\Sprightly.Application\Sprightly.Application.fsproj" />
-    <ProjectReference Include="..\Sprightly.Common\Sprightly.Common.fsproj" />
-    <ProjectReference Include="..\Sprightly.Domain\Sprightly.Domain.fsproj" />
     <ProjectReference Include="..\Sprightly.Infrastructure.WPF\Sprightly.Infrastructure.WPF.fsproj" />
-    <ProjectReference Include="..\Sprightly.Infrastructure\Sprightly.Infrastructure.fsproj" />
     <ProjectReference Include="..\Sprightly.Persistence.WPF\Sprightly.Persistence.WPF.fsproj" />
-    <ProjectReference Include="..\Sprightly.Persistence\Sprightly.Persistence.fsproj" />
-    <ProjectReference Include="..\Sprightly.Presentation.WPF.Components\Sprightly.Presentation.WPF.Components.csproj" />
     <ProjectReference Include="..\Sprightly.Presentation.WPF\Sprightly.Presentation.WPF.fsproj" />
-    <ProjectReference Include="..\Sprightly.Presentation\Sprightly.Presentation.fsproj" />
     <ProjectReference Include="..\Sprightly\Sprightly.fsproj" />
   </ItemGroup>
 </Project>
