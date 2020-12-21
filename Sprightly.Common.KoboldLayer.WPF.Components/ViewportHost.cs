@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
 
-namespace Sprightly.WPF.Components
+namespace Sprightly.Common.KoboldLayer.WPF.Components
 {
     /// <summary>
     /// <see cref="ViewportHost"/> provides the <see cref="HwndHost"/>

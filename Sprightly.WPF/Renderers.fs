@@ -23,3 +23,8 @@ module Dummy_RecentProjectButtonRenderer=
     [<assembly: ExportRenderer(typeof<Sprightly.Presentation.Components.StartPage.RecentProjectButton>, 
                                typeof<RecentProjectButtonRenderer>)>]
     do ()
+
+module Dummy_ViewPortRenderer = 
+    [<assembly: ExportRenderer(typeof<Sprightly.Presentation.Components.ProjectPage.Viewport>, 
+                               typeof<ViewportRenderer>)>]
+    do ()

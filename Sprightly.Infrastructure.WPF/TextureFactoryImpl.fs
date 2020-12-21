@@ -1,9 +1,9 @@
-﻿namespace Sprightly.WPF
+﻿namespace Sprightly.Infrastructure.WPF
 
 open Sprightly.Common.Path
-open Sprightly.Domain.Textures.Texture
+open Sprightly.Common.KoboldLayer.WPF
 
-open Xamarin.Forms
+open Sprightly.Domain.Textures.Texture
 
 /// <summary>
 /// <see cref="TextureFactory"/> provides a platform specific implementation 
@@ -20,8 +20,3 @@ type public TextureFactoryImpl() =
         member this.RequestTextureLoad (id: Id) 
                                        (path: Sprightly.Common.Path.T) = 
             viewport.LoadTexture (toKeyString id, toString path)
-
-
-module Dummy_TextureFactory =
-    [<assembly: Dependency(typeof<TextureFactoryImpl>)>]
-    do ()

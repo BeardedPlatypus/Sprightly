@@ -2,8 +2,9 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
+using Sprightly.Common.KoboldLayer.WPF.Components;
 
-namespace Sprightly.WPF.Components
+namespace Sprightly.Presentation.WPF.Components
 {
     /// <summary>
     /// Interaction logic for ViewportControl.xaml

@@ -3,6 +3,7 @@
 open Xamarin.Forms
 open Sprightly.Presentation.WPF.Dialogs
 open Sprightly.Persistence.WPF
+open Sprightly.Infrastructure.WPF
 
 [<assembly: Dependency(typeof<SaveFileDialogImpl>)>]
 do ()
@@ -11,4 +12,7 @@ do ()
 do ()
 
 [<assembly: Dependency(typeof<InspectorImpl>)>]
+do ()
+
+[<assembly: Dependency(typeof<TextureFactoryImpl>)>]
 do ()

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sprightly.WPF.Components
+namespace Sprightly.Common.KoboldLayer.WPF.Components
 {
     /// <summary>
     /// <see cref="IViewport"/> defines the interface with which components

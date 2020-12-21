@@ -14,6 +14,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Sprightly.Common.KoboldLayer.WPF.Components\Sprightly.Common.KoboldLayer.WPF.Components.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="CollapsiblePaneHeaderContent.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -62,6 +66,9 @@
     <Page Update="SprightlyIconButtonVerticalContent.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Update="ViewportControl.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
   </ItemGroup>
 

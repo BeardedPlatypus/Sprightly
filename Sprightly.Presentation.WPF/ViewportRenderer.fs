@@ -1,8 +1,9 @@
-﻿namespace Sprightly.WPF
+﻿namespace Sprightly.Presentation.WPF
 
 open Xamarin.Forms.Platform.WPF
 
-open Sprightly.WPF.Components
+open Sprightly.Common.KoboldLayer.WPF
+open Sprightly.Presentation.WPF.Components
 
 /// <summary>
 /// <see cref="ViewportRenderer"/> provides the custom renderer implementation
@@ -20,10 +21,3 @@ type ViewportRenderer() =
             this.SetNativeControl(ViewportControl(viewport))
         | _ ->
             do ()
-
-// Dummy module to ensure this renderer is exported and picked up by Xamarin.Forms
-module Dummy_ViewPortRenderer = 
-    [<assembly: ExportRenderer(typeof<Sprightly.Presentation.Components.ProjectPage.Viewport>, 
-                               typeof<ViewportRenderer>)>]
-    do ()
-

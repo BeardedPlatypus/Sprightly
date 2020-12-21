@@ -1,7 +1,7 @@
 ﻿using System;
 using kobold_layer.clr;
 
-namespace Sprightly.WPF.Components
+namespace Sprightly.Common.KoboldLayer.WPF.Components
 {
     /// <summary>
     /// <see cref="Viewport"/> implements the interface defined by the

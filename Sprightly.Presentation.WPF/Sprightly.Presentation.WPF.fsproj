@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="ViewportRenderer.fs" />
     <Compile Include="RecentProjectButtonRenderer.fs" />
     <Compile Include="CollapsiblePaneHeaderRenderer.fs" />
     <Compile Include="SprightlyButtonRenderer.fs" />
@@ -21,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Sprightly.Common.KoboldLayer.WPF\Sprightly.Common.KoboldLayer.WPF.fsproj" />
     <ProjectReference Include="..\Sprightly.Common\Sprightly.Common.fsproj" />
     <ProjectReference Include="..\Sprightly.Domain\Sprightly.Domain.fsproj" />
     <ProjectReference Include="..\Sprightly.Presentation.WPF.Components\Sprightly.Presentation.WPF.Components.csproj" />
