@@ -33,7 +33,7 @@ steps:
   - task: CopyFiles@2
     displayName: 'Build - Copy Executable'
     inputs:
-      SourceFolder: '$(Build.SourcesDirectory)/Sprightly.WPF/bin/$(buildConfiguration)/netcoreapp3.1/'
+      SourceFolder: '$(Build.SourcesDirectory)/Sprightly.WPF/bin/$(buildConfiguration)/net5.0-windows/'
       Contents: '**/*'
       TargetFolder: '$(Build.ArtifactStagingDirectory)'
       CleanTargetFolder: true
