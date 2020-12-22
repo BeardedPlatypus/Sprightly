@@ -8,9 +8,10 @@ open Sprightly.Common
 open Sprightly.Domain.Textures
 open Sprightly.Presentation.Components.Common
 
+// TODO: Rename this to TextureToolbox
 module public SpriteToolBox = 
     type public Model = 
-        { Textures : Texture.T list
+        { Textures : Texture.Store
           ActiveTextureId : Texture.Id option
 
           ProjectTreeIsOpen : bool
@@ -19,10 +20,16 @@ module public SpriteToolBox =
           SolutionDirectoryPath: Path.T
         }
 
+    /// <summary>
+    /// The type of Pane.
+    /// </summary>
     type public Pane =
         | ProjectTree
         | Detail
 
+    /// <summary>
+    /// <see cref="Msg"/> defines the messages for the <see cref="SpriteToolBox"/>.
+    /// </summary>
     type public Msg = 
         | SetIsOpen of Pane * bool
         | SetActiveTextureId of Texture.Id
@@ -30,10 +37,18 @@ module public SpriteToolBox =
         | RequestImportTexture of Path.T
         | AddTexture of Texture.T
 
+    /// <summary>
+    /// <see cref="InternalCmdMsg"/> defines the internal command messages for 
+    /// the <see cref="NewProject"/>, which can be mapped through the 
+    /// <see cref="mapInternalCmdMsg"/> method.
+    /// </summary>
     type public InternalCmdMsg =
         | OpenTexturePicker
         | ImportTexture of Path.T * Path.T
     
+    /// <summary>
+    /// <see cref="CmdMsg"/> defines the command messages for the <see cref="SpriteToolbox"/>.
+    /// </summary>
     type public CmdMsg = 
         | Internal of InternalCmdMsg
 
@@ -48,6 +63,7 @@ module public SpriteToolBox =
                                                      title = "Load a new texture")
         Dialogs.Cmds.openFileDialogCmd config RequestImportTexture
 
+    // TODO: This should be moved to the application project / Sprightly
     let private importTextureCmd (solutionDirectoryPath: Path.T) 
                                  (texPath: Path.T) : Cmd<Msg> =
         async {
@@ -75,7 +91,6 @@ module public SpriteToolBox =
                                                    }
                                           }
         } |> Cmd.ofAsyncMsgOption
-
 
     /// <summary>
     /// <see cref="mapInternalCmdMsg> maps the provided <paramref name="cmd"/>
@@ -141,7 +156,6 @@ module public SpriteToolBox =
                                editButtons
                              ]  
                              (dispatch << (fun b -> SetIsOpen (ProjectTree, b)))
-
 
     let private textureDetailsView (texture: Texture.T) =
         let rowName = View.Grid(coldefs = [ Star; Stars 2.0 ],
@@ -234,7 +248,6 @@ module public SpriteToolBox =
                              [ if Option.isSome texture then yield textureDetailsView texture.Value
                              ]  
                              (dispatch << (fun b -> SetIsOpen (Detail, b)))
-       
 
     /// <summary>
     /// <see cref="view"/> transforms the <paramref name="model"/> onto
@@ -249,4 +262,3 @@ module public SpriteToolBox =
         View.StackLayout(children = [ yield projectTreePaneView model dispatch
                                       if Option.isSome model.ActiveTextureId then yield textureSpecificView model dispatch
                                     ])
-
