@@ -2,6 +2,10 @@
 
 open Sprightly
 
+/// <summary>
+/// <see cref="InspectorImpl"/> implements the <see cref="Domain.Textures.Inspector"/> within 
+/// the WPF implementation.
+/// </summary>
 [<Sealed>]
 type public InspectorImpl() = 
     interface Domain.Textures.Inspector with 
