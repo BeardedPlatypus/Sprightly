@@ -14,6 +14,8 @@ module Texture =
     type public DataAccessRecord =
         { Name : string 
           FileName : string
+          idString : string 
+          idIndex : uint
         }
 
     open Common.Path
@@ -29,24 +31,25 @@ module Texture =
 
     open Domain.Textures.Texture
     /// <summary>
-    /// Load the <see cref="Domain.Texture.T"/> from the specified <paramref name="dao"/>
-    /// with the given new <paramref name="id"/>.
+    /// Load the <see cref="Domain.Texture.T"/> from the specified <paramref name="texturePath"/>.
     /// </summary>
-    /// <param name="dao">The data-access record.</param>
+    /// <param name="inspector">The texture inspector to retrieve the metadata.</param>
+    /// <param name="name">The name of the new texture.</param>
+    /// <param name="id">The id of the new texture.</param>
+    /// <param name="texturePath">The texture path.</param>
     /// <returns>
     /// The <see cref="Domain.Texture.T"/> if one can be read correctly from the specified
-    /// <paramref name="dao"/>, else <see cref="Option.None"/>.
+    /// <paramref name="texturePath"/>, else <see cref="Option.None"/>.
     /// </returns>
     let public loadDomainTexture (inspector: Domain.Textures.Inspector)
-                                 (solutionDirectoryPath: Common.Path.T) 
-                                 (dao: DataAccessRecord) : T option =
-        let fullPath = (textureFolder solutionDirectoryPath) / (Common.Path.fromString dao.FileName)
-        let metaData = inspector.ReadMetaData fullPath
+                                 (name: string)
+                                 (id: Id)
+                                 (texturePath: Common.Path.T) : T option =
+        let metaData = inspector.ReadMetaData texturePath
 
-        // TODO: verify whether we can use name here for id
-        metaData |> Option.map (fun md -> { Id = Id (dao.Name, uint 0)
-                                            Data = { Name = dao.Name |> Name
-                                                     Path = fullPath
+        metaData |> Option.map (fun md -> { Id = id
+                                            Data = { Name = name |> Name
+                                                     Path = texturePath
                                                      MetaData= md
                                                    }
                                           })

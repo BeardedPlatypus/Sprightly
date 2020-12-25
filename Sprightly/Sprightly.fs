@@ -91,29 +91,28 @@ module App =
         | _ ->
             model, []
 
-    let update (msg: Msg) (model: Model) : Model * CmdMsg list =
+    /// <summary>
+    /// Update the provided <paramref name="model"/> to its new state given the
+    /// provided <paramref name="msg"/>.
+    /// </summary>
+    /// <param name="msg">The message for which the new state should be returned.</param>
+    /// </param name="model">The model from which the new state is calculated.</param>
+    /// <returns>
+    /// The new state as a <see cref="Model"/> and a set of command messages to be 
+    /// executed.
+    /// </returns>
+    let public update (msg: Msg) (model: Model) : Model * CmdMsg list =
         match msg with 
         | PresentationMsg presentationMsg -> 
             updatePresentation presentationMsg model
         | StartNewProject ->
             { model with PageModel = Pages.NewProjectPage.init () |> NewProjectPageModel}, []
         | OpenProject solutionFilePath ->
+            let initModel, cmdMsgs = Pages.ProjectPage.init solutionFilePath
 
-            match Persistence.SolutionFile.read solutionFilePath with
-            | None -> init ()
-            | Some solutionFile -> 
-                let directoryPath = Common.Path.parentDirectory solutionFilePath
-                let inspector = DependencyService.Get<Sprightly.Domain.Textures.Inspector>()
-                let textures = List.map ( Persistence.Texture.loadDomainTexture inspector directoryPath ) solutionFile.Textures
-                               |> List.choose id
-                
-                
-                let initModel, cmdMsgs = Pages.ProjectPage.init directoryPath textures
-                { model with PageModel = ProjectPageModel initModel
-                             IsLoading = false }, 
-
-                [ MoveProjectToTopOfRecentProjects { Path = solutionFilePath; LastOpened = System.DateTime.Now } ] @
-                  List.map ProjectPageCmdMsg cmdMsgs
+            { model with PageModel = ProjectPageModel initModel; IsLoading = false }, 
+            [ MoveProjectToTopOfRecentProjects { Path = solutionFilePath; LastOpened = System.DateTime.Now } ] @
+            List.map ProjectPageCmdMsg cmdMsgs
         | ReturnToStartPage ->
             init ()
         | OpenLoadingPage ->
@@ -121,7 +120,16 @@ module App =
         | CloseLoadingPage ->
             { model with IsLoading = false }, []
 
-    let view (model: Model) dispatch =
+    /// <summary>
+    /// <see cref="view"/> transforms the <paramref name="model"/> into
+    /// its corresponding view.
+    /// </summary>
+    /// <param name="model">The model to display.</param>
+    /// <param name="dispatch">The function to dispatch messages with.</param>
+    /// <remarks>
+    /// <see cref='view"/> is executed on the ui thread.
+    /// </remarks>
+    let public view (model: Model) dispatch =
         let pageDispatch = dispatch << PresentationMsg
         let pageContent = 
             match model.PageModel with 
@@ -210,13 +218,53 @@ module App =
         | Pages.NewProjectPage.External externalCmdMsg -> 
             mapExternalNewProjectPageCmdMsg externalCmdMsg
 
+    let private initialiseFromPathCmd (path: Common.Path.T) : Cmd<Msg> =
+        async {
+            do! Async.SwitchToThreadPool ()
+
+            let textureFolder = Persistence.Texture.textureFolder (Common.Path.parentDirectory path)
+            let toTextureDescription (t: Persistence.Texture.DataAccessRecord) : (Application.Project.TextureDescription) =
+                { Name = t.Name 
+                  Id = Domain.Textures.Texture.Id (t.idString, t.idIndex) 
+                  Path = Common.Path.combine textureFolder (Common.Path.fromString t.FileName)
+                }
+
+            let fRetrieveTexturePathsFromSolutionFunc (p: Common.Path.T) : (Application.Project.TextureDescription list) option =
+                Persistence.SolutionFile.read p
+                |> Option.map (fun dao -> dao.Textures |> List.map toTextureDescription)
+
+
+            let inspector = DependencyService.Get<Domain.Textures.Inspector>()
+            let fRetrieveTextureData (texDescr: Application.Project.TextureDescription) : Domain.Textures.Texture.T option =
+                Persistence.Texture.loadDomainTexture inspector texDescr.Name texDescr.Id texDescr.Path
+
+            let fLoadTexture (tex: Domain.Textures.Texture.T) : unit =
+                do ()
+            
+            return Application.Project.loadProject fRetrieveTexturePathsFromSolutionFunc
+                                                   fRetrieveTextureData
+                                                   fLoadTexture
+                                                   path
+                   |> Option.map (PresentationMsg << ProjectPageMsg << Pages.ProjectPage.Msg.Initialise)
+        } |> Cmd.ofAsyncMsgOption
+
+
+    let private mapExternalProjectPageCmdMsg (cmdMsg: Pages.ProjectPage.ExternalCmdMsg) =
+        match cmdMsg with 
+        | Pages.ProjectPage.StartLoading -> 
+            Cmd.ofMsg OpenLoadingPage
+        | Pages.ProjectPage.StopLoading  -> 
+            Cmd.ofMsg CloseLoadingPage
+        | Pages.ProjectPage.InitialiseFromPath path ->
+            initialiseFromPathCmd path
+
     let private mapProjectPageCmdMsg (cmdMsg: Pages.ProjectPage.CmdMsg) =
         match cmdMsg with 
         | Pages.ProjectPage.Internal internalCmdMsg -> 
             Pages.ProjectPage.mapInternalCmdMsg internalCmdMsg 
             |> ( Cmd.map ( ProjectPageMsg >> PresentationMsg ))
         | Pages.ProjectPage.External externalCmdMsg -> 
-            Cmd.none
+            mapExternalProjectPageCmdMsg externalCmdMsg
 
     let private moveProjectToTopOfRecentProjectsCmd (recentProject: Domain.RecentProject) =
         async {

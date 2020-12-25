@@ -69,6 +69,14 @@ module public Texture =
     /// </summary>
     type public Store = T list
 
+    /// <summary>
+    /// Create a new empty <see cref="Store"/>.
+    /// </summary>
+    /// <returns>
+    /// A new empty <see cref="Store"/>.
+    /// </returns>
+    let public emptyStore () : Store = []
+
     let private getUniqueId (store: Store) (idString: string) : Id = 
         let usedIndices: uint Set = List.filter (fun (e: T) -> getIdString e.Id = idString) store
                                     |> List.map (fun (e: T) -> getIdIndex e.Id)

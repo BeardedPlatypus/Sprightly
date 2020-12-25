@@ -1,5 +1,6 @@
 ﻿namespace Sprightly.Application
 
+open Sprightly.Common
 open Sprightly.Domain
 
 /// <summary>
@@ -58,3 +59,39 @@ module public Project =
         |> List.filter (fun x -> x.Path <> recentProject.Path)
         |> (fun l -> recentProject :: l)
         |> fSaveRecentProjects
+
+    type public TextureDescription = 
+        { Name : string 
+          Id : Textures.Texture.Id
+          Path : Path.T
+        }
+
+    type public RetrieveTexturePathsFromSolutionFunc = Path.T -> (TextureDescription list) option
+    type public RetrieveTextureDataFunc = TextureDescription -> Textures.Texture.T option
+    type public LoadTextureFunc = Textures.Texture.T -> unit
+
+    /// <summary>
+    /// Load the project at the given <paramref name="solutionFilePath"/>.
+    /// </summary>
+    /// <param name ="fRetrieveTexturePathsFromSolution"/>
+    /// Function to retrieve the relevant texture paths from the <paramref name="solutionFilePath"/>.
+    /// </param>
+    /// <param name="fRetrieveTextureData>
+    /// Function to retrieve the texture from the given texture path.
+    /// </param>
+    let public loadProject (fRetrieveTexturePathsFromSolution: RetrieveTexturePathsFromSolutionFunc)
+                           (fRetrieveTextureData: RetrieveTextureDataFunc)
+                           (fLoadTexture: LoadTextureFunc)
+                           (solutionFilePath: Path.T) : Project option =
+        let texturePaths = fRetrieveTexturePathsFromSolution solutionFilePath
+
+        texturePaths |> Option.map (fun paths ->
+            let textureStore : Textures.Texture.Store = 
+                List.map fRetrieveTextureData paths
+                |> List.choose id
+
+            for t in textureStore do fLoadTexture t
+
+            { TextureStore = textureStore
+              SolutionPath = solutionFilePath
+            })

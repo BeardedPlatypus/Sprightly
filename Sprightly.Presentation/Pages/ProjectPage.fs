@@ -4,8 +4,8 @@ open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
 
+open Sprightly
 open Sprightly.Common
-open Sprightly.Domain.Textures
 open Sprightly.Presentation.Components.Common
 open Sprightly.Presentation.Components.ProjectPage
 open Sprightly.Presentation.Components.ProjectPage.ToolBoxes
@@ -16,10 +16,10 @@ open Sprightly.Presentation.Components.ProjectPage.ToolBoxes
 /// user to load textures, define sprites, and define sprite animations.
 /// </summary>
 module ProjectPage =
+    /// <summary>
+    /// <see cref="Model"/> defines the model for the <see cref="ProjectPage"/>.
+    /// </summary>
     type public Model = 
-        /// <summary>
-        /// <see cref="Model"/> defines the model for the <see cref="ProjectPage"/>.
-        /// </summary>
         { IsOpen : bool 
           SpriteToolBox : SpriteToolBox.Model
         }
@@ -34,6 +34,7 @@ module ProjectPage =
     /// <see cref="Msg"/> defines the messages for the <see cref="ProjectPage"/>.
     /// </summary>
     type public Msg =
+        | Initialise of Domain.Project
         | SetIsOpen of bool
         | ToolBoxMsg of ToolBoxMsg
 
@@ -50,10 +51,12 @@ module ProjectPage =
     /// the <see cref="NewProject"/>.
     /// </summary>
     type public ExternalCmdMsg =
-        | Initialize 
+        | InitialiseFromPath of Path.T
+        | StartLoading
+        | StopLoading
 
     /// <summary>
-    /// <see cref="Msg"/> defines the command messages for the <see cref="ProjectPage"/>.
+    /// <see cref="CmdMsg"/> defines the command messages for the <see cref="ProjectPage"/>.
     /// </summary>
     type public CmdMsg =
         | Internal of InternalCmdMsg
@@ -72,15 +75,13 @@ module ProjectPage =
         | InternalSpriteToolBoxCmdMsg cmdMsg ->
              SpriteToolBox.mapInternalCmdMsg cmdMsg |> ( Cmd.map (ToolBoxMsg << SpriteToolBoxMsg ))
 
-    let public init (solutionDirectoryPath : Path.T) (textures : Texture.T list) : Model * CmdMsg list = 
+    /// <summary>
+    /// Initialise a new project with the given solution path.
+    /// </summary>
+    let public init (solutionPath : Path.T) : Model * CmdMsg list = 
         { IsOpen = true 
-          SpriteToolBox = { Textures = textures
-                            ActiveTextureId = None
-                            ProjectTreeIsOpen = true
-                            DetailIsOpen = true
-                            SolutionDirectoryPath = solutionDirectoryPath
-                          }
-        }, []
+          SpriteToolBox = SpriteToolBox.initEmpty (Path.parentDirectory solutionPath)
+        }, [ External StartLoading; External (InitialiseFromPath solutionPath) ]
 
     /// <summary>
     /// Update the provided <paramref name="model"/> to its new state given the
@@ -94,7 +95,8 @@ module ProjectPage =
     /// </returns>
     let public update (msg: Msg) (model: Model) : Model * CmdMsg list =
         match msg with 
-        | SetIsOpen v -> { model with IsOpen = v }, []
+        | SetIsOpen v -> 
+            { model with IsOpen = v }, []
         | ToolBoxMsg tbMsg -> 
             match tbMsg with 
             | SpriteToolBoxMsg m ->
@@ -106,7 +108,10 @@ module ProjectPage =
                  
 
                 { model with SpriteToolBox = newToolboxModel }, List.map fMapCmdMsg cmdMsgs
-        | _           -> model, []
+        | Initialise project -> 
+            { model with SpriteToolBox = SpriteToolBox.initFromProject project }, [ External StopLoading]
+        | _ -> 
+            model, []
 
     let private placeHolderIcons = 
         [ (FontAwesome.Icons.home, Color.White)
@@ -120,7 +125,7 @@ module ProjectPage =
             .Spacing(0.0)
 
     /// <summary>
-    /// <see cref="view"/> transforms the <paramref name="model"/> onto
+    /// <see cref="view"/> transforms the <paramref name="model"/> into
     /// its corresponding view.
     /// </summary>
     /// <param name="model">The model to display.</param>

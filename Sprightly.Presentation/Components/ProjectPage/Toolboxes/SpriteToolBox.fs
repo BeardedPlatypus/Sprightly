@@ -4,6 +4,7 @@ open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
 
+open Sprightly
 open Sprightly.Common
 open Sprightly.Domain.Textures
 open Sprightly.Presentation.Components.Common
@@ -18,6 +19,41 @@ module public SpriteToolBox =
           DetailIsOpen : bool
 
           SolutionDirectoryPath: Path.T
+        }
+
+    /// <summary>
+    /// Create a new empty <see cref="Model"/> with the given solution 
+    /// directory path.
+    /// </summary>
+    /// <param name="solutionDirectoryPath">The path to the directory of the solution file.</param>
+    /// <returns>
+    /// A new empty <see cref="Model"/>.
+    /// </returns>
+    let public initEmpty (solutionDirectoryPath: Path.T) : Model =
+        { Textures = Texture.emptyStore () 
+          ActiveTextureId = None 
+
+          ProjectTreeIsOpen = false
+          DetailIsOpen = false
+
+          SolutionDirectoryPath = solutionDirectoryPath
+        }
+
+    /// <summary>
+    /// Create a new <see cref="Model"/> from the given <paramref name="project"/>.
+    /// </summary>
+    /// <param name="project">The project to create the <see cref="Model"/> from.</param>
+    /// <returns>
+    /// A new <see cref="Model"/> from the given <paramref name="project"/>.
+    /// </returns>
+    let public initFromProject (project: Domain.Project) : Model =
+        { Textures = project.TextureStore
+          ActiveTextureId = if List.isEmpty project.TextureStore then None else Some (List.head project.TextureStore).Id
+
+          ProjectTreeIsOpen = true 
+          DetailIsOpen = true
+
+          SolutionDirectoryPath = Path.parentDirectory project.SolutionPath
         }
 
     /// <summary>

@@ -5,7 +5,6 @@ open Sprightly.Common.Path
 
 open Sprightly.Presentation.Components
 
-open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
 
