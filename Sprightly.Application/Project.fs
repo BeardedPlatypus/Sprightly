@@ -60,15 +60,8 @@ module public Project =
         |> (fun l -> recentProject :: l)
         |> fSaveRecentProjects
 
-    type public TextureDescription = 
-        { Name : string 
-          Id : Textures.Texture.Id
-          Path : Path.T
-        }
 
-    type public RetrieveTexturePathsFromSolutionFunc = Path.T -> (TextureDescription list) option
-    type public RetrieveTextureDataFunc = TextureDescription -> Textures.Texture.T option
-    type public LoadTextureFunc = Textures.Texture.T -> unit
+    type public RetrieveTexturePathsFromSolutionFunc = Path.T -> (Texture.TextureDescription list) option
 
     /// <summary>
     /// Load the project at the given <paramref name="solutionFilePath"/>.
@@ -80,8 +73,8 @@ module public Project =
     /// Function to retrieve the texture from the given texture path.
     /// </param>
     let public loadProject (fRetrieveTexturePathsFromSolution: RetrieveTexturePathsFromSolutionFunc)
-                           (fRetrieveTextureData: RetrieveTextureDataFunc)
-                           (fLoadTexture: LoadTextureFunc)
+                           (fRetrieveTextureData: Texture.RetrieveTextureDataFunc)
+                           (fLoadTexture: Texture.LoadTextureFunc)
                            (solutionFilePath: Path.T) : Project option =
         let texturePaths = fRetrieveTexturePathsFromSolution solutionFilePath
 

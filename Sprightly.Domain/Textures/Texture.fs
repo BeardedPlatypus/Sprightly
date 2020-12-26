@@ -56,8 +56,8 @@ module public Texture =
     /// <returns>
     /// A new texture.
     /// </returns>
-    let construct (id: (string * uint)) (name: string) (path: Path.T) (metaData: MetaData.T) : T =
-        { Id = Id id
+    let construct (id: Id) (name: string) (path: Path.T) (metaData: MetaData.T) : T =
+        { Id = id
           Data = { Name = Name name
                    Path = path
                    MetaData = metaData
@@ -77,7 +77,7 @@ module public Texture =
     /// </returns>
     let public emptyStore () : Store = []
 
-    let private getUniqueId (store: Store) (idString: string) : Id = 
+    let public getUniqueId (store: Store) (idString: string) : Id = 
         let usedIndices: uint Set = List.filter (fun (e: T) -> getIdString e.Id = idString) store
                                     |> List.map (fun (e: T) -> getIdIndex e.Id)
                                     |> Set.ofList
