@@ -117,5 +117,15 @@ module public Path =
         | Read  -> System.IO.File.OpenRead (path |> toString)
         | Write -> System.IO.File.OpenWrite (path |> toString)
 
+    /// <summary>
+    /// Check whether the specified path exists as eihter a file or a directory.
+    /// </summary>
+    /// <param name="path">The path to check.</param>
+    /// <returns>
+    /// True if the specified path is either a file or directory; false otherwise.
+    /// </returns>
+    let exists (path: T) : bool =
+        let pString = path |> toString
 
-
+        System.IO.File.Exists pString || 
+        System.IO.Directory.Exists pString
