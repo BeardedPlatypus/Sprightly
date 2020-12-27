@@ -6,7 +6,7 @@ open Sprightly
 /// The <see cref="DataAccess.Texture"/> module provides all methods related to
 /// to accessing texture information on disk.
 /// </summary>
-module Texture =
+module public Texture =
     /// <summary>
     /// <see cref='DataAccessRecord"/> defines the data acces information of a 
     /// single texture.
@@ -16,6 +16,22 @@ module Texture =
           FileName : string
           idString : string 
           idIndex : uint
+        }
+
+    /// <summary>
+    /// Convert the specified <paramref name="tex"/> to its corresponding 
+    /// <see cref="DataAccessRecord"/>.
+    /// </summary>
+    /// <param name="tex">The texture to convert.</param>
+    /// <returns>
+    /// The corresponding <see cref="DataAccessRecord"/>.
+    /// <returns>
+    let public toDataAccessRecord (tex: Domain.Textures.Texture.T) : DataAccessRecord =
+        let idString, idIndex = match tex.Id with | Domain.Textures.Texture.Id (idString, idIndex) -> idString, idIndex
+        { Name = match tex.Data.Name with | Domain.Textures.Texture.Name name -> name
+          FileName = tex.Data.Path |> Common.Path.name
+          idString = idString
+          idIndex = idIndex
         }
 
     open Common.Path
