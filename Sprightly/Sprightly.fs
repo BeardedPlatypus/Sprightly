@@ -238,8 +238,9 @@ module App =
             let fRetrieveTextureData (texDescr: Application.Texture.TextureDescription) : Domain.Textures.Texture.T option =
                 Persistence.Texture.loadDomainTexture inspector texDescr.Name texDescr.Id texDescr.Path
 
+            let textureFactory = DependencyService.Get<Infrastructure.TextureFactory>()
             let fLoadTexture (tex: Domain.Textures.Texture.T) : unit =
-                do ()
+                textureFactory.RequestTextureLoad tex.Id tex.Data.Path
             
             return Application.Project.loadProject fRetrieveTexturePathsFromSolution
                                                    fRetrieveTextureData
