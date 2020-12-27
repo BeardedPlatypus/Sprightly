@@ -107,3 +107,19 @@ module SolutionFile =
         { FileName = Path.name path
           DirectoryPath = Path.parentDirectory path
         }
+
+    /// <summary>
+    /// Update the solution at <paramref name="slnPath"/> with the given 
+    /// <paramref name="updateSln"/> function.
+    /// </summary>
+    /// <param name="updateSln">Function to update the solution with.</param>
+    /// <param name="slnPath">Path of the solution file.</param>
+    /// <remarks>
+    /// If no (correct) file exists at <paramref name="slnPath"/> then nothing 
+    /// will happen.
+    /// </remarks>
+    let public updateOnDisk (updateSln: DataAccessRecord -> DataAccessRecord) (slnPath: Path.T) : unit =
+        let sln = read slnPath
+
+        if sln.IsSome then 
+            write (updateSln sln.Value) slnPath
