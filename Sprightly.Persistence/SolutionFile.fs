@@ -123,3 +123,19 @@ module SolutionFile =
 
         if sln.IsSome then 
             write (updateSln sln.Value) slnPath
+
+    /// <summary>
+    /// Update the <see cref="Store"/> in the solution file at <paramref name="slnPath"/>
+    /// to the provided <paramref name="store"/>.
+    /// </summary>
+    /// <param name="store">The new <see cref="Store"/>.</param>
+    /// <param name "slnPath">The path to the solution file.</param>
+    /// <remarks>
+    /// If no (correct) file exists at <paramref name="slnPath"/> then nothing 
+    /// will happen.
+    /// </remarks>
+    let public updateTexturesOnDisk (textures: Texture.DataAccessRecord list) (slnPath: Path.T) : unit =
+        let updateSolution (originalSolution: DataAccessRecord) : DataAccessRecord =
+            { originalSolution with Textures = textures }
+
+        updateOnDisk updateSolution slnPath
