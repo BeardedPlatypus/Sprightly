@@ -6,7 +6,6 @@ open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
 
-
 /// <summary>
 /// <see cref="Orientation"/> defines the orientation of a <see cref="SprightlyIconButton"/>.
 /// </summary>
@@ -97,4 +96,3 @@ module FabulousSprightlyListElement=
                 source.UpdatePrimitive (prevOpt, target, iconOrientationValueAttribKey, (fun target v -> target.IconOrientation <- v))
 
             ViewElement.Create(SprightlyIconButton, update, attribs)
-

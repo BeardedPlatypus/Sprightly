@@ -8,7 +8,6 @@ open Sprightly.Presentation.Components
 open Fabulous.XamarinForms
 open Xamarin.Forms
 
-
 /// <summary>
 /// <see cref="NewProjectPage"/> defines the page shown to create a new project
 /// </summary>

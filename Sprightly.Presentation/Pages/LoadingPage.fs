@@ -3,7 +3,6 @@
 open Fabulous.XamarinForms
 open Xamarin.Forms
 
-
 /// <summary>
 /// <see cref="LoadingPage"/> defines the loading page of the Sprightly
 /// application.

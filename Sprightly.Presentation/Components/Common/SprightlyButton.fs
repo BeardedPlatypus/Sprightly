@@ -35,4 +35,3 @@ module FabulousSprightlyButton =
                 ViewBuilders.UpdateButton(registry, prevOpt, source, target)
 
             ViewElement.Create(SprightlyButton, update, attribs)
-

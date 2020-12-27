@@ -1,6 +1,5 @@
 ﻿namespace Sprightly.Presentation.Components.Common
 
-open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
 
@@ -39,4 +38,3 @@ module CollapsiblePane =
                                     ])
             .Spacing(0.0)
             |> MaterialDesign.withElevation (MaterialDesign.Elevation 4)
-

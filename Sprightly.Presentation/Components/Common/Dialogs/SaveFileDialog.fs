@@ -20,4 +20,3 @@ type public SaveFileDialog =
     /// <see cref="FileBrowserDialogConfiguration"/>.
     /// </summary>
     abstract Configuration : FileDialogConfiguration option with get, set
-

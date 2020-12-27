@@ -44,4 +44,3 @@ module public Cmds =
 
             return Option.map toMsg <| picker.Pick ()
         } |> Cmd.ofAsyncMsgOption
-

@@ -62,4 +62,3 @@ module public Json =
     let public readJsonString (path: Path.T) : JsonString =
         use stream = new System.IO.StreamReader (path |> Path.toString)
         stream.ReadToEnd()
-

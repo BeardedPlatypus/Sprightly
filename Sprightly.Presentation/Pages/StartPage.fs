@@ -7,7 +7,6 @@ open Sprightly
 open Sprightly.Presentation.Components
 open Sprightly.Presentation.Components.StartPage.FabulousRecentProjectButton
 
-
 /// <summary>
 /// <see cref="StartPage"/> defines the introduction page shown when
 /// sprightly is started.

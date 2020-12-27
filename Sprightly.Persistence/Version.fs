@@ -1,6 +1,5 @@
 ﻿namespace Sprightly.Persistence
 
-
 /// <summary>
 /// <see cref="Version"/> defines the methods working on the
 /// version type.
@@ -45,4 +44,3 @@ module public Version =
             Some { Major = major; Minor = minor; Patch = patch }
         | _ -> 
             None
-

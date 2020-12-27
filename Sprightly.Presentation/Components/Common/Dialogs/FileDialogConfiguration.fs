@@ -83,4 +83,3 @@ type public FileDialogConfiguration (?addExtension: bool,
     /// Value indicating whether the dialog box accepts only valid Win32 file names.
     /// </summary>
     member val ValidateNames: bool option = validateNames
-

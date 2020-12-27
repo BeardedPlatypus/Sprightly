@@ -10,7 +10,6 @@ open Sprightly.Presentation.Components.Common
 open Sprightly.Presentation.Components.ProjectPage
 open Sprightly.Presentation.Components.ProjectPage.ToolBoxes
 
-
 /// <summary>
 /// <see cref="ProjectPage"/> defines the project page which allows the 
 /// user to load textures, define sprites, and define sprite animations.

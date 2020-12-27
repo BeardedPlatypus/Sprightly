@@ -107,6 +107,3 @@ module SolutionFile =
         { FileName = Path.name path
           DirectoryPath = Path.parentDirectory path
         }
-
-
-

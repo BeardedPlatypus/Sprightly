@@ -35,5 +35,3 @@ module Dummy_FontAwesome=
 
     [<assembly: ExportFont("fa-solid-900.ttf", Alias = "fa-solid")>]
     do()
-
-
