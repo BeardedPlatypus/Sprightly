@@ -139,3 +139,37 @@ module public Path =
 
         System.IO.File.Exists pString || 
         System.IO.Directory.Exists pString
+
+    /// <summary>
+    /// Generate a unique name given the specified <paramref name="name"/>
+    /// within the specified <paramref name="dir"/>.
+    /// </summary>
+    /// <param name="dir">The directory folder in which to generate the name.</param>
+    /// <param name="name">The initial name.</param>
+    /// <returns>
+    /// <paramref name="name"/> if <paramref name="name"/> does not exist
+    /// within <paramref name="dir"/>, otherwise a name with an appended 
+    /// index.
+    /// </returns>
+    let generateUniqueName (dir: T) (name: string) : string =
+        let path = combine dir (fromString name)
+
+        if exists path then 
+            let namePath = fromString name
+
+            let nameWithoutExtension = nameWithoutExtension namePath
+            let extension = extension namePath
+
+            let rec generate (i: int): string = 
+                let newName = nameWithoutExtension + "_" + i.ToString() + extension
+                let newPath = combine dir (newName |> fromString)
+
+                if exists newPath then 
+                    generate (i + 1)
+                else 
+                    newName
+
+            generate 1
+        else 
+            name 
+
