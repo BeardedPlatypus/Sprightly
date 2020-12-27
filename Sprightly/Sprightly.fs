@@ -258,8 +258,9 @@ module App =
             let inspector = DependencyService.Get<Domain.Textures.Inspector>()
             let fRetrieveTextureMetaData = inspector.ReadMetaData
 
+            let textureFactory = DependencyService.Get<Infrastructure.TextureFactory>()
             let fLoadTexture (tex: Domain.Textures.Texture.T) : unit =
-                do ()
+                textureFactory.RequestTextureLoad tex.Id tex.Data.Path
 
             let fSaveAddNewTexture (tex: Domain.Textures.Texture.T) : unit =
                 do ()
