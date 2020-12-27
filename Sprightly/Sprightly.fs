@@ -187,14 +187,17 @@ module App =
     let private createSolutionFileCmd (path: Common.Path.T) : Cmd<Msg> =
         async {
             do! Async.SwitchToThreadPool ()
-            let solutionFileDescription : Sprightly.Persistence.SolutionFile.Description = 
-                { FileName = Common.Path.name path
-                  DirectoryPath = Common.Path.parentDirectory path 
-                }
+            
+            let fWriteEmptySolution (p: Common.Path.T) = 
+                let solutionFileDescription : Sprightly.Persistence.SolutionFile.Description = 
+                    { FileName = Common.Path.name p
+                      DirectoryPath = Common.Path.parentDirectory p
+                    }
 
-            Sprightly.Persistence.SolutionFile.writeEmpty (solutionFileDescription |> Sprightly.Persistence.SolutionFile.descriptionToPath)
-            // TODO: move this to a better location AB#212
-            System.IO.Directory.CreateDirectory(Common.Path.combine solutionFileDescription.DirectoryPath (Common.Path.fromString "Textures") |> Common.Path.toString) |> ignore
+                Persistence.SolutionFile.writeEmpty (solutionFileDescription |> Sprightly.Persistence.SolutionFile.descriptionToPath)
+                Persistence.Texture.createTextureFolder solutionFileDescription.DirectoryPath
+
+            Application.Project.createNewProject fWriteEmptySolution path
 
             return PresentationMsg ( NewProjectPageMsg ( Pages.NewProjectPage.RequestOpenNewProject path ))
         } |> Cmd.ofAsyncMsg
