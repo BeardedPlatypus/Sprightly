@@ -85,6 +85,7 @@ module public Project =
             let textureStore : Textures.Texture.Store = 
                 List.map fRetrieveTextureData paths
                 |> List.choose id
+                |> Textures.Texture.addTexturesToStore (Textures.Texture.emptyStore ())
 
             for t in textureStore do fLoadTexture t
 

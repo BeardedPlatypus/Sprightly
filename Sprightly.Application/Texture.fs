@@ -91,8 +91,7 @@ module public Texture =
                 fLoadTexture newTexture
                 fSaveAddNewTexture newTexture
             
-                let newStore = newTexture :: store
-                               |> List.sortBy (fun (t: Textures.Texture.T) -> (match t.Id with | Textures.Texture.Id (v, _) -> v))
+                let newStore = Textures.Texture.addTextureToStore store newTexture
                 Some (id, newStore)
             else 
                 None
