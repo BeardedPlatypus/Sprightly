@@ -91,3 +91,18 @@ module public Project =
             { TextureStore = textureStore
               SolutionPath = solutionFilePath
             })
+
+    /// <summary>
+    /// Function to write an empty solution file.
+    /// </summary>
+    type public WriteEmptySolutionFunc = Path.T -> unit
+
+    /// <summary>
+    /// Create a new empty solution file and corresponding file structure at
+    /// the specified <paramref name="slnFile"/>.
+    /// </summary>
+    /// <param name="fWriteEmptySolution">Function to write an empty solution file.</param>
+    /// <param name="slnFile">The path to the solution file to write.</param>
+    let public createNewProject (fWriteEmptySolution) 
+                                (slnFile: Path.T) : unit = 
+        fWriteEmptySolution slnFile
