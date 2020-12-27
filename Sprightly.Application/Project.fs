@@ -60,7 +60,9 @@ module public Project =
         |> (fun l -> recentProject :: l)
         |> fSaveRecentProjects
 
-
+    /// <summary>
+    /// Function to retrieve texture paths from the solution file at the specified path.
+    /// </summary>
     type public RetrieveTexturePathsFromSolutionFunc = Path.T -> (Texture.TextureDescription list) option
 
     /// <summary>
