@@ -66,6 +66,9 @@ module App =
     let private toCmdMsg (mapFunc: 'a -> CmdMsg) (cmdMsgList: 'a list) : CmdMsg list =
         List.map mapFunc cmdMsgList
 
+    /// <summary>
+    /// Create a new model and corresponding <see cref="CmdMsg"/> list.
+    /// </summary>
     let public init () =
         let model, cmdMsgs = Pages.StartPage.init
 
