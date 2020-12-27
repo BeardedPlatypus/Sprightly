@@ -53,3 +53,28 @@ module Texture =
                                                      MetaData= md
                                                    }
                                           })
+
+    /// <summary>
+    /// Copy the specified <paramref name="texturePath"/> into the texture folder of
+    /// the solution at <paramref name="slnDirectoryPath"/> and return the new path.
+    /// </summary>
+    /// <param name="slnDirectoryPath">The path to the directory containing the solution.</param>
+    /// <param name="texturePath">The path to the texture external of the solution.</param>
+    /// <returns>
+    /// The path to the copied texture if one was copied.
+    /// </returns>
+    let public copyTextureIntoTextureFolder (slnDirectoryPath: Common.Path.T)
+                                            (texturePath: Common.Path.T) : Common.Path.T option =
+        if Common.Path.exists texturePath &&
+           Common.Path.exists slnDirectoryPath then 
+            let texFolder = textureFolder slnDirectoryPath
+            let name = Common.Path.name texturePath
+            let newPath = 
+                Common.Path.combine texFolder ((Common.Path.generateUniqueName texFolder name) |> Common.Path.fromString)
+
+            System.IO.File.Copy(texturePath |> Common.Path.toString,
+                                newPath |> Common.Path.toString)
+
+            Some newPath
+        else 
+            None
