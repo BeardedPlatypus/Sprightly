@@ -26,7 +26,7 @@
     <Compile Include="Components\Common\CollapsiblePaneHeader.fs" />
     <Compile Include="Components\Common\CollapsiblePane.fs" />
     <Compile Include="Components\Common\Components.fs" />
-    <Compile Include="Components\ProjectPage\Toolboxes\SpriteToolBox.fs" />
+    <Compile Include="Components\ProjectPage\Toolboxes\TextureToolBox.fs" />
     <Compile Include="Components\ProjectPage\Viewport.fs" />
     <Compile Include="Components\StartPage\RecentProjectButton.fs" />
     <Compile Include="Pages\LoadingPage.fs" />

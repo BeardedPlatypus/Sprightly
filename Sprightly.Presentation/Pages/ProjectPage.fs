@@ -21,14 +21,14 @@ module ProjectPage =
     /// </summary>
     type public Model = 
         { IsOpen : bool 
-          SpriteToolBox : SpriteToolBox.Model
+          TextureToolBox : TextureToolBox.Model
         }
 
     /// <summary>
     /// <see cref="ToolBoxMsg"/> defines all possible toolbox messages.
     /// </summary>
     type public ToolBoxMsg = 
-        | SpriteToolBoxMsg of SpriteToolBox.Msg
+        | SpriteToolBoxMsg of TextureToolBox.Msg
 
     /// <summary>
     /// <see cref="Msg"/> defines the messages for the <see cref="ProjectPage"/>.
@@ -44,7 +44,7 @@ module ProjectPage =
     /// <see cref="mapInternalCmdMsg"/> method.
     /// </summary>
     type public InternalCmdMsg =
-        | InternalSpriteToolBoxCmdMsg of SpriteToolBox.InternalCmdMsg
+        | InternalSpriteToolBoxCmdMsg of TextureToolBox.InternalCmdMsg
 
     /// <summary>
     /// <see cref="ExternalCmdMsg"/> defines the external command messages for 
@@ -73,14 +73,14 @@ module ProjectPage =
     let public mapInternalCmdMsg (cmd: InternalCmdMsg) =
         match cmd with 
         | InternalSpriteToolBoxCmdMsg cmdMsg ->
-             SpriteToolBox.mapInternalCmdMsg cmdMsg |> ( Cmd.map (ToolBoxMsg << SpriteToolBoxMsg ))
+             TextureToolBox.mapInternalCmdMsg cmdMsg |> ( Cmd.map (ToolBoxMsg << SpriteToolBoxMsg ))
 
     /// <summary>
     /// Initialise a new project with the given solution path.
     /// </summary>
     let public init (solutionPath : Path.T) : Model * CmdMsg list = 
         { IsOpen = true 
-          SpriteToolBox = SpriteToolBox.initEmpty (Path.parentDirectory solutionPath)
+          TextureToolBox = TextureToolBox.initEmpty (Path.parentDirectory solutionPath)
         }, [ External StartLoading; External (InitialiseFromPath solutionPath) ]
 
     /// <summary>
@@ -100,16 +100,16 @@ module ProjectPage =
         | ToolBoxMsg tbMsg -> 
             match tbMsg with 
             | SpriteToolBoxMsg m ->
-                let newToolboxModel, cmdMsgs = SpriteToolBox.update m model.SpriteToolBox
+                let newToolboxModel, cmdMsgs = TextureToolBox.update m model.TextureToolBox
 
-                let fMapCmdMsg (cmdMsg: SpriteToolBox.CmdMsg) = 
+                let fMapCmdMsg (cmdMsg: TextureToolBox.CmdMsg) = 
                     match cmdMsg with 
-                    | SpriteToolBox.Internal internalMsg -> Internal (InternalSpriteToolBoxCmdMsg internalMsg)
+                    | TextureToolBox.Internal internalMsg -> Internal (InternalSpriteToolBoxCmdMsg internalMsg)
                  
 
-                { model with SpriteToolBox = newToolboxModel }, List.map fMapCmdMsg cmdMsgs
+                { model with TextureToolBox = newToolboxModel }, List.map fMapCmdMsg cmdMsgs
         | Initialise project -> 
-            { model with SpriteToolBox = SpriteToolBox.initFromProject project }, [ External StopLoading]
+            { model with TextureToolBox = TextureToolBox.initFromProject project }, [ External StopLoading]
         | _ -> 
             model, []
 
@@ -141,7 +141,7 @@ module ProjectPage =
                       coldefs = [ Stars 5.0; Star ],
                       children = [ viewport.VerticalOptions(LayoutOptions.FillAndExpand)
                                            .Column(0)
-                                   (SpriteToolBox.view model.SpriteToolBox (dispatch << ( ToolBoxMsg << SpriteToolBoxMsg)))
+                                   (TextureToolBox.view model.TextureToolBox (dispatch << ( ToolBoxMsg << SpriteToolBoxMsg)))
                                        .VerticalOptions(LayoutOptions.FillAndExpand)
                                        .Column(1)
                                  ])

@@ -9,8 +9,7 @@ open Sprightly.Common
 open Sprightly.Domain.Textures
 open Sprightly.Presentation.Components.Common
 
-// TODO: Rename this to TextureToolbox
-module public SpriteToolBox = 
+module public TextureToolBox = 
     type public Model = 
         { Textures : Texture.Store
           ActiveTextureId : Texture.Id option
@@ -25,7 +24,9 @@ module public SpriteToolBox =
     /// Create a new empty <see cref="Model"/> with the given solution 
     /// directory path.
     /// </summary>
-    /// <param name="solutionDirectoryPath">The path to the directory of the solution file.</param>
+    /// <param name="solutionDirectoryPath">
+    /// The path to the directory of the solution file.
+    /// </param>
     /// <returns>
     /// A new empty <see cref="Model"/>.
     /// </returns>
@@ -48,7 +49,9 @@ module public SpriteToolBox =
     /// </returns>
     let public initFromProject (project: Domain.Project) : Model =
         { Textures = project.TextureStore
-          ActiveTextureId = if List.isEmpty project.TextureStore then None else Some (List.head project.TextureStore).Id
+          ActiveTextureId = 
+              if List.isEmpty project.TextureStore then None 
+              else Some (List.head project.TextureStore).Id
 
           ProjectTreeIsOpen = true 
           DetailIsOpen = true
@@ -64,7 +67,7 @@ module public SpriteToolBox =
         | Detail
 
     /// <summary>
-    /// <see cref="Msg"/> defines the messages for the <see cref="SpriteToolBox"/>.
+    /// <see cref="Msg"/> defines the messages for the <see cref="TextureToolBox"/>.
     /// </summary>
     type public Msg = 
         | SetIsOpen of Pane * bool
@@ -83,7 +86,7 @@ module public SpriteToolBox =
         | ImportTexture of Path.T * Path.T
     
     /// <summary>
-    /// <see cref="CmdMsg"/> defines the command messages for the <see cref="SpriteToolbox"/>.
+    /// <see cref="CmdMsg"/> defines the command messages for the <see cref="TextureToolbox"/>.
     /// </summary>
     type public CmdMsg = 
         | Internal of InternalCmdMsg
