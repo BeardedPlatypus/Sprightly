@@ -84,6 +84,7 @@ module public Components =
             .FontSize(FontSize.fromValue 14.0)
             .FontFamily(MaterialDesign.Fonts.RobotoCondensedRegular)
             .TextColor(textColor)
+            .Key(text)
 
     /// <summary>
     /// Create a new styled icon text button with the specified 

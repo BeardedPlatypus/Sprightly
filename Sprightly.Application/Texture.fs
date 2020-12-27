@@ -39,7 +39,7 @@ module public Texture =
     /// The function to copy the texture defined in the <see cref="TextureCopyData"/>
     /// and return the new location.
     /// </summary>
-    type public CopyTextureIntoSolutionFunc = Path.T -> Path.T
+    type public CopyTextureIntoSolutionFunc = Path.T -> Path.T option
 
     /// <summary>
     /// The function to save the event that a new texture has been added.
@@ -78,20 +78,21 @@ module public Texture =
                                     (texturePath: Path.T)
                                     (store: Textures.Texture.Store) : 
                                     (Textures.Texture.Id * Textures.Texture.Store) option =
-        if Path.exists texturePath then
-            let slnTexturePath = fCopyTextureIntoSolution texturePath
-            let metaData = fRetrieveMetaData slnTexturePath
+        let slnTexturePath = fCopyTextureIntoSolution texturePath
+        if slnTexturePath.IsSome then
+            let metaData = fRetrieveMetaData slnTexturePath.Value
             
             if metaData.IsSome then 
-                let name = Path.nameWithoutExtension slnTexturePath
+                let name = Path.nameWithoutExtension slnTexturePath.Value
                 let id = Textures.Texture.getUniqueId store name
                 let newTexture = 
-                    Textures.Texture.construct id name slnTexturePath metaData.Value
+                    Textures.Texture.construct id name slnTexturePath.Value metaData.Value
             
                 fLoadTexture newTexture
                 fSaveAddNewTexture newTexture
             
                 let newStore = newTexture :: store
+                               |> List.sortBy (fun (t: Textures.Texture.T) -> (match t.Id with | Textures.Texture.Id (v, _) -> v))
                 Some (id, newStore)
             else 
                 None

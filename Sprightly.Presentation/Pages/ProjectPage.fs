@@ -22,6 +22,7 @@ module ProjectPage =
     type public Model = 
         { IsOpen : bool 
           TextureToolBox : TextureToolBox.Model
+          SolutionDirectoryPath : Path.T
         }
 
     /// <summary>
@@ -37,6 +38,7 @@ module ProjectPage =
         | Initialise of Domain.Project
         | SetIsOpen of bool
         | ToolBoxMsg of ToolBoxMsg
+        | UpdateTextureStore of (Domain.Textures.Texture.Id option * Domain.Textures.Texture.Store)
 
     /// <summary>
     /// <see cref="InternalCmdMsg"/> defines the internal command messages for 
@@ -46,6 +48,13 @@ module ProjectPage =
     type public InternalCmdMsg =
         | InternalSpriteToolBoxCmdMsg of TextureToolBox.InternalCmdMsg
 
+
+    type public AddTextureDescription = 
+        { TexturePath: Path.T
+          Store: Domain.Textures.Texture.Store
+          SolutionDirectoryPath: Path.T
+        }
+
     /// <summary>
     /// <see cref="ExternalCmdMsg"/> defines the external command messages for 
     /// the <see cref="NewProject"/>.
@@ -54,6 +63,7 @@ module ProjectPage =
         | InitialiseFromPath of Path.T
         | StartLoading
         | StopLoading
+        | AddTextureToStore of AddTextureDescription
 
     /// <summary>
     /// <see cref="CmdMsg"/> defines the command messages for the <see cref="ProjectPage"/>.
@@ -80,8 +90,19 @@ module ProjectPage =
     /// </summary>
     let public init (solutionPath : Path.T) : Model * CmdMsg list = 
         { IsOpen = true 
-          TextureToolBox = TextureToolBox.initEmpty (Path.parentDirectory solutionPath)
+          TextureToolBox = TextureToolBox.initEmpty 
+          SolutionDirectoryPath = (Path.parentDirectory solutionPath)
         }, [ External StartLoading; External (InitialiseFromPath solutionPath) ]
+
+    let private mapTextureToolBoxCmdMsg (model: Model) (cmdMsg: TextureToolBox.CmdMsg) : CmdMsg  =
+        match cmdMsg with 
+        | TextureToolBox.Internal internalMsg -> 
+            Internal (InternalSpriteToolBoxCmdMsg internalMsg)
+        | TextureToolBox.External (TextureToolBox.AddTexture path) -> 
+            External (AddTextureToStore { TexturePath = path
+                                          Store = model.TextureToolBox.Textures
+                                          SolutionDirectoryPath = model.SolutionDirectoryPath
+                                        })
 
     /// <summary>
     /// Update the provided <paramref name="model"/> to its new state given the
@@ -101,17 +122,15 @@ module ProjectPage =
             match tbMsg with 
             | SpriteToolBoxMsg m ->
                 let newToolboxModel, cmdMsgs = TextureToolBox.update m model.TextureToolBox
-
-                let fMapCmdMsg (cmdMsg: TextureToolBox.CmdMsg) = 
-                    match cmdMsg with 
-                    | TextureToolBox.Internal internalMsg -> Internal (InternalSpriteToolBoxCmdMsg internalMsg)
-                 
-
-                { model with TextureToolBox = newToolboxModel }, List.map fMapCmdMsg cmdMsgs
+                let newModel = { model with TextureToolBox = newToolboxModel } 
+                newModel, List.map (mapTextureToolBoxCmdMsg newModel) cmdMsgs
         | Initialise project -> 
             { model with TextureToolBox = TextureToolBox.initFromProject project }, [ External StopLoading]
-        | _ -> 
-            model, []
+        | UpdateTextureStore (id, store) ->
+            let textureToolBox = { model.TextureToolBox with Textures = store 
+                                                             ActiveTextureId = id
+                                 }
+            { model with TextureToolBox = textureToolBox }, []
 
     let private placeHolderIcons = 
         [ (FontAwesome.Icons.home, Color.White)

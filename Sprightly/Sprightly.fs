@@ -229,7 +229,7 @@ module App =
                   Path = Common.Path.combine textureFolder (Common.Path.fromString t.FileName)
                 }
 
-            let fRetrieveTexturePathsFromSolutionFunc (p: Common.Path.T) : (Application.Texture.TextureDescription list) option =
+            let fRetrieveTexturePathsFromSolution (p: Common.Path.T) : (Application.Texture.TextureDescription list) option =
                 Persistence.SolutionFile.read p
                 |> Option.map (fun dao -> dao.Textures |> List.map toTextureDescription)
 
@@ -241,14 +241,40 @@ module App =
             let fLoadTexture (tex: Domain.Textures.Texture.T) : unit =
                 do ()
             
-            return Application.Project.loadProject fRetrieveTexturePathsFromSolutionFunc
+            return Application.Project.loadProject fRetrieveTexturePathsFromSolution
                                                    fRetrieveTextureData
                                                    fLoadTexture
                                                    path
                    |> Option.map (PresentationMsg << ProjectPageMsg << Pages.ProjectPage.Msg.Initialise)
         } |> Cmd.ofAsyncMsgOption
 
+    let private addTextureToStoreCmd (description: Pages.ProjectPage.AddTextureDescription) : Cmd<Msg> =
+        async {
+            do! Async.SwitchToThreadPool ()
 
+            let fCopyTextureIntoSolution : Application.Texture.CopyTextureIntoSolutionFunc = 
+                Persistence.Texture.copyTextureIntoTextureFolder description.SolutionDirectoryPath
+
+            let inspector = DependencyService.Get<Domain.Textures.Inspector>()
+            let fRetrieveTextureMetaData = inspector.ReadMetaData
+
+            let fLoadTexture (tex: Domain.Textures.Texture.T) : unit =
+                do ()
+
+            let fSaveAddNewTexture (tex: Domain.Textures.Texture.T) : unit =
+                do ()
+
+            let res = Application.Texture.addNewTextureToStore fCopyTextureIntoSolution
+                                                               fRetrieveTextureMetaData
+                                                               fLoadTexture
+                                                               fSaveAddNewTexture
+                                                               description.TexturePath
+                                                               description.Store
+
+            return Option.map (fun (newId, newStore) -> Pages.ProjectPage.UpdateTextureStore ((Some newId), newStore)) res
+                |> Option.map (PresentationMsg << ProjectPageMsg)
+        } |> Cmd.ofAsyncMsgOption
+        
     let private mapExternalProjectPageCmdMsg (cmdMsg: Pages.ProjectPage.ExternalCmdMsg) =
         match cmdMsg with 
         | Pages.ProjectPage.StartLoading -> 
@@ -257,6 +283,8 @@ module App =
             Cmd.ofMsg CloseLoadingPage
         | Pages.ProjectPage.InitialiseFromPath path ->
             initialiseFromPathCmd path
+        | Pages.ProjectPage.AddTextureToStore description ->
+            addTextureToStoreCmd description
 
     let private mapProjectPageCmdMsg (cmdMsg: Pages.ProjectPage.CmdMsg) =
         match cmdMsg with 

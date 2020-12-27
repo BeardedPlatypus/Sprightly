@@ -16,8 +16,6 @@ module public TextureToolBox =
 
           ProjectTreeIsOpen : bool
           DetailIsOpen : bool
-
-          SolutionDirectoryPath: Path.T
         }
 
     /// <summary>
@@ -30,14 +28,12 @@ module public TextureToolBox =
     /// <returns>
     /// A new empty <see cref="Model"/>.
     /// </returns>
-    let public initEmpty (solutionDirectoryPath: Path.T) : Model =
+    let public initEmpty : Model =
         { Textures = Texture.emptyStore () 
           ActiveTextureId = None 
 
           ProjectTreeIsOpen = false
           DetailIsOpen = false
-
-          SolutionDirectoryPath = solutionDirectoryPath
         }
 
     /// <summary>
@@ -55,8 +51,6 @@ module public TextureToolBox =
 
           ProjectTreeIsOpen = true 
           DetailIsOpen = true
-
-          SolutionDirectoryPath = Path.parentDirectory project.SolutionPath
         }
 
     /// <summary>
@@ -74,22 +68,28 @@ module public TextureToolBox =
         | SetActiveTextureId of Texture.Id
         | RequestOpenTexturePicker
         | RequestImportTexture of Path.T
-        | AddTexture of Texture.T
 
     /// <summary>
     /// <see cref="InternalCmdMsg"/> defines the internal command messages for 
-    /// the <see cref="NewProject"/>, which can be mapped through the 
+    /// the <see cref="TextureToolBox"/>, which can be mapped through the 
     /// <see cref="mapInternalCmdMsg"/> method.
     /// </summary>
     type public InternalCmdMsg =
         | OpenTexturePicker
-        | ImportTexture of Path.T * Path.T
+        //| ImportTexture of Path.T * Path.T
+
+    /// <summary>
+    /// <see cref="ExternalCmdMsg"/> defines the external command messages of
+    /// the <see cref="TextureToolBox"/>.
+    type public ExternalCmdMsg = 
+        | AddTexture of Path.T
     
     /// <summary>
     /// <see cref="CmdMsg"/> defines the command messages for the <see cref="TextureToolbox"/>.
     /// </summary>
     type public CmdMsg = 
         | Internal of InternalCmdMsg
+        | External of ExternalCmdMsg
 
     let private openTexturePickerCmd () =
         let config = Dialogs.FileDialogConfiguration(addExtension = true,
@@ -101,35 +101,6 @@ module public TextureToolBox =
                                                      restoreDirectory = false, 
                                                      title = "Load a new texture")
         Dialogs.Cmds.openFileDialogCmd config RequestImportTexture
-
-    // TODO: This should be moved to the application project / Sprightly
-    let private importTextureCmd (solutionDirectoryPath: Path.T) 
-                                 (texPath: Path.T) : Cmd<Msg> =
-        async {
-            do! Async.SwitchToThreadPool ()
-
-            let inspector = DependencyService.Get<Sprightly.Domain.Textures.Inspector>()
-            let metaData = inspector.ReadMetaData texPath
-
-            if metaData.IsNone then
-                return None
-            else
-                // TODO: Move this to a separate place
-                let name = 
-                    Path.name texPath
-                let destinationPath = 
-                    Path.combine
-                        (Path.combine solutionDirectoryPath (Path.fromString "Textures"))
-                        (Path.fromString name)
-                System.IO.File.Copy(Path.toString texPath, Path.toString destinationPath)
-
-                return Some <| AddTexture { Id = Texture.Id (name, uint 0)
-                                            Data = { Name = Texture.Name name
-                                                     Path = destinationPath
-                                                     MetaData = metaData.Value
-                                                   }
-                                          }
-        } |> Cmd.ofAsyncMsgOption
 
     /// <summary>
     /// <see cref="mapInternalCmdMsg> maps the provided <paramref name="cmd"/>
@@ -143,8 +114,6 @@ module public TextureToolBox =
         match cmd with 
         | OpenTexturePicker ->
             openTexturePickerCmd ()
-        | ImportTexture (solutionPath, texturePath) -> 
-            importTextureCmd solutionPath texturePath
 
     let public update (msg: Msg) (model: Model) : Model * CmdMsg list =
         match msg with 
@@ -157,11 +126,7 @@ module public TextureToolBox =
         | RequestOpenTexturePicker ->
             model, [ Internal OpenTexturePicker ]
         | RequestImportTexture path ->
-            model, [ Internal (ImportTexture (model.SolutionDirectoryPath, path)) ]
-        | AddTexture tex ->
-            { model with Textures = List.sortBy (fun (t: Texture.T) -> (match t.Id with | Texture.Id (v, _) -> v)) (tex :: model.Textures) 
-                         ActiveTextureId = Some tex.Id
-            }, []
+            model, [ External (AddTexture path) ]
 
     let private projectTreeView (model: Model) dispatch = 
         let fClickListItem id () = dispatch ( SetActiveTextureId id )
