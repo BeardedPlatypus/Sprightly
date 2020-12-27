@@ -76,6 +76,7 @@ module public Project =
                            (fRetrieveTextureData: Texture.RetrieveTextureDataFunc)
                            (fLoadTexture: Texture.LoadTextureFunc)
                            (solutionFilePath: Path.T) : Project option =
+        
         let texturePaths = fRetrieveTexturePathsFromSolution solutionFilePath
 
         texturePaths |> Option.map (fun paths ->

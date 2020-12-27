@@ -223,19 +223,19 @@ module App =
             do! Async.SwitchToThreadPool ()
 
             let textureFolder = Persistence.Texture.textureFolder (Common.Path.parentDirectory path)
-            let toTextureDescription (t: Persistence.Texture.DataAccessRecord) : (Application.Project.TextureDescription) =
+            let toTextureDescription (t: Persistence.Texture.DataAccessRecord) : (Application.Texture.TextureDescription) =
                 { Name = t.Name 
                   Id = Domain.Textures.Texture.Id (t.idString, t.idIndex) 
                   Path = Common.Path.combine textureFolder (Common.Path.fromString t.FileName)
                 }
 
-            let fRetrieveTexturePathsFromSolutionFunc (p: Common.Path.T) : (Application.Project.TextureDescription list) option =
+            let fRetrieveTexturePathsFromSolutionFunc (p: Common.Path.T) : (Application.Texture.TextureDescription list) option =
                 Persistence.SolutionFile.read p
                 |> Option.map (fun dao -> dao.Textures |> List.map toTextureDescription)
 
 
             let inspector = DependencyService.Get<Domain.Textures.Inspector>()
-            let fRetrieveTextureData (texDescr: Application.Project.TextureDescription) : Domain.Textures.Texture.T option =
+            let fRetrieveTextureData (texDescr: Application.Texture.TextureDescription) : Domain.Textures.Texture.T option =
                 Persistence.Texture.loadDomainTexture inspector texDescr.Name texDescr.Id texDescr.Path
 
             let fLoadTexture (tex: Domain.Textures.Texture.T) : unit =
