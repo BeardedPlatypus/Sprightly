@@ -78,6 +78,33 @@ module public Texture =
     let public emptyStore () : Store = []
 
     /// <summary>
+    /// Add the specified <paramref name="textures"/> to the provided 
+    /// <paramref name="store"/> and return the new <see cref="Store"/>.
+    /// </summary>
+    /// <param name="store">The store to which the textures should be added.</param>
+    /// <param name="textures">The textures to add</param>
+    /// <returns>
+    /// The new <see cref="Store"/> after adding the provided 
+    /// <paramref name="textures"/> to the provided <paramref name="store"/>.
+    /// </returns>
+    let public addTexturesToStore (store: Store) (textures: T list) : Store =
+        textures @ store 
+        |> List.sortBy (fun (t: T) -> (match t.Id with | Id (v, _) -> v))
+
+    /// <summary>
+    /// Add the specified <paramref name="texture"/> to the provided 
+    /// <paramref name="store"/> and return the new <see cref="Store"/>.
+    /// </summary>
+    /// <param name="store">The store to which the texture should be added.</param>
+    /// <param name="texture">The texture to add</param>
+    /// <returns>
+    /// The new <see cref="Store"/> after adding the provided 
+    /// <paramref name="texture"/> to the provided <paramref name="store"/>.
+    /// </returns>
+    let public addTextureToStore (store: Store) (texture: T) : Store =
+        addTexturesToStore store [ texture ]
+
+    /// <summary>
     /// Get an id unique within the provided <paramref name="store"/> with the
     /// <paramref name="idString"/> as id string.
     /// </summary>
