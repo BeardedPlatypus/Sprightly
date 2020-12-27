@@ -1,6 +1,5 @@
 ﻿namespace Sprightly.Presentation.Components.ProjectPage.ToolBoxes
 
-open Fabulous
 open Fabulous.XamarinForms
 open Xamarin.Forms
 
@@ -9,7 +8,13 @@ open Sprightly.Common
 open Sprightly.Domain.Textures
 open Sprightly.Presentation.Components.Common
 
+/// <summary>
+/// <see cref="TextureToolBox"/> defines the toolbox for adjusting textures.
+/// </summary>
 module public TextureToolBox = 
+    /// <summary>
+    /// <see cref="Model"/> defines the model for the <see cref="TextureToolBox"/>.
+    /// </summary>
     type public Model = 
         { Textures : Texture.Store
           ActiveTextureId : Texture.Id option
@@ -115,6 +120,16 @@ module public TextureToolBox =
         | OpenTexturePicker ->
             openTexturePickerCmd ()
 
+    /// <summary>
+    /// Update the provided <paramref name="model"/> to its new state given the
+    /// provided <paramref name="msg"/>.
+    /// </summary>
+    /// <param name="msg">The message for which the new state should be returned.</param>
+    /// </param name="model">The model from which the new state is calculated.</param>
+    /// <returns>
+    /// The new state as a <see cref="Model"/> and a set of command messages to be 
+    /// executed.
+    /// </returns>
     let public update (msg: Msg) (model: Model) : Model * CmdMsg list =
         match msg with 
         | SetIsOpen (pane, newState) -> 
