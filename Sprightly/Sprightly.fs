@@ -259,8 +259,9 @@ module App =
         async {
             do! Async.SwitchToThreadPool ()
 
+            let solutionDirectoryPath = Common.Path.parentDirectory description.SolutionPath
             let fCopyTextureIntoSolution : Application.Texture.CopyTextureIntoSolutionFunc = 
-                Persistence.Texture.copyTextureIntoTextureFolder description.SolutionDirectoryPath
+                Persistence.Texture.copyTextureIntoTextureFolder solutionDirectoryPath
 
             let inspector = DependencyService.Get<Domain.Textures.Inspector>()
             let fRetrieveTextureMetaData = inspector.ReadMetaData
@@ -269,13 +270,14 @@ module App =
             let fLoadTexture (tex: Domain.Textures.Texture.T) : unit =
                 textureFactory.RequestTextureLoad tex.Id tex.Data.Path
 
-            let fSaveAddNewTexture (tex: Domain.Textures.Texture.T) : unit =
-                do ()
+            let fSaveStore (store: Domain.Textures.Texture.Store) : unit =
+                let textureDARs = store |> List.map Persistence.Texture.toDataAccessRecord
+                Persistence.SolutionFile.updateTexturesOnDisk textureDARs description.SolutionPath
 
             let res = Application.Texture.addNewTextureToStore fCopyTextureIntoSolution
                                                                fRetrieveTextureMetaData
                                                                fLoadTexture
-                                                               fSaveAddNewTexture
+                                                               fSaveStore
                                                                description.TexturePath
                                                                description.Store
 

@@ -21,7 +21,7 @@ module ProjectPage =
     type public Model = 
         { IsOpen : bool 
           TextureToolBox : TextureToolBox.Model
-          SolutionDirectoryPath : Path.T
+          SolutionPath : Path.T
         }
 
     /// <summary>
@@ -47,11 +47,13 @@ module ProjectPage =
     type public InternalCmdMsg =
         | InternalSpriteToolBoxCmdMsg of TextureToolBox.InternalCmdMsg
 
-
+    /// <summary>
+    /// The data required to add a texture to this project.
+    /// </summary>
     type public AddTextureDescription = 
         { TexturePath: Path.T
           Store: Domain.Textures.Texture.Store
-          SolutionDirectoryPath: Path.T
+          SolutionPath: Path.T
         }
 
     /// <summary>
@@ -90,7 +92,7 @@ module ProjectPage =
     let public init (solutionPath : Path.T) : Model * CmdMsg list = 
         { IsOpen = true 
           TextureToolBox = TextureToolBox.initEmpty 
-          SolutionDirectoryPath = (Path.parentDirectory solutionPath)
+          SolutionPath = solutionPath
         }, [ External StartLoading; External (InitialiseFromPath solutionPath) ]
 
     let private mapTextureToolBoxCmdMsg (model: Model) (cmdMsg: TextureToolBox.CmdMsg) : CmdMsg  =
@@ -100,7 +102,7 @@ module ProjectPage =
         | TextureToolBox.External (TextureToolBox.AddTexture path) -> 
             External (AddTextureToStore { TexturePath = path
                                           Store = model.TextureToolBox.Textures
-                                          SolutionDirectoryPath = model.SolutionDirectoryPath
+                                          SolutionPath = model.SolutionPath
                                         })
 
     /// <summary>

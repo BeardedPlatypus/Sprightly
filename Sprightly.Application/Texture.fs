@@ -42,9 +42,9 @@ module public Texture =
     type public CopyTextureIntoSolutionFunc = Path.T -> Path.T option
 
     /// <summary>
-    /// The function to save the event that a new texture has been added.
+    /// The function to save the store to disk.
     /// </summary>
-    type public SaveAddNewTextureFunc = Textures.Texture.T -> unit
+    type public SaveStoreFunc = Textures.Texture.Store -> unit
 
     /// <summary>
     /// Adds the texture at the specified <paramref name="texturePath"/> to the
@@ -74,7 +74,7 @@ module public Texture =
     let public addNewTextureToStore (fCopyTextureIntoSolution: CopyTextureIntoSolutionFunc)
                                     (fRetrieveMetaData: RetrieveTextureMetaDataFunc)
                                     (fLoadTexture: LoadTextureFunc)
-                                    (fSaveAddNewTexture: SaveAddNewTextureFunc)
+                                    (fSaveStore: SaveStoreFunc)
                                     (texturePath: Path.T)
                                     (store: Textures.Texture.Store) : 
                                     (Textures.Texture.Id * Textures.Texture.Store) option =
@@ -89,9 +89,10 @@ module public Texture =
                     Textures.Texture.construct id name slnTexturePath.Value metaData.Value
             
                 fLoadTexture newTexture
-                fSaveAddNewTexture newTexture
             
                 let newStore = Textures.Texture.addTextureToStore store newTexture
+
+                fSaveStore newStore
                 Some (id, newStore)
             else 
                 None
