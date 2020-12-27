@@ -29,6 +29,16 @@ module Texture =
     let public textureFolder (solutionDirectoryPath: Common.Path.T) : Common.Path.T =
         solutionDirectoryPath / (fromString "Textures")
 
+    /// <summary>
+    /// Create an empty texture folder in the specified <paramref name="solutionDirectoryPath"/>.
+    /// </summary>
+    /// <param name="solutionDirectoryPath">Path to to the solution directory.</param>
+    let public createTextureFolder (solutionDirectoryPath: Common.Path.T) : unit =
+        let textureFolder = textureFolder solutionDirectoryPath
+
+        if not <| Common.Path.exists textureFolder then
+            System.IO.Directory.CreateDirectory(textureFolder |> Common.Path.toString) |> ignore
+
     open Domain.Textures.Texture
     /// <summary>
     /// Load the <see cref="Domain.Texture.T"/> from the specified <paramref name="texturePath"/>.
