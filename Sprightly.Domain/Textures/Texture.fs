@@ -77,6 +77,15 @@ module public Texture =
     /// </returns>
     let public emptyStore () : Store = []
 
+    /// <summary>
+    /// Get an id unique within the provided <paramref name="store"/> with the
+    /// <paramref name="idString"/> as id string.
+    /// </summary>
+    /// <param name="store">The store in which the unique id should be generated.</param>
+    /// <param name="idString">The base id string.</param>
+    /// <returns>
+    /// An <see cref="Id"/> with the given idString and a unique index.
+    /// </returns>
     let public getUniqueId (store: Store) (idString: string) : Id = 
         let usedIndices: uint Set = List.filter (fun (e: T) -> getIdString e.Id = idString) store
                                     |> List.map (fun (e: T) -> getIdIndex e.Id)
