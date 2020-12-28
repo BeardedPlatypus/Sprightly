@@ -6,6 +6,10 @@ open Sprightly.Presentation.WPF.Components
 
 open Sprightly.Presentation.Components.Common
 
+/// <summary>
+/// <see cref="CollapsiblePaneHeaderRenderer"/> provides the custom renderer implementation
+/// to render the <see cref="CollapsiblePaneHeader"/> as a <see cref="Xamarin.Forms.Button"/>.
+/// </summary>
 type CollapsiblePaneHeaderRenderer() =
     inherit ButtonRenderer()
 
